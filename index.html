@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Philo — La Raison & La Science</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:#0d0c0b;
+  --bg2:#161412;
+  --bg3:#1e1b18;
+  --card:#1a1714;
+  --border:#2e2a25;
+  --border2:#3d3830;
+  --text:#e8e0d4;
+  --muted:#7a7060;
+  --muted2:#a09278;
+  --r:#c47a5a;
+  --r-light:#d4956e;
+  --r-bg:#1f1410;
+  --s:#5a8c7a;
+  --s-light:#6ea88e;
+  --s-bg:#0f1a16;
+  --gold:#b8922a;
+  --gold2:#d4a93c;
+}
+
+html{scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.7;min-height:100vh;overflow-x:hidden}
+
+/* ── PAGES ── */
+.page{display:none;min-height:100vh;animation:fadeIn .35s ease}
+.page.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;backdrop-filter:blur(16px);background:rgba(13,12,11,.85);border-bottom:1px solid var(--border);padding:.75rem 1.5rem;display:flex;align-items:center;gap:1rem}
+.nav-back{background:none;border:none;color:var(--muted2);cursor:pointer;font-family:'Outfit',sans-serif;font-size:13px;display:flex;align-items:center;gap:.4rem;padding:.3rem .6rem;border-radius:4px;transition:color .2s,background .2s}
+.nav-back:hover{color:var(--text);background:var(--bg3)}
+.nav-title{font-family:'Cormorant Garamond',serif;font-size:1rem;font-style:italic;color:var(--muted2);flex:1}
+.nav-badge{font-size:11px;font-weight:500;padding:.25rem .6rem;border-radius:20px;letter-spacing:.04em}
+.badge-r{background:var(--r-bg);color:var(--r);border:1px solid rgba(196,122,90,.2)}
+.badge-s{background:var(--s-bg);color:var(--s);border:1px solid rgba(90,140,122,.2)}
+
+/* ══════════════
+   HOME PAGE
+══════════════ */
+#home{padding-top:0}
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:2rem 1.5rem;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 40%,rgba(184,146,42,.06) 0%,transparent 70%)}
+
+.hero-eyebrow{font-size:11px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:1.5rem}
+.hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2.8rem,10vw,6rem);font-weight:300;line-height:1.05;letter-spacing:-.02em;margin-bottom:.5rem}
+.hero-title em{font-style:italic;color:var(--gold2)}
+.hero-sub{font-size:14px;color:var(--muted2);margin-bottom:3.5rem;max-width:320px}
+
+.cards-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;width:100%;max-width:640px;margin-bottom:2.5rem}
+@media(max-width:500px){.cards-grid{grid-template-columns:1fr}}
+
+.notion-card{border:1px solid var(--border);border-radius:8px;padding:1.75rem 1.5rem;cursor:pointer;text-align:left;transition:border-color .25s,transform .25s,background .25s;background:var(--card);position:relative;overflow:hidden}
+.notion-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;transition:opacity .25s}
+.notion-card.card-r::before{background:linear-gradient(90deg,var(--r),transparent);opacity:.6}
+.notion-card.card-s::before{background:linear-gradient(90deg,var(--s),transparent);opacity:.6}
+.notion-card:hover{transform:translateY(-3px)}
+.notion-card.card-r:hover{border-color:rgba(196,122,90,.4);background:#1a1310}
+.notion-card.card-s:hover{border-color:rgba(90,140,122,.4);background:#101a15}
+
+.card-num{font-family:'Cormorant Garamond',serif;font-size:3rem;font-weight:300;line-height:1;margin-bottom:.5rem;opacity:.18}
+.card-r .card-num{color:var(--r)}
+.card-s .card-num{color:var(--s)}
+.card-label{font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;margin-bottom:.35rem}
+.card-r .card-label{color:var(--r)}
+.card-s .card-label{color:var(--s)}
+.card-title{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:400;line-height:1.2;margin-bottom:.5rem}
+.card-desc{font-size:13px;color:var(--muted2);line-height:1.5}
+.card-arrow{position:absolute;bottom:1.25rem;right:1.25rem;font-size:18px;opacity:.3;transition:opacity .25s,transform .25s}
+.notion-card:hover .card-arrow{opacity:.8;transform:translate(2px,-2px)}
+.card-r .card-arrow{color:var(--r)}
+.card-s .card-arrow{color:var(--s)}
+
+.hero-note{font-size:12px;color:var(--muted);border:1px solid var(--border);border-radius:4px;padding:.5rem 1rem}
+
+/* ══════════════
+   CONTENT PAGES
+══════════════ */
+.content-wrap{max-width:720px;margin:0 auto;padding:5.5rem 1.5rem 4rem}
+
+.page-hero{margin-bottom:3rem;padding-bottom:2rem;border-bottom:1px solid var(--border)}
+.page-num{font-family:'Cormorant Garamond',serif;font-size:5rem;font-weight:300;line-height:1;opacity:.1;margin-bottom:-.5rem}
+.page-r .page-num{color:var(--r)}
+.page-s .page-num{color:var(--s)}
+.page-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,6vw,3rem);font-weight:400;line-height:1.1;margin-bottom:.5rem}
+.page-tagline{font-size:13px;color:var(--muted2);font-style:italic}
+
+/* SECTIONS */
+.section{margin-bottom:2.5rem}
+.section-label{font-size:10.5px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;margin-bottom:.75rem;padding-bottom:.4rem;border-bottom:1px solid var(--border)}
+.page-r .section-label{color:var(--r)}
+.page-s .section-label{color:var(--s)}
+
+p{color:var(--muted2);margin-bottom:.55rem;font-size:14.5px}
+p:last-child{margin-bottom:0}
+strong{color:var(--text);font-weight:500}
+
+/* QUOTE */
+.quote{border-left:2px solid var(--gold);padding:.6rem 1rem .6rem 1.1rem;margin:1rem 0;background:rgba(184,146,42,.05);border-radius:0 4px 4px 0}
+.quote p{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:var(--text);line-height:1.6;margin:0}
+.quote .src{font-family:'Outfit',sans-serif;font-style:normal;font-size:11.5px;color:var(--muted);margin-top:.3rem;display:block}
+
+/* PILLS ROW */
+.pills{display:flex;flex-wrap:wrap;gap:.5rem;margin:.75rem 0}
+.pill{font-size:12px;font-weight:400;padding:.3rem .75rem;border-radius:20px;border:1px solid var(--border);background:var(--bg3);color:var(--muted2)}
+
+/* PHILO ITEMS */
+.philo-list{display:flex;flex-direction:column;gap:.75rem;margin:.75rem 0}
+.philo-item{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:1rem 1.1rem;display:grid;grid-template-columns:auto 1fr;gap:.75rem}
+.philo-dot{width:8px;height:8px;border-radius:50%;margin-top:.55rem;flex-shrink:0}
+.page-r .philo-dot{background:var(--r)}
+.page-s .philo-dot{background:var(--s)}
+.philo-name{font-weight:500;font-size:14px;color:var(--text);margin-bottom:.15rem}
+.philo-sub{font-size:11.5px;color:var(--muted);font-style:italic}
+.philo-text{font-size:13.5px;color:var(--muted2);line-height:1.55}
+
+/* FACULTIES TABLE */
+.table-wrap{overflow-x:auto;margin:.75rem 0;border-radius:6px;border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{text-align:left;padding:.6rem .9rem;background:var(--bg3);color:var(--muted);font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;border-bottom:1px solid var(--border)}
+td{padding:.6rem .9rem;border-bottom:1px solid var(--border);color:var(--muted2);vertical-align:top;line-height:1.5}
+tr:last-child td{border-bottom:none}
+td:first-child{font-weight:500;color:var(--text);white-space:nowrap}
+.page-r td:first-child{color:var(--r-light)}
+.page-s td:first-child{color:var(--s-light)}
+
+/* EXAMPLE CARDS */
+.example{background:var(--bg2);border:1px solid var(--border);border-radius:6px;overflow:hidden;margin:.75rem 0}
+.example-head{padding:.5rem 1rem;display:flex;align-items:center;gap:.6rem;border-bottom:1px solid var(--border);background:var(--bg3)}
+.example-dot2{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.page-r .example-dot2{background:var(--r)}
+.page-s .example-dot2{background:var(--s)}
+.example-head-text{font-size:11.5px;font-weight:500;letter-spacing:.04em;color:var(--muted2)}
+.example-body{padding:.85rem 1rem;font-size:13.5px;color:var(--muted2);line-height:1.6}
+.example-body strong{color:var(--text)}
+.example-body .lesson{margin-top:.6rem;padding-top:.6rem;border-top:1px dashed var(--border);font-size:12.5px;color:var(--muted)}
+.example-body .lesson strong{color:var(--muted2)}
+
+/* LOGIC BOX */
+.logic-box{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:.85rem 1rem;margin:.75rem 0;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;color:var(--text);line-height:1.8}
+.logic-verdict{font-family:'Outfit',sans-serif;font-style:normal;font-size:12px;margin-top:.5rem;padding-top:.5rem;border-top:1px solid var(--border);color:#e07050}
+
+/* SUMMARY BOX */
+.summary{border-radius:6px;padding:1rem 1.1rem;margin:1rem 0;font-size:14px;line-height:1.6}
+.page-r .summary{background:var(--r-bg);border:1px solid rgba(196,122,90,.2);color:var(--r-light)}
+.page-s .summary{background:var(--s-bg);border:1px solid rgba(90,140,122,.2);color:var(--s-light)}
+
+/* FLOW */
+.flow{display:flex;align-items:center;flex-wrap:wrap;gap:.4rem;margin:.75rem 0}
+.flow-step{font-size:12px;font-weight:500;padding:.3rem .65rem;border-radius:4px;background:var(--bg3);border:1px solid var(--border);color:var(--muted2)}
+.flow-arrow{color:var(--muted);font-size:13px}
+
+/* SCROLL PROGRESS */
+.progress-bar{position:fixed;top:0;left:0;height:2px;z-index:200;transition:width .1s}
+.page-r-active .progress-bar{background:var(--r)}
+.page-s-active .progress-bar{background:var(--s)}
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progress"></div>
+
+<!-- ══════════════════════
+     HOME
+══════════════════════ -->
+<div class="page active" id="home">
+  <div class="hero">
+    <div class="hero-eyebrow">Philosophie · Terminale · Révisions mercredi</div>
+    <h1 class="hero-title">La <em>Connaissance</em></h1>
+    <p class="hero-sub">Deux notions clés. Clique sur une carte pour commencer.</p>
+
+    <div class="cards-grid">
+      <div class="notion-card card-r" onclick="showPage('raison')">
+        <div class="card-num">01</div>
+        <div class="card-label">Notion I</div>
+        <div class="card-title">La Raison</div>
+        <p class="card-desc">Définition · Logique vs vérité · Rationalisme · Kant &amp; les facultés</p>
+        <div class="card-arrow">↗</div>
+      </div>
+      <div class="notion-card card-s" onclick="showPage('science')">
+        <div class="card-num">02</div>
+        <div class="card-label">Notion II</div>
+        <div class="card-title">La Science</div>
+        <p class="card-desc">Histoire · Théorie ↔ expérience · Exemples clés · Popper</p>
+        <div class="card-arrow">↗</div>
+      </div>
+    </div>
+
+    <div class="hero-note">💡 Éval mercredi — intro + plan détaillé</div>
+  </div>
+</div>
+
+<!-- ══════════════════════
+     PAGE RAISON
+══════════════════════ -->
+<div class="page page-r" id="page-raison">
+  <nav>
+    <button class="nav-back" onclick="showPage('home')">← Accueil</button>
+    <div class="nav-title">La Raison &amp; La Science</div>
+    <span class="nav-badge badge-r">01 · La Raison</span>
+  </nav>
+
+  <div class="content-wrap">
+    <div class="page-hero">
+      <div class="page-num">01</div>
+      <h2 class="page-title">La Raison</h2>
+      <p class="page-tagline">Définition · Logique vs vérité · Rationalisme · Kant</p>
+    </div>
+
+    <!-- 1. Définition -->
+    <div class="section">
+      <div class="section-label">Définition &amp; nature</div>
+      <p>La raison est la <strong>faculté de discernement</strong> entre le vrai et le faux. Descartes la nomme le « bon sens » dans le <em>Discours de la méthode</em> : la faculté de distinguer le vrai du faux. Elle est liée à la logique, manifestation de l'esprit.</p>
+      <p>Aristote : l'homme est un <strong>animal rationnel</strong> — la raison est la faculté proprement humaine.</p>
+      <div class="pills">
+        <span class="pill">Champ 1 · Connaissance</span>
+        <span class="pill">Champ 2 · Moral &amp; action</span>
+      </div>
+    </div>
+
+    <!-- 2. Logique vs vérité -->
+    <div class="section">
+      <div class="section-label">Logique ≠ Vérité — distinction clé</div>
+      <p>Un discours peut être <strong>formellement vrai</strong> (logique, cohérent) et pourtant <strong>matériellement faux</strong> (pas de concordance avec la réalité). La logique est <strong>nécessaire mais pas suffisante</strong>.</p>
+
+      <div class="logic-box">
+        « Tous les hommes sont blonds. »<br>
+        « Or Socrate est un homme. »<br>
+        « Donc Socrate est blond. »
+        <div class="logic-verdict">✗ Cohérent formellement — faux dans la réalité (observable)</div>
+      </div>
+
+      <p>Pour vérifier qu'un discours cohérent est vrai, il faut <strong>sortir du discours</strong> et confronter l'affirmation à la réalité. En sciences, c'est l'expérience qui joue ce rôle → aller-retour permanent construction rationnelle ↔ réalité.</p>
+    </div>
+
+    <!-- 3. Rationalisme -->
+    <div class="section">
+      <div class="section-label">Le rationalisme &amp; ses limites</div>
+      <p><strong>Rationalisme</strong> = la raison est la <em>seule</em> faculté conduisant à la vérité. Position dominante de Platon au 18e s.</p>
+
+      <div class="philo-list">
+        <div class="philo-item">
+          <div class="philo-dot"></div>
+          <div>
+            <div class="philo-name">Platon <span class="philo-sub">— La République</span></div>
+            <div class="philo-text">Connaître = se dégager du monde sensible (trompeur). « La science ne comporte rien de sensible. » Rationalisme radical.</div>
+          </div>
+        </div>
+        <div class="philo-item">
+          <div class="philo-dot"></div>
+          <div>
+            <div class="philo-name">Descartes <span class="philo-sub">— Discours de la méthode</span></div>
+            <div class="philo-text">Raison = bon sens, « inspection de l'esprit ». L'imagination est trop limitée pour être efficace.</div>
+          </div>
+        </div>
+        <div class="philo-item">
+          <div class="philo-dot"></div>
+          <div>
+            <div class="philo-name">Malebranche &amp; Pascal</div>
+            <div class="philo-text">Méfiance envers l'imagination : « la folle du logis » (Malebranche), « maîtresse d'erreur et de fausseté » (Pascal).</div>
+          </div>
+        </div>
+      </div>
+
+      <p><strong>Limite :</strong> on sait que le soleil ne se lève pas, mais on continue de le <em>voir</em> ainsi. Décalage irréductible entre expérience sensible et construction rationnelle.</p>
+    </div>
+
+    <!-- 4. Kant -->
+    <div class="section">
+      <div class="section-label">Kant — la grande synthèse</div>
+      <p>La <em>Critique de la raison pure</em> dénonce l'illusion rationaliste : la raison seule ne peut pas construire la connaissance.</p>
+
+      <div class="quote">
+        <p>« La raison délire dès qu'elle est privée de la pierre de touche de l'expérience. »</p>
+        <span class="src">— Emmanuel Kant, Critique de la raison pure</span>
+      </div>
+
+      <p>La connaissance est une <strong>combinaison de plusieurs facultés</strong> :</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Faculté</th><th>Rôle</th></tr></thead>
+          <tbody>
+            <tr><td>Raison</td><td>Enchaîner les propositions logiques</td></tr>
+            <tr><td>Entendement</td><td>Poser des concepts sur les choses, catégoriser le réel</td></tr>
+            <tr><td>Sensibilité</td><td>Mettre en contact avec le monde via les intuitions sensibles</td></tr>
+            <tr><td>Imagination</td><td>Donner une représentation sensible de ce qu'on n'a pas sous les yeux — réhabilitée par Kant</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="quote">
+        <p>« Des pensées sans matière sont vides, des intuitions sans concepts sont aveugles. »</p>
+        <span class="src">— Emmanuel Kant</span>
+      </div>
+
+      <div class="summary">
+        Kant reste rationaliste, mais son rationalisme est <strong>élargi</strong> : la connaissance n'est plus une pure inspection de l'esprit, c'est le résultat de <em>toutes</em> les facultés en interaction.
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════
+     PAGE SCIENCE
+══════════════════════ -->
+<div class="page page-s" id="page-science">
+  <nav>
+    <button class="nav-back" onclick="showPage('home')">← Accueil</button>
+    <div class="nav-title">La Raison &amp; La Science</div>
+    <span class="nav-badge badge-s">02 · La Science</span>
+  </nav>
+
+  <div class="content-wrap">
+    <div class="page-hero">
+      <div class="page-num">02</div>
+      <h2 class="page-title">La Science</h2>
+      <p class="page-tagline">Histoire · Dialogue théorie/expérience · Exemples · Popper</p>
+    </div>
+
+    <!-- 1. Progression historique -->
+    <div class="section">
+      <div class="section-label">Progression historique</div>
+      <p>La conception de la science a radicalement évolué : d'abord affaire de raison pure, elle intègre progressivement l'expérience.</p>
+
+      <div class="flow">
+        <span class="flow-step">Platon · raison pure</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step">Descartes · inspection de l'esprit</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step">Hume · empirisme</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step">Kant · synthèse</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step">Popper · falsifiabilité</span>
+      </div>
+
+      <div class="philo-list">
+        <div class="philo-item">
+          <div class="philo-dot"></div>
+          <div>
+            <div class="philo-name">Platon <span class="philo-sub">— La République</span></div>
+            <div class="philo-text">« La science ne comporte rien de sensible. » Connaître = se dégager du monde trompeur des sens. Rationalisme pur.</div>
+          </div>
+        </div>
+        <div class="philo-item">
+          <div class="philo-dot"></div>
+          <div>
+            <div class="philo-name">Descartes <span class="philo-sub">— Exemple de la cire</span></div>
+            <div class="philo-text">La cire fondue change d'apparence mais c'est la même cire — on le <em>sait</em> sans le voir. Connaissance = inspection de l'esprit, pas des sens.</div>
+          </div>
+        </div>
+        <div class="philo-item">
+          <div class="philo-dot"></div>
+          <div>
+            <div class="philo-name">Hume <span class="philo-sub">— Empirisme</span></div>
+            <div class="philo-text">Sans expérience, aucune connaissance n'est possible — sauf en mathématiques. Sa lecture réveille Kant de son « sommeil dogmatique ».</div>
+          </div>
+        </div>
+        <div class="philo-item">
+          <div class="philo-dot"></div>
+          <div>
+            <div class="philo-name">Kant <span class="philo-sub">— Critique de la raison pure</span></div>
+            <div class="philo-text">La connaissance = échange constant entre théories de l'esprit et observations. En maths, la démo se suffit. En sciences, l'expérience est indispensable.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="quote">
+        <p>« La raison doit prendre les devants et obliger la nature à répondre à ses questions, et ne pas se laisser conduire en laisse. »</p>
+        <span class="src">— Emmanuel Kant</span>
+      </div>
+    </div>
+
+    <!-- 2. Exemples -->
+    <div class="section">
+      <div class="section-label">Les exemples à connaître</div>
+
+      <div class="example">
+        <div class="example-head">
+          <div class="example-dot2"></div>
+          <div class="example-head-text">Théorie de la lumière — Newton / Huygens</div>
+        </div>
+        <div class="example-body">
+          <strong>Newton</strong> : la lumière est faite de <em>corpuscules</em> → deux faisceaux croisés devraient s'additionner.<br>
+          <strong>Expérience :</strong> l'intersection est une zone d'ombre. Newton réfuté. ✗<br>
+          <strong>Huygens</strong> : la lumière est une <em>onde</em> → les ondes se repoussent → zone d'ombre expliquée. ✓
+          <div class="lesson"><strong>Leçon :</strong> l'expérience infirme la théorie et impose une nouvelle construction intellectuelle.</div>
+        </div>
+      </div>
+
+      <div class="example">
+        <div class="example-head">
+          <div class="example-dot2"></div>
+          <div class="example-head-text">Découverte de Neptune — Le Verrier</div>
+        </div>
+        <div class="example-body">
+          Le Verrier calcule la trajectoire d'Uranus avec les lois de Newton → écart avec la trajectoire réelle. Deux hypothèses : Newton est faux, ou un corps céleste inconnu dévie Uranus. C'est la 2e : <strong>Neptune découverte</strong>. ✓
+          <div class="lesson"><strong>Leçon :</strong> l'expérience peut confirmer la théorie en révélant du réel nouveau.</div>
+        </div>
+      </div>
+
+      <div class="example">
+        <div class="example-head">
+          <div class="example-dot2"></div>
+          <div class="example-head-text">La pénicilline — Fleming (découverte involontaire)</div>
+        </div>
+        <div class="example-body">
+          Fleming laisse une préparation au soleil → moisissure → il observe que les germes ont régressé autour. Découverte de la pénicilline par hasard.
+          <div class="lesson"><strong>Leçon :</strong> la science peut avancer par expériences imprévues. Aucune vérité n'est définitivement acquise.</div>
+        </div>
+      </div>
+
+      <div class="example">
+        <div class="example-head">
+          <div class="example-dot2"></div>
+          <div class="example-head-text">Le vivant — Harvey &amp; Descartes vs Kant</div>
+        </div>
+        <div class="example-body">
+          <strong>Harvey :</strong> cœur = pompe, circulation = circuit hydraulique → modèle mécaniste.<br>
+          <strong>Kant objecte à Descartes :</strong> un corps n'est pas une <em>force motrice</em> mais une <em>force formatrice</em> — la cicatrisation et la croissance ne s'expliquent pas mécaniquement. → passage de l'anatomie (mort) à la physiologie (vivant).
+          <div class="lesson"><strong>Leçon :</strong> le modèle théorique bute sur la réalité du vivant, la science doit évoluer.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Popper -->
+    <div class="section">
+      <div class="section-label">Popper — la falsifiabilité</div>
+      <p><strong>Critère de scientificité :</strong> une théorie est scientifique si et seulement si elle est <strong>falsifiable</strong> — si elle peut être réfutée par une expérience.</p>
+      <p>Conséquence directe : la science ne produit que des <strong>connaissances provisoires</strong>, toujours exposées à la révision.</p>
+
+      <div class="quote">
+        <p>« Les théories scientifiques ne doivent pas être confondues avec une représentation de tous les aspects du monde réel, même quand elles semblent donner d'excellentes approximations de la réalité. »</p>
+        <span class="src">— Karl Popper</span>
+      </div>
+
+      <p><strong>Métaphore du filet de pêche :</strong> le scientifique ne rend compte du réel que de façon <em>partielle et provisoire</em> — comme un filet qui laisse échapper l'essentiel de l'eau.</p>
+
+      <div class="quote">
+        <p>« Le succès d'énoncés en langue anglaise ne doit pas nous inciter à conclure que le monde est en lui-même britannique. »</p>
+        <span class="src">— Karl Popper (avec ironie)</span>
+      </div>
+    </div>
+
+    <!-- 4. Bilan -->
+    <div class="section">
+      <div class="section-label">Bilan — conception moderne</div>
+      <p>On passe d'une vision de la science comme <strong>vérités définitives par la raison pure</strong> à une science comme <strong>connaissances provisoires</strong> en dialogue permanent avec l'expérience. La raison reste centrale, mais elle s'adjoint :</p>
+      <div class="pills">
+        <span class="pill">La sensibilité · observer</span>
+        <span class="pill">L'imagination · formuler des hypothèses</span>
+        <span class="pill">L'expérience · valider ou infirmer</span>
+      </div>
+      <div class="summary">
+        Il n'y a de science que de <strong>phénomènes</strong> — toute théorie est exposée à un éventuel démenti expérimental.
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById(id==='home'?'home':'page-'+id).classList.add('active');
+  window.scrollTo(0,0);
+  document.body.className = id==='home'?'':(id==='raison'?'page-r-active':'page-s-active');
+}
+
+window.addEventListener('scroll',()=>{
+  const el=document.getElementById('progress');
+  if(!el)return;
+  const s=document.documentElement.scrollTop;
+  const h=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+  el.style.width=(h>0?Math.min(100,s/h*100):0)+'%';
+});
+</script>
+</body>
+</html>
