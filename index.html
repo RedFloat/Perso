@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Philo — La Raison & La Science</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0d0c0b;--bg2:#161412;--bg3:#1e1b18;--card:#1a1714;
+  --border:#2e2a25;--border2:#3d3830;
+  --text:#e8e0d4;--muted:#7a7060;--muted2:#a09278;
+  --r:#c47a5a;--r-l:#d4956e;--r-bg:#1f1410;
+  --s:#5a8c7a;--s-l:#6ea88e;--s-bg:#0f1a16;
+  --gold:#b8922a;--gold2:#d4a93c;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.7;min-height:100vh;overflow-x:hidden}
+.page{display:none;min-height:100vh;animation:fadeIn .3s ease}
+.page.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+#progress{position:fixed;top:0;left:0;height:2px;z-index:200;width:0;transition:width .1s linear}
+body.pr #progress{background:var(--r)}
+body.ps #progress{background:var(--s)}
+body.ph #progress{background:var(--gold2)}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;backdrop-filter:blur(16px);background:rgba(13,12,11,.88);border-bottom:1px solid var(--border);padding:.7rem 1.25rem;display:flex;align-items:center;gap:.75rem}
+.nav-back{background:none;border:1px solid var(--border);color:var(--muted2);cursor:pointer;font-family:'Outfit',sans-serif;font-size:12.5px;padding:.28rem .7rem;border-radius:4px;transition:all .2s;white-space:nowrap}
+.nav-back:hover{color:var(--text);border-color:var(--border2);background:var(--bg3)}
+.nav-title{font-family:'Cormorant Garamond',serif;font-size:.95rem;font-style:italic;color:var(--muted);flex:1;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.nav-switch{display:flex;gap:.4rem;align-items:center}
+.nav-switch button{background:none;border:1px solid var(--border);border-radius:4px;font-family:'Outfit',sans-serif;font-size:11.5px;font-weight:500;padding:.28rem .65rem;cursor:pointer;transition:all .2s;white-space:nowrap}
+.nav-switch .btn-r{color:var(--r);border-color:rgba(196,122,90,.25)}
+.nav-switch .btn-r:hover,.nav-switch .btn-r.cur{background:var(--r-bg);border-color:var(--r)}
+.nav-switch .btn-s{color:var(--s);border-color:rgba(90,140,122,.25)}
+.nav-switch .btn-s:hover,.nav-switch .btn-s.cur{background:var(--s-bg);border-color:var(--s)}
+@media(max-width:480px){.nav-title{display:none}.nav-switch button{font-size:11px;padding:.25rem .5rem}}
+.cwrap{max-width:720px;margin:0 auto;padding:5.5rem 1.25rem 5rem}
+.page-nav{display:flex;gap:.75rem;justify-content:space-between;margin-top:3rem;padding-top:2rem;border-top:1px solid var(--border)}
+.pnav-btn{flex:1;background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:.9rem 1.1rem;cursor:pointer;font-family:'Outfit',sans-serif;text-align:left;transition:all .2s;max-width:48%}
+.pnav-btn:hover{border-color:var(--border2);background:var(--bg3)}
+.pnav-btn.right{text-align:right}
+.pnav-label{font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.2rem}
+.pnav-title{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-style:italic}
+.pnav-btn.left .pnav-title::before{content:'← ';opacity:.5}
+.pnav-btn.right .pnav-title::after{content:' →';opacity:.5}
+.pnav-btn.r .pnav-title{color:var(--r-l)}
+.pnav-btn.s .pnav-title{color:var(--s-l)}
+.pnav-btn.h .pnav-title{color:var(--gold2)}
+/* HOME */
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:2rem 1.25rem;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 40%,rgba(184,146,42,.07) 0%,transparent 70%)}
+.hero-eye{font-size:10.5px;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-bottom:1.5rem}
+.hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(3rem,12vw,6.5rem);font-weight:300;line-height:1;letter-spacing:-.02em;margin-bottom:.4rem}
+.hero-title em{font-style:italic;color:var(--gold2)}
+.hero-sub{font-size:13.5px;color:var(--muted2);margin-bottom:3rem;max-width:300px}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:.9rem;width:100%;max-width:580px;margin-bottom:2rem}
+@media(max-width:460px){.cards{grid-template-columns:1fr}}
+.ncard{border:1px solid var(--border);border-radius:8px;padding:1.5rem 1.25rem 1.25rem;cursor:pointer;text-align:left;transition:transform .2s,border-color .2s,background .2s;background:var(--card);position:relative;overflow:hidden}
+.ncard::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.ncard.cr::before{background:linear-gradient(90deg,var(--r),transparent);opacity:.7}
+.ncard.cs::before{background:linear-gradient(90deg,var(--s),transparent);opacity:.7}
+.ncard:hover{transform:translateY(-3px)}
+.ncard.cr:hover{border-color:rgba(196,122,90,.4);background:#1b1210}
+.ncard.cs:hover{border-color:rgba(90,140,122,.4);background:#101a15}
+.cnum{font-family:'Cormorant Garamond',serif;font-size:2.8rem;font-weight:300;line-height:1;opacity:.15;margin-bottom:.3rem}
+.cr .cnum{color:var(--r)}.cs .cnum{color:var(--s)}
+.clabel{font-size:10.5px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;margin-bottom:.3rem}
+.cr .clabel{color:var(--r)}.cs .clabel{color:var(--s)}
+.ctitle{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:400;margin-bottom:.4rem}
+.cdesc{font-size:12.5px;color:var(--muted2);line-height:1.45}
+.carrow{position:absolute;bottom:1rem;right:1rem;font-size:16px;opacity:.25;transition:all .2s}
+.cr .carrow{color:var(--r)}.cs .carrow{color:var(--s)}
+.ncard:hover .carrow{opacity:.7;transform:translate(2px,-2px)}
+.hero-note{font-size:12px;color:var(--muted);border:1px solid var(--border);border-radius:4px;padding:.45rem .9rem}
+/* CONTENT */
+.phero{margin-bottom:2.5rem;padding-bottom:1.75rem;border-bottom:1px solid var(--border)}
+.pnum{font-family:'Cormorant Garamond',serif;font-size:4.5rem;font-weight:300;line-height:1;opacity:.08;margin-bottom:-.4rem}
+.pr .pnum{color:var(--r)}.ps .pnum{color:var(--s)}
+.ptitle{font-family:'Cormorant Garamond',serif;font-size:clamp(1.8rem,6vw,2.8rem);font-weight:400;line-height:1.1;margin-bottom:.4rem}
+.ptag{font-size:13px;color:var(--muted2);font-style:italic}
+.section{margin-bottom:2.25rem}
+.slabel{font-size:10.5px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;margin-bottom:.8rem;padding-bottom:.4rem;border-bottom:1px solid var(--border)}
+.pr .slabel{color:var(--r)}.ps .slabel{color:var(--s)}
+p{color:var(--muted2);margin-bottom:.5rem;font-size:14.5px}
+p:last-child{margin-bottom:0}
+strong{color:var(--text);font-weight:500}
+.quote{border-left:2px solid var(--gold);padding:.55rem .9rem .55rem 1rem;margin:.85rem 0;background:rgba(184,146,42,.05);border-radius:0 4px 4px 0}
+.quote p{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.97rem;color:var(--text);line-height:1.55;margin:0}
+.quote .src{font-family:'Outfit',sans-serif;font-style:normal;font-size:11px;color:var(--muted);margin-top:.3rem;display:block}
+.pills{display:flex;flex-wrap:wrap;gap:.4rem;margin:.7rem 0}
+.pill{font-size:12px;padding:.25rem .65rem;border-radius:20px;border:1px solid var(--border);background:var(--bg3);color:var(--muted2)}
+.plist{display:flex;flex-direction:column;gap:.65rem;margin:.7rem 0}
+.pitem{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:.85rem 1rem;display:grid;grid-template-columns:8px 1fr;gap:.7rem;align-items:start}
+.pdot{width:8px;height:8px;border-radius:50%;margin-top:.52rem;flex-shrink:0}
+.pr .pdot{background:var(--r)}.ps .pdot{background:var(--s)}
+.pname{font-weight:500;font-size:13.5px;color:var(--text);margin-bottom:.1rem}
+.psub{font-size:11px;color:var(--muted);font-style:italic}
+.ptext{font-size:13.5px;color:var(--muted2);line-height:1.5}
+.ex{background:var(--bg2);border:1px solid var(--border);border-radius:6px;overflow:hidden;margin:.7rem 0}
+.exh{padding:.45rem .9rem;display:flex;align-items:center;gap:.55rem;border-bottom:1px solid var(--border);background:var(--bg3)}
+.exd{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.pr .exd{background:var(--r)}.ps .exd{background:var(--s)}
+.exht{font-size:11.5px;font-weight:500;color:var(--muted2)}
+.exb{padding:.8rem .9rem;font-size:13.5px;color:var(--muted2);line-height:1.55}
+.exb strong{color:var(--text)}
+.lesson{margin-top:.55rem;padding-top:.55rem;border-top:1px dashed var(--border);font-size:12px;color:var(--muted)}
+.lesson strong{color:var(--muted2)}
+.lbox{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:.8rem .95rem;margin:.7rem 0;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.93rem;color:var(--text);line-height:1.75}
+.lverdict{font-family:'Outfit',sans-serif;font-style:normal;font-size:12px;margin-top:.45rem;padding-top:.45rem;border-top:1px solid var(--border);color:#d07858}
+.sumbox{border-radius:6px;padding:.9rem 1rem;margin:.85rem 0;font-size:14px;line-height:1.55}
+.pr .sumbox{background:var(--r-bg);border:1px solid rgba(196,122,90,.2);color:var(--r-l)}
+.ps .sumbox{background:var(--s-bg);border:1px solid rgba(90,140,122,.2);color:var(--s-l)}
+/* DIAGRAMS — tappable cards */
+.diagram{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:1.1rem 1rem .9rem;margin:1rem 0;position:relative;-webkit-tap-highlight-color:transparent}
+.diagram svg{width:100%;height:auto;display:block}
+.dtitle{font-size:10.5px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:.8rem;display:flex;align-items:center;justify-content:space-between}
+.dtap{font-size:11px;opacity:.4;font-weight:400;letter-spacing:0;text-transform:none}
+/* tap area — invisible button on top of diagram */
+.dtap-btn{position:absolute;inset:0;background:none;border:none;cursor:pointer;-webkit-tap-highlight-color:rgba(255,255,255,.05);border-radius:8px}
+.dtap-btn:active{background:rgba(255,255,255,.04)}
+/* OVERLAY */
+#ov{display:none;position:fixed;inset:0;z-index:999;flex-direction:column;background:#000}
+#ov.open{display:flex}
+#ov-bar{display:flex;align-items:center;justify-content:space-between;padding:.6rem 1rem;border-bottom:1px solid #2e2a25;flex-shrink:0;background:#0d0c0b}
+#ov-title{font-size:10px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:#7a7060;font-family:Outfit,sans-serif;flex:1;margin-right:.5rem}
+#ov-hint{font-size:11px;color:#3a3428;font-family:Outfit,sans-serif;margin-right:.75rem;white-space:nowrap}
+#ov-close{background:none;border:1px solid #2e2a25;color:#a09278;font-family:Outfit,sans-serif;font-size:14px;cursor:pointer;padding:.3rem .9rem;border-radius:4px;-webkit-tap-highlight-color:transparent;flex-shrink:0}
+#ov-body{flex:1;overflow:auto;-webkit-overflow-scrolling:touch;padding:1.25rem;display:flex;align-items:center;justify-content:center}
+#ov-body svg{width:100%;max-width:100%;height:auto;display:block;border-radius:6px;background:#161412}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<!-- HOME -->
+<div class="page active" id="pg-home">
+  <div class="hero">
+    <div class="hero-eye">Philosophie · Terminale · Éval mercredi</div>
+    <h1 class="hero-title">La <em>Connaissance</em></h1>
+    <p class="hero-sub">Deux notions. Appuie pour réviser.</p>
+    <div class="cards">
+      <div class="ncard cr" onclick="go('raison',true)">
+        <div class="cnum">01</div><div class="clabel">Notion I</div>
+        <div class="ctitle">La Raison</div>
+        <p class="cdesc">Définition · Logique vs vérité · Rationalisme · Kant &amp; les facultés</p>
+        <div class="carrow">↗</div>
+      </div>
+      <div class="ncard cs" onclick="go('science',true)">
+        <div class="cnum">02</div><div class="clabel">Notion II</div>
+        <div class="ctitle">La Science</div>
+        <p class="cdesc">Histoire · Théorie ↔ expérience · Exemples clés · Popper</p>
+        <div class="carrow">↗</div>
+      </div>
+    </div>
+    <div class="hero-note">💡 Introduction + plan détaillé</div>
+  </div>
+</div>
+
+<!-- PAGE RAISON -->
+<div class="page pr" id="pg-raison">
+  <nav>
+    <button class="nav-back" onclick="go('home')">← Accueil</button>
+    <div class="nav-title">Philosophie · Terminale</div>
+    <div class="nav-switch">
+      <button class="btn-r cur" onclick="go('raison')">01 · Raison</button>
+      <button class="btn-s" onclick="go('science')">02 · Science</button>
+    </div>
+  </nav>
+  <div class="cwrap">
+    <div class="phero">
+      <div class="pnum">01</div>
+      <h2 class="ptitle">La Raison</h2>
+      <p class="ptag">Définition · Logique vs vérité · Rationalisme · Kant</p>
+    </div>
+
+    <div class="section">
+      <div class="slabel">Vue d'ensemble</div>
+      <div class="diagram">
+        <div class="dtitle">La Raison — carte mentale <span class="dtap">Appuie pour zoomer 🔍</span></div>
+        <svg viewBox="0 0 660 310" xmlns="http://www.w3.org/2000/svg">
+          <rect x="230" y="128" width="200" height="54" rx="8" fill="#2a1f18" stroke="#c47a5a" stroke-width="1.5"/>
+          <text x="330" y="150" text-anchor="middle" fill="#c47a5a" font-family="Georgia,serif" font-size="16" font-style="italic">La Raison</text>
+          <text x="330" y="170" text-anchor="middle" fill="#7a6050" font-family="Arial,sans-serif" font-size="11">faculté de discernement vrai / faux</text>
+          <rect x="14" y="18" width="182" height="74" rx="6" fill="#1e1b18" stroke="#3d3830" stroke-width="1"/>
+          <text x="105" y="40" text-anchor="middle" fill="#e8e0d4" font-family="Arial,sans-serif" font-size="12" font-weight="bold">Connaissance</text>
+          <text x="105" y="57" text-anchor="middle" fill="#7a7060" font-family="Arial,sans-serif" font-size="10.5">sciences &amp; vérité</text>
+          <text x="105" y="76" text-anchor="middle" fill="#c47a5a" font-family="Arial,sans-serif" font-size="10" font-style="italic">« Socrate est blond » — logique mais faux</text>
+          <line x1="196" y1="55" x2="228" y2="142" stroke="#3d3830" stroke-width="1" stroke-dasharray="4 3"/>
+          <rect x="14" y="218" width="182" height="74" rx="6" fill="#1e1b18" stroke="#3d3830" stroke-width="1"/>
+          <text x="105" y="240" text-anchor="middle" fill="#e8e0d4" font-family="Arial,sans-serif" font-size="12" font-weight="bold">Moral / Action</text>
+          <text x="105" y="257" text-anchor="middle" fill="#7a7060" font-family="Arial,sans-serif" font-size="10.5">éthique &amp; jugement</text>
+          <text x="105" y="276" text-anchor="middle" fill="#c47a5a" font-family="Arial,sans-serif" font-size="10" font-style="italic">la raison guide sans se fier aux passions</text>
+          <line x1="196" y1="255" x2="228" y2="168" stroke="#3d3830" stroke-width="1" stroke-dasharray="4 3"/>
+          <rect x="464" y="18" width="182" height="74" rx="6" fill="#1e1b18" stroke="#3d3830" stroke-width="1"/>
+          <text x="555" y="40" text-anchor="middle" fill="#e8e0d4" font-family="Arial,sans-serif" font-size="12" font-weight="bold">Rationalisme</text>
+          <text x="555" y="57" text-anchor="middle" fill="#7a7060" font-family="Arial,sans-serif" font-size="10.5">Platon · Descartes</text>
+          <text x="555" y="76" text-anchor="middle" fill="#c47a5a" font-family="Arial,sans-serif" font-size="10" font-style="italic">La cire fond et change d'aspect, mais Descartes sait que c'est la même cire sans la voir — c'est l'esprit, pas les sens</text>
+          <line x1="464" y1="55" x2="432" y2="142" stroke="#3d3830" stroke-width="1" stroke-dasharray="4 3"/>
+          <rect x="464" y="218" width="182" height="74" rx="6" fill="#1a2820" stroke="#5a8c7a" stroke-width="1"/>
+          <text x="555" y="240" text-anchor="middle" fill="#6ea88e" font-family="Arial,sans-serif" font-size="12" font-weight="bold">Kant — synthèse</text>
+          <text x="555" y="257" text-anchor="middle" fill="#3d6050" font-family="Arial,sans-serif" font-size="10.5">raison + expérience</text>
+          <text x="555" y="276" text-anchor="middle" fill="#5a8c7a" font-family="Arial,sans-serif" font-size="10" font-style="italic">Kant : sans l'expérience pour corriger la raison, elle produit des erreurs — « elle délire » — Critique</text>
+          <line x1="464" y1="255" x2="432" y2="168" stroke="#5a8c7a" stroke-width="1" stroke-dasharray="4 3" opacity=".8"/>
+        </svg>
+        <button class="dtap-btn" aria-label="Agrandir le schéma" onclick="openZoom('s1')"></button>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="slabel">Définition &amp; nature</div>
+      <p>La raison est la <strong>faculté de discernement</strong> entre le vrai et le faux. Descartes la nomme le « bon sens » dans le <em>Discours de la méthode</em>. Elle est liée à la logique, manifestation de l'esprit.</p>
+      <p>Aristote : l'homme est un <strong>animal rationnel</strong> — la raison est la faculté proprement humaine.</p>
+      <div class="pills"><span class="pill">Champ 1 · Connaissance</span><span class="pill">Champ 2 · Moral &amp; action</span></div>
+    </div>
+
+    <div class="section">
+      <div class="slabel">Logique ≠ Vérité — distinction clé</div>
+      <p>Un discours peut être <strong>formellement vrai</strong> (logique, cohérent) et <strong>matériellement faux</strong> (sans lien avec la réalité). La logique est nécessaire mais non suffisante.</p>
+      <div class="lbox">
+        « Tous les hommes sont blonds. »<br>« Or Socrate est un homme. »<br>« Donc Socrate est blond. »
+        <div class="lverdict">✗ Cohérent formellement — faux dans la réalité</div>
+      </div>
+      <p>Pour vérifier la vérité d'un discours, il faut <strong>sortir du discours</strong> et confronter à la réalité.</p>
+    </div>
+
+    <div class="section">
+      <div class="slabel">Le rationalisme &amp; ses limites</div>
+      <p><strong>Rationalisme</strong> = la raison est la <em>seule</em> faculté conduisant à la vérité. Position dominante de Platon au 18e s.</p>
+      <div class="plist">
+        <div class="pitem"><div class="pdot"></div><div>
+          <div class="pname">Platon <span class="psub">— La République</span></div>
+          <div class="ptext">« La science ne comporte rien de sensible. » Connaître = se dégager du monde trompeur des sens.</div>
+        </div></div>
+        <div class="pitem"><div class="pdot"></div><div>
+          <div class="pname">Descartes <span class="psub">— Discours de la méthode</span></div>
+          <div class="ptext">Raison = bon sens, « inspection de l'esprit ». L'imagination est une faculté trop limitée.</div>
+        </div></div>
+        <div class="pitem"><div class="pdot"></div><div>
+          <div class="pname">Malebranche &amp; Pascal</div>
+          <div class="ptext">« La folle du logis » (Malebranche), « maîtresse d'erreur et de fausseté » (Pascal).</div>
+        </div></div>
+      </div>
+      <p><strong>Limite :</strong> on sait que le soleil ne se lève pas, mais on continue de le <em>voir</em> ainsi. Décalage irréductible entre expérience sensible et construction rationnelle.</p>
+    </div>
+
+    <div class="section">
+      <div class="slabel">Kant — la grande synthèse</div>
+      <p>La <em>Critique de la raison pure</em> dénonce l'illusion rationaliste : la raison seule ne peut pas construire la connaissance.</p>
+      <div class="quote"><p>« La raison délire dès qu'elle est privée de la pierre de touche de l'expérience. »</p><span class="src">— Emmanuel Kant, Critique de la raison pure</span></div>
+      <div class="diagram">
+        <div class="dtitle">Les 4 facultés selon Kant <span class="dtap">Appuie pour zoomer 🔍</span></div>
+        <svg viewBox="0 0 660 240" xmlns="http://www.w3.org/2000/svg">
+          <rect x="205" y="178" width="250" height="52" rx="8" fill="#0f1a16" stroke="#5a8c7a" stroke-width="1.5"/>
+          <text x="330" y="200" text-anchor="middle" fill="#6ea88e" font-family="Georgia,serif" font-size="15" font-style="italic">Connaissance</text>
+          <text x="330" y="219" text-anchor="middle" fill="#3d6050" font-family="Arial,sans-serif" font-size="9.5">résultat de la combinaison de toutes les facultés</text>
+          <rect x="10" y="20" width="148" height="74" rx="6" fill="#2a1f18" stroke="#c47a5a" stroke-width="1"/>
+          <text x="84" y="42" text-anchor="middle" fill="#c47a5a" font-family="Arial,sans-serif" font-size="12" font-weight="bold">Raison</text>
+          <text x="84" y="59" text-anchor="middle" fill="#7a6050" font-family="Arial,sans-serif" font-size="10">logique, enchaîner</text>
+          <text x="84" y="80" text-anchor="middle" fill="#c47a5a" font-family="Arial,sans-serif" font-size="9.5" font-style="italic">Tous les hommes meurent, Socrate est un homme, donc Socrate mourra — c'est la raison qui enchaîne</text>
+          <line x1="100" y1="94" x2="248" y2="186" stroke="#c47a5a" stroke-width="1" opacity=".45"/>
+          <rect x="172" y="20" width="148" height="74" rx="6" fill="#1e1b18" stroke="#3d3830" stroke-width="1"/>
+          <text x="246" y="42" text-anchor="middle" fill="#e8e0d4" font-family="Arial,sans-serif" font-size="12" font-weight="bold">Entendement</text>
+          <text x="246" y="59" text-anchor="middle" fill="#7a7060" font-family="Arial,sans-serif" font-size="10">concepts, catégoriser</text>
+          <text x="246" y="80" text-anchor="middle" fill="#a09278" font-family="Arial,sans-serif" font-size="9.5" font-style="italic">je pose « corps » sur la cire fondue</text>
+          <line x1="270" y1="94" x2="300" y2="176" stroke="#5a5040" stroke-width="1" opacity=".45"/>
+          <rect x="340" y="20" width="148" height="74" rx="6" fill="#1e1b18" stroke="#3d3830" stroke-width="1"/>
+          <text x="414" y="42" text-anchor="middle" fill="#e8e0d4" font-family="Arial,sans-serif" font-size="12" font-weight="bold">Imagination</text>
+          <text x="414" y="59" text-anchor="middle" fill="#7a7060" font-family="Arial,sans-serif" font-size="10">représenter, hypothèses</text>
+          <text x="414" y="80" text-anchor="middle" fill="#a09278" font-family="Arial,sans-serif" font-size="9.5" font-style="italic">Le Verrier imagine une planète inconnue</text>
+          <line x1="390" y1="94" x2="360" y2="176" stroke="#5a5040" stroke-width="1" opacity=".45"/>
+          <rect x="502" y="20" width="148" height="74" rx="6" fill="#1e1b18" stroke="#3d3830" stroke-width="1"/>
+          <text x="576" y="42" text-anchor="middle" fill="#e8e0d4" font-family="Arial,sans-serif" font-size="12" font-weight="bold">Sensibilité</text>
+          <text x="576" y="59" text-anchor="middle" fill="#7a7060" font-family="Arial,sans-serif" font-size="10">contact avec le monde</text>
+          <text x="576" y="80" text-anchor="middle" fill="#a09278" font-family="Arial,sans-serif" font-size="9.5" font-style="italic">Huygens observe sur l'écran une zone d'ombre là où Newton prédisait de la lumière — la sensibilité réfute la théorie</text>
+          <line x1="554" y1="94" x2="424" y2="186" stroke="#5a5040" stroke-width="1" opacity=".45"/>
+        </svg>
+        <button class="dtap-btn" aria-label="Agrandir le schéma" onclick="openZoom('s2')"></button>
+      </div>
+      <div class="quote"><p>« Des pensées sans matière sont vides, des intuitions sans concepts sont aveugles. »</p><span class="src">— Emmanuel Kant</span></div>
+      <div class="sumbox">Kant reste rationaliste, mais son rationalisme est <strong>élargi</strong> : la connaissance n'est plus une pure inspection de l'esprit, c'est le résultat de <em>toutes</em> les facultés en interaction.</div>
+    </div>
+
+    <div class="page-nav">
+      <button class="pnav-btn left h" onclick="go('home')"><div class="pnav-label">Retour</div><div class="pnav-title">Accueil</div></button>
+      <button class="pnav-btn right s" onclick="go('science')"><div class="pnav-label">Notion suivante</div><div class="pnav-title">La Science</div></button>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE SCIENCE -->
+<div class="page ps" id="pg-science">
+  <nav>
+    <button class="nav-back" onclick="go('home')">← Accueil</button>
+    <div class="nav-title">Philosophie · Terminale</div>
+    <div class="nav-switch">
+      <button class="btn-r" onclick="go('raison')">01 · Raison</button>
+      <button class="btn-s cur" onclick="go('science')">02 · Science</button>
+    </div>
+  </nav>
+  <div class="cwrap">
+    <div class="phero">
+      <div class="pnum">02</div>
+      <h2 class="ptitle">La Science</h2>
+      <p class="ptag">Histoire · Théorie ↔ expérience · Exemples · Popper</p>
+    </div>
+
+    <div class="section">
+      <div class="slabel">Vue d'ensemble</div>
+      <div class="diagram">
+        <div class="dtitle">Évolution de la conception de la science <span class="dtap">Appuie pour zoomer 🔍</span></div>
+        <svg viewBox="0 0 660 200" xmlns="http://www.w3.org/2000/svg">
+          <rect x="8" y="20" width="112" height="90" rx="6" fill="#1e1b18" stroke="#3d3830" stroke-width="1"/>
+          <text x="64" y="43" text-anchor="middle" fill="#e8e0d4" font-family="Arial,sans-serif" font-size="12" font-weight="bold">Platon</text>
+          <text x="64" y="60" text-anchor="middle" fill="#7a7060" font-family="Arial,sans-serif" font-size="10">La raison seule suffit — le monde sensible est trompeur</text>
+          <text x="64" y="78" text-anchor="middle" fill="#c47a5a" font-family="Arial,sans-serif" font-size="9.5" font-style="italic">« la science ne comporte</text>
+          <text x="64" y="92" text-anchor="middle" fill="#c47a5a" font-family="Arial,sans-serif" font-size="9.5" font-style="italic">rien de sensible »</text>
+          <text x="64" y="170" text-anchor="middle" fill="#3a3428" font-family="Arial,sans-serif" font-size="9">Antiquité</text>
+          <text x="128" y="68" text-anchor="middle" fill="#4a4438" font-family="Arial,sans-serif" font-size="15">→</text>
+          <rect x="138" y="20" width="116" height="90" rx="6" fill="#1e1b18" stroke="#3d3830" stroke-width="1"/>
+          <text x="196" y="43" text-anchor="middle" fill="#e8e0d4" font-family="Arial,sans-serif" font-size="12" font-weight="bold">Descartes</text>
+          <text x="196" y="60" text-anchor="middle" fill="#7a7060" font-family="Arial,sans-serif" font-size="10">Inspection esprit</text>
+          <text x="196" y="78" text-anchor="middle" fill="#c47a5a" font-family="Arial,sans-serif" font-size="9.5" font-style="italic">la cire fondue change</text>
+          <text x="196" y="92" text-anchor="middle" fill="#c47a5a" font-family="Arial,sans-serif" font-size="9.5" font-style="italic">d'aspect — on sait sans voir</text>
+          <text x="196" y="170" text-anchor="middle" fill="#3a3428" font-family="Arial,sans-serif" font-size="9">17e s.</text>
+          <text x="262" y="68" text-anchor="middle" fill="#4a4438" font-family="Arial,sans-serif" font-size="15">→</text>
+          <rect x="272" y="20" width="112" height="90" rx="6" fill="#1e1b18" stroke="#3d3830" stroke-width="1"/>
+          <text x="328" y="43" text-anchor="middle" fill="#e8e0d4" font-family="Arial,sans-serif" font-size="12" font-weight="bold">Hume</text>
+          <text x="328" y="60" text-anchor="middle" fill="#7a7060" font-family="Arial,sans-serif" font-size="10">Empirisme</text>
+          <text x="328" y="78" text-anchor="middle" fill="#c47a5a" font-family="Arial,sans-serif" font-size="9.5" font-style="italic">sans voir le feu, je ne</text>
+          <text x="328" y="92" text-anchor="middle" fill="#c47a5a" font-family="Arial,sans-serif" font-size="9.5" font-style="italic">sais pas qu'il brûle</text>
+          <text x="328" y="170" text-anchor="middle" fill="#3a3428" font-family="Arial,sans-serif" font-size="9">18e s.</text>
+          <text x="392" y="68" text-anchor="middle" fill="#4a4438" font-family="Arial,sans-serif" font-size="15">→</text>
+          <rect x="402" y="10" width="112" height="110" rx="6" fill="#0f1a16" stroke="#5a8c7a" stroke-width="1.3"/>
+          <text x="458" y="35" text-anchor="middle" fill="#6ea88e" font-family="Arial,sans-serif" font-size="12" font-weight="bold">Kant</text>
+          <text x="458" y="52" text-anchor="middle" fill="#3d6050" font-family="Arial,sans-serif" font-size="10">Synthèse</text>
+          <text x="458" y="70" text-anchor="middle" fill="#5a8c7a" font-family="Arial,sans-serif" font-size="9.5" font-style="italic">4 facultés : la lumière</text>
+          <text x="458" y="84" text-anchor="middle" fill="#5a8c7a" font-family="Arial,sans-serif" font-size="9.5" font-style="italic">se voit ET se théorise</text>
+          <text x="458" y="170" text-anchor="middle" fill="#3a3428" font-family="Arial,sans-serif" font-size="9">18e s.</text>
+          <text x="522" y="68" text-anchor="middle" fill="#4a4438" font-family="Arial,sans-serif" font-size="15">→</text>
+          <rect x="532" y="20" width="120" height="90" rx="6" fill="#1a1410" stroke="#b8922a" stroke-width="1"/>
+          <text x="592" y="43" text-anchor="middle" fill="#d4a93c" font-family="Arial,sans-serif" font-size="12" font-weight="bold">Popper</text>
+          <text x="592" y="60" text-anchor="middle" fill="#806020" font-family="Arial,sans-serif" font-size="10">Falsifiabilité</text>
+          <text x="592" y="78" text-anchor="middle" fill="#c47a5a" font-family="Arial,sans-serif" font-size="9.5" font-style="italic">Newton réfuté par</text>
+          <text x="592" y="92" text-anchor="middle" fill="#c47a5a" font-family="Arial,sans-serif" font-size="9.5" font-style="italic">la zone d'ombre</text>
+          <text x="592" y="170" text-anchor="middle" fill="#3a3428" font-family="Arial,sans-serif" font-size="9">20e s.</text>
+          <line x1="20" y1="155" x2="640" y2="155" stroke="#2e2a25" stroke-width="1"/>
+          <circle cx="64" cy="155" r="3" fill="#3d3830"/>
+          <circle cx="196" cy="155" r="3" fill="#3d3830"/>
+          <circle cx="328" cy="155" r="3" fill="#3d3830"/>
+          <circle cx="458" cy="155" r="4" fill="#5a8c7a"/>
+          <circle cx="592" cy="155" r="3" fill="#b8922a"/>
+        </svg>
+        <button class="dtap-btn" aria-label="Agrandir le schéma" onclick="openZoom('s3')"></button>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="slabel">Les grandes positions</div>
+      <div class="plist">
+        <div class="pitem"><div class="pdot"></div><div>
+          <div class="pname">Platon <span class="psub">— La République</span></div>
+          <div class="ptext">« La science ne comporte rien de sensible. » Connaître = se dégager du monde trompeur des sens.</div>
+        </div></div>
+        <div class="pitem"><div class="pdot"></div><div>
+          <div class="pname">Descartes <span class="psub">— Exemple de la cire</span></div>
+          <div class="ptext">La cire fondue change d'apparence mais c'est la même cire — on le <em>sait</em> sans le voir.</div>
+        </div></div>
+        <div class="pitem"><div class="pdot"></div><div>
+          <div class="pname">Hume <span class="psub">— Empirisme</span></div>
+          <div class="ptext">Sans expérience, aucune connaissance n'est possible — sauf en mathématiques. Réveille Kant de son « sommeil dogmatique ».</div>
+        </div></div>
+        <div class="pitem"><div class="pdot"></div><div>
+          <div class="pname">Kant <span class="psub">— Critique de la raison pure</span></div>
+          <div class="ptext">Connaissance = échange constant théories ↔ observations. Sauf en maths, l'expérience est indispensable.</div>
+        </div></div>
+      </div>
+      <div class="quote"><p>« La raison doit prendre les devants et obliger la nature à répondre à ses questions. »</p><span class="src">— Emmanuel Kant</span></div>
+    </div>
+
+    <div class="section">
+      <div class="slabel">Le dialogue théorie ↔ expérience</div>
+      <div class="diagram">
+        <div class="dtitle">La boucle scientifique <span class="dtap">Appuie pour zoomer 🔍</span></div>
+        <svg viewBox="0 0 660 230" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="ag" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M2 1L8 5L2 9" fill="none" stroke="#b8922a" stroke-width="1.5" stroke-linecap="round"/></marker>
+            <marker id="av" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M2 1L8 5L2 9" fill="none" stroke="#5a8c7a" stroke-width="1.5" stroke-linecap="round"/></marker>
+          </defs>
+          <rect x="30" y="50" width="230" height="90" rx="8" fill="#1a1410" stroke="#b8922a" stroke-width="1.2"/>
+          <text x="145" y="75" text-anchor="middle" fill="#d4a93c" font-family="Georgia,serif" font-size="14" font-style="italic">Théorie / Hypothèse</text>
+          <text x="145" y="93" text-anchor="middle" fill="#806020" font-family="Arial,sans-serif" font-size="10.5">construction de l'esprit</text>
+          <text x="145" y="114" text-anchor="middle" fill="#c47a5a" font-family="Arial,sans-serif" font-size="10" font-style="italic">Newton : lumière = corpuscules,</text>
+          <text x="145" y="128" text-anchor="middle" fill="#c47a5a" font-family="Arial,sans-serif" font-size="10" font-style="italic">2 faisceaux doivent s'additionner</text>
+          <rect x="400" y="50" width="230" height="90" rx="8" fill="#0f1a16" stroke="#5a8c7a" stroke-width="1.2"/>
+          <text x="515" y="75" text-anchor="middle" fill="#6ea88e" font-family="Georgia,serif" font-size="14" font-style="italic">Expérience</text>
+          <text x="515" y="93" text-anchor="middle" fill="#3d6050" font-family="Arial,sans-serif" font-size="10.5">confrontation à la réalité</text>
+          <text x="515" y="114" text-anchor="middle" fill="#5a8c7a" font-family="Arial,sans-serif" font-size="10" font-style="italic">Huygens : intersection =</text>
+          <text x="515" y="128" text-anchor="middle" fill="#5a8c7a" font-family="Arial,sans-serif" font-size="10" font-style="italic">zone d'ombre → Newton ✗</text>
+          <line x1="262" y1="72" x2="398" y2="72" stroke="#b8922a" stroke-width="1.2" opacity=".7" marker-end="url(#ag)"/>
+          <text x="330" y="64" text-anchor="middle" fill="#806020" font-family="Arial,sans-serif" font-size="10">prédiction · test</text>
+          <line x1="398" y1="112" x2="262" y2="112" stroke="#5a8c7a" stroke-width="1.2" opacity=".7" marker-end="url(#av)"/>
+          <text x="330" y="148" text-anchor="middle" fill="#3d6050" font-family="Arial,sans-serif" font-size="10">confirme ✓ ou réfute ✗</text>
+          <rect x="200" y="168" width="260" height="48" rx="6" fill="#1a1814" stroke="#2e2a25" stroke-width="1"/>
+          <text x="330" y="188" text-anchor="middle" fill="#a09278" font-family="Arial,sans-serif" font-size="11" font-weight="bold">Si réfutée → nouvelle théorie</text>
+          <text x="330" y="206" text-anchor="middle" fill="#c47a5a" font-family="Arial,sans-serif" font-size="10" font-style="italic">Huygens propose les ondes → zone d'ombre expliquée ✓</text>
+          <line x1="330" y1="143" x2="330" y2="166" stroke="#3d3830" stroke-width="1" stroke-dasharray="3 3"/>
+        </svg>
+        <button class="dtap-btn" aria-label="Agrandir le schéma" onclick="openZoom('s4')"></button>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="slabel">Les exemples à connaître</div>
+      <div class="ex"><div class="exh"><div class="exd"></div><div class="exht">Théorie de la lumière — Newton / Huygens</div></div>
+        <div class="exb"><strong>Newton</strong> : lumière = <em>corpuscules</em> → deux faisceaux croisés devraient s'additionner.<br>
+          <strong>Expérience :</strong> l'intersection est une zone d'ombre. Newton réfuté. ✗<br>
+          <strong>Huygens</strong> : lumière = <em>onde</em> → les ondes se repoussent → zone d'ombre expliquée. ✓
+          <div class="lesson"><strong>Leçon :</strong> l'expérience infirme la théorie → nouvelle construction intellectuelle.</div>
+        </div></div>
+      <div class="ex"><div class="exh"><div class="exd"></div><div class="exht">Découverte de Neptune — Le Verrier</div></div>
+        <div class="exb">Le Verrier calcule la trajectoire d'Uranus avec Newton → écart avec la réalité. Hypothèse : corps céleste inconnu → <strong>Neptune découverte</strong>. ✓
+          <div class="lesson"><strong>Leçon :</strong> l'expérience peut confirmer la théorie en révélant du réel nouveau.</div>
+        </div></div>
+      <div class="ex"><div class="exh"><div class="exd"></div><div class="exht">La pénicilline — Fleming</div></div>
+        <div class="exb">Fleming laisse une préparation au soleil → moisissure → les germes régressent autour. Pénicilline découverte par hasard.
+          <div class="lesson"><strong>Leçon :</strong> la science peut avancer par expériences imprévues. Aucune vérité n'est définitive.</div>
+        </div></div>
+      <div class="ex"><div class="exh"><div class="exd"></div><div class="exht">Le vivant — Harvey &amp; Descartes vs Kant</div></div>
+        <div class="exb"><strong>Harvey :</strong> cœur = pompe, sang = circuit hydraulique → modèle mécaniste.<br>
+          <strong>Kant objecte :</strong> un corps est une <em>force formatrice</em> — cicatrisation et croissance ne s'expliquent pas mécaniquement.
+          <div class="lesson"><strong>Leçon :</strong> passage de l'anatomie (mort) à la physiologie (vivant). Le modèle bute sur la réalité.</div>
+        </div></div>
+    </div>
+
+    <div class="section">
+      <div class="slabel">Popper — la falsifiabilité</div>
+      <div class="diagram">
+        <div class="dtitle">Critère de scientificité de Popper <span class="dtap">Appuie pour zoomer 🔍</span></div>
+        <svg viewBox="0 0 660 210" xmlns="http://www.w3.org/2000/svg">
+          <rect x="205" y="12" width="250" height="54" rx="7" fill="#1a1410" stroke="#b8922a" stroke-width="1.2"/>
+          <text x="330" y="34" text-anchor="middle" fill="#d4a93c" font-family="Arial,sans-serif" font-size="13" font-weight="bold">Théorie scientifique</text>
+          <text x="330" y="52" text-anchor="middle" fill="#806020" font-family="Arial,sans-serif" font-size="10">toujours exposée à l'expérience (Popper)</text>
+          <line x1="286" y1="66" x2="168" y2="110" stroke="#5a5040" stroke-width="1" opacity=".7"/>
+          <line x1="374" y1="66" x2="492" y2="110" stroke="#5a5040" stroke-width="1" opacity=".7"/>
+          <rect x="58" y="110" width="220" height="76" rx="6" fill="#0f1a16" stroke="#5a8c7a" stroke-width="1"/>
+          <text x="168" y="133" text-anchor="middle" fill="#6ea88e" font-family="Arial,sans-serif" font-size="12" font-weight="bold">✓ Confirmée</text>
+          <text x="168" y="150" text-anchor="middle" fill="#3d6050" font-family="Arial,sans-serif" font-size="10.5">vraie jusqu'à preuve du contraire</text>
+          <text x="168" y="169" text-anchor="middle" fill="#5a8c7a" font-family="Arial,sans-serif" font-size="10" font-style="italic">Le Verrier prédit Neptune →</text>
+          <text x="168" y="181" text-anchor="middle" fill="#5a8c7a" font-family="Arial,sans-serif" font-size="10" font-style="italic">le télescope la confirme ✓</text>
+          <rect x="382" y="110" width="220" height="76" rx="6" fill="#1f1410" stroke="#c47a5a" stroke-width="1"/>
+          <text x="492" y="133" text-anchor="middle" fill="#c47a5a" font-family="Arial,sans-serif" font-size="12" font-weight="bold">✗ Réfutée</text>
+          <text x="492" y="150" text-anchor="middle" fill="#7a4030" font-family="Arial,sans-serif" font-size="10.5">→ nouvelle hypothèse</text>
+          <text x="492" y="169" text-anchor="middle" fill="#c47a5a" font-family="Arial,sans-serif" font-size="10" font-style="italic">Newton : corpuscules → zone d'ombre</text>
+          <text x="492" y="181" text-anchor="middle" fill="#c47a5a" font-family="Arial,sans-serif" font-size="10" font-style="italic">impossible → Huygens : ondes ✓</text>
+          <text x="330" y="204" text-anchor="middle" fill="#3a3428" font-family="Arial,sans-serif" font-size="9" font-style="italic">« Les théories sont des filets qui laissent toujours échapper l'essentiel » — Popper</text>
+        </svg>
+        <button class="dtap-btn" aria-label="Agrandir le schéma" onclick="openZoom('s5')"></button>
+      </div>
+      <p><strong>Critère de scientificité :</strong> une théorie est scientifique si elle est <strong>falsifiable</strong> — si elle peut être réfutée par une expérience.</p>
+      <p>Conséquence : la science ne produit que des <strong>connaissances provisoires</strong>, toujours exposées à la révision.</p>
+      <div class="quote"><p>« Les théories scientifiques ne doivent pas être confondues avec une représentation de tous les aspects du monde réel. »</p><span class="src">— Karl Popper</span></div>
+      <div class="quote"><p>« Le succès d'énoncés en langue anglaise ne doit pas nous inciter à conclure que le monde est en lui-même britannique. »</p><span class="src">— Karl Popper (avec ironie)</span></div>
+    </div>
+
+    <div class="section">
+      <div class="slabel">Bilan — conception moderne</div>
+      <p>De la <strong>vérité définitive par la raison pure</strong> à des <strong>connaissances provisoires</strong> en dialogue permanent avec l'expérience.</p>
+      <div class="pills">
+        <span class="pill">La sensibilité · observer</span>
+        <span class="pill">L'imagination · formuler des hypothèses</span>
+        <span class="pill">L'expérience · valider ou infirmer</span>
+      </div>
+      <div class="sumbox">Il n'y a de science que de <strong>phénomènes</strong> — toute théorie est exposée à un éventuel démenti expérimental.</div>
+    </div>
+
+    <div class="page-nav">
+      <button class="pnav-btn left r" onclick="go('raison')"><div class="pnav-label">Notion précédente</div><div class="pnav-title">La Raison</div></button>
+      <button class="pnav-btn right h" onclick="go('home')"><div class="pnav-label">Retour</div><div class="pnav-title">Accueil</div></button>
+    </div>
+  </div>
+</div>
+
+<!-- OVERLAY -->
+<div id="ov">
+  <div id="ov-bar">
+    <div id="ov-title"></div>
+    <span id="ov-hint" style="font-size:11px;color:#3a3428;font-family:Outfit,sans-serif">Glisse pour voir</span>
+    <button id="ov-close" onclick="closeZoom()">✕</button>
+  </div>
+  <div id="ov-body"></div>
+</div>
+
+<script>
+/* NAV */
+function go(id,doFS){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('pg-'+id).classList.add('active');
+  window.scrollTo({top:0,behavior:'instant'});
+  document.body.className=id==='raison'?'pr':id==='science'?'ps':'ph';
+  if(doFS&&id!=='home'){
+    const e=document.documentElement;
+    (e.requestFullscreen||e.webkitRequestFullscreen||e.mozRequestFullScreen||e.msRequestFullscreen||function(){}).call(e);
+  }
+  
+}
+
+/* ZOOM */
+function openZoom(id){
+  const titles = {
+    s1:'La Raison — carte mentale',
+    s2:'Les 4 facultés selon Kant',
+    s3:'Évolution de la conception de la science',
+    s4:'La boucle scientifique',
+    s5:'Critère de scientificité de Popper'
+  };
+  document.getElementById('ov-title').textContent = titles[id]||'';
+  document.getElementById('ov-body').innerHTML = schemas[id]||'';
+  document.getElementById('ov').classList.add('open');
+}
+function closeZoom(){
+  document.getElementById('ov').classList.remove('open');
+}
+
+/* SCHÉMAS PLEIN ÉCRAN */
+const schemas = {
+
+s1: `<svg viewBox="0 0 400 560" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-height:85vh;height:auto;display:block;margin:auto">
+  <rect x="125" y="240" width="150" height="52" rx="8" fill="#2a1f18" stroke="#c47a5a" stroke-width="1.5"/>
+  <text x="200" y="262" text-anchor="middle" fill="#c47a5a" font-family="Georgia,serif" font-size="15" font-style="italic">La Raison</text>
+  <text x="200" y="281" text-anchor="middle" fill="#7a6050" font-family="Arial,sans-serif" font-size="10">faculté de discernement</text>
+
+  <rect x="10" y="20" width="175" height="90" rx="7" fill="#1e1b18" stroke="#3d3830" stroke-width="1"/>
+  <text x="97" y="42" text-anchor="middle" fill="#e8e0d4" font-family="Arial,sans-serif" font-size="13" font-weight="bold">Connaissance</text>
+  <text x="97" y="60" text-anchor="middle" fill="#c47a5a" font-family="Arial,sans-serif" font-size="9.5" font-style="italic">« Tous les hommes sont blonds,</text>
+  <text x="97" y="74" text-anchor="middle" fill="#c47a5a" font-family="Arial,sans-serif" font-size="9.5" font-style="italic">Socrate est blond » — logique mais faux</text>
+  <text x="97" y="90" text-anchor="middle" fill="#5a5040" font-family="Arial,sans-serif" font-size="9" font-style="italic">→ cohérent ≠ vrai</text>
+  <line x1="160" y1="75" x2="168" y2="248" stroke="#3d3830" stroke-width="1" stroke-dasharray="4 3"/>
+
+  <rect x="215" y="20" width="175" height="90" rx="7" fill="#1e1b18" stroke="#3d3830" stroke-width="1"/>
+  <text x="303" y="42" text-anchor="middle" fill="#e8e0d4" font-family="Arial,sans-serif" font-size="13" font-weight="bold">Rationalisme</text>
+  <text x="303" y="60" text-anchor="middle" fill="#7a7060" font-family="Arial,sans-serif" font-size="10">Platon · Descartes</text>
+  <text x="303" y="76" text-anchor="middle" fill="#c47a5a" font-family="Arial,sans-serif" font-size="9.5" font-style="italic">La cire fond et change d'aspect,</text>
+  <text x="303" y="90" text-anchor="middle" fill="#c47a5a" font-family="Arial,sans-serif" font-size="9.5" font-style="italic">Descartes sait que c'est la même — sans voir</text>
+  <line x1="240" y1="75" x2="232" y2="248" stroke="#3d3830" stroke-width="1" stroke-dasharray="4 3"/>
+
+  <rect x="10" y="440" width="175" height="100" rx="7" fill="#1e1b18" stroke="#3d3830" stroke-width="1"/>
+  <text x="97" y="462" text-anchor="middle" fill="#e8e0d4" font-family="Arial,sans-serif" font-size="13" font-weight="bold">Moral / Action</text>
+  <text x="97" y="480" text-anchor="middle" fill="#c47a5a" font-family="Arial,sans-serif" font-size="9.5" font-style="italic">La raison dit de ne pas mentir</text>
+  <text x="97" y="494" text-anchor="middle" fill="#c47a5a" font-family="Arial,sans-serif" font-size="9.5" font-style="italic">même si ça m'arrange —</text>
+  <text x="97" y="508" text-anchor="middle" fill="#c47a5a" font-family="Arial,sans-serif" font-size="9.5" font-style="italic">elle s'oppose à l'intérêt immédiat</text>
+  <line x1="160" y1="460" x2="168" y2="294" stroke="#3d3830" stroke-width="1" stroke-dasharray="4 3"/>
+
+  <rect x="215" y="440" width="175" height="100" rx="7" fill="#1a2820" stroke="#5a8c7a" stroke-width="1"/>
+  <text x="303" y="462" text-anchor="middle" fill="#6ea88e" font-family="Arial,sans-serif" font-size="13" font-weight="bold">Kant — synthèse</text>
+  <text x="303" y="480" text-anchor="middle" fill="#3d6050" font-family="Arial,sans-serif" font-size="10">raison + expérience</text>
+  <text x="303" y="498" text-anchor="middle" fill="#5a8c7a" font-family="Arial,sans-serif" font-size="9.5" font-style="italic">Sans l'expérience pour corriger</text>
+  <text x="303" y="512" text-anchor="middle" fill="#5a8c7a" font-family="Arial,sans-serif" font-size="9.5" font-style="italic">la raison, elle produit des erreurs</text>
+  <line x1="240" y1="460" x2="232" y2="294" stroke="#5a8c7a" stroke-width="1" stroke-dasharray="4 3" opacity=".8"/>
+</svg>`,
+
+s2: `<svg viewBox="0 0 400 580" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-height:85vh;height:auto;display:block;margin:auto">
+  <rect x="75" y="500" width="250" height="60" rx="8" fill="#0f1a16" stroke="#5a8c7a" stroke-width="1.5"/>
+  <text x="200" y="524" text-anchor="middle" fill="#6ea88e" font-family="Georgia,serif" font-size="15" font-style="italic">Connaissance</text>
+  <text x="200" y="545" text-anchor="middle" fill="#3d6050" font-family="Arial,sans-serif" font-size="10">résultat de la combinaison de toutes les facultés</text>
+
+  <rect x="10" y="20" width="185" height="100" rx="7" fill="#2a1f18" stroke="#c47a5a" stroke-width="1"/>
+  <text x="102" y="44" text-anchor="middle" fill="#c47a5a" font-family="Arial,sans-serif" font-size="13" font-weight="bold">Raison</text>
+  <text x="102" y="62" text-anchor="middle" fill="#7a6050" font-family="Arial,sans-serif" font-size="10">logique, enchaîner</text>
+  <text x="102" y="79" text-anchor="middle" fill="#c47a5a" font-family="Arial,sans-serif" font-size="9.5" font-style="italic">Tous les hommes meurent,</text>
+  <text x="102" y="93" text-anchor="middle" fill="#c47a5a" font-family="Arial,sans-serif" font-size="9.5" font-style="italic">Socrate est un homme → il mourra</text>
+  <line x1="130" y1="120" x2="165" y2="500" stroke="#c47a5a" stroke-width="1" opacity=".5"/>
+
+  <rect x="205" y="20" width="185" height="100" rx="7" fill="#1e1b18" stroke="#3d3830" stroke-width="1"/>
+  <text x="297" y="44" text-anchor="middle" fill="#e8e0d4" font-family="Arial,sans-serif" font-size="13" font-weight="bold">Entendement</text>
+  <text x="297" y="62" text-anchor="middle" fill="#7a7060" font-family="Arial,sans-serif" font-size="10">concepts, catégoriser</text>
+  <text x="297" y="79" text-anchor="middle" fill="#a09278" font-family="Arial,sans-serif" font-size="9.5" font-style="italic">Je vois la cire changer, l'entendement</text>
+  <text x="297" y="93" text-anchor="middle" fill="#a09278" font-family="Arial,sans-serif" font-size="9.5" font-style="italic">pose le concept « corps matériel »</text>
+  <line x1="270" y1="120" x2="235" y2="500" stroke="#5a5040" stroke-width="1" opacity=".5"/>
+
+  <rect x="10" y="260" width="185" height="100" rx="7" fill="#1e1b18" stroke="#3d3830" stroke-width="1"/>
+  <text x="102" y="284" text-anchor="middle" fill="#e8e0d4" font-family="Arial,sans-serif" font-size="13" font-weight="bold">Imagination</text>
+  <text x="102" y="302" text-anchor="middle" fill="#7a7060" font-family="Arial,sans-serif" font-size="10">représenter, hypothèses</text>
+  <text x="102" y="319" text-anchor="middle" fill="#a09278" font-family="Arial,sans-serif" font-size="9.5" font-style="italic">Le Verrier ne voit pas Neptune</text>
+  <text x="102" y="333" text-anchor="middle" fill="#a09278" font-family="Arial,sans-serif" font-size="9.5" font-style="italic">mais l'imagine pour expliquer Uranus</text>
+  <line x1="130" y1="360" x2="165" y2="500" stroke="#5a5040" stroke-width="1" opacity=".5"/>
+
+  <rect x="205" y="260" width="185" height="100" rx="7" fill="#1e1b18" stroke="#3d3830" stroke-width="1"/>
+  <text x="297" y="284" text-anchor="middle" fill="#e8e0d4" font-family="Arial,sans-serif" font-size="13" font-weight="bold">Sensibilité</text>
+  <text x="297" y="302" text-anchor="middle" fill="#7a7060" font-family="Arial,sans-serif" font-size="10">contact avec le monde</text>
+  <text x="297" y="319" text-anchor="middle" fill="#a09278" font-family="Arial,sans-serif" font-size="9.5" font-style="italic">Huygens observe sur l'écran</text>
+  <text x="297" y="333" text-anchor="middle" fill="#a09278" font-family="Arial,sans-serif" font-size="9.5" font-style="italic">une zone d'ombre → réfute Newton</text>
+  <line x1="270" y1="360" x2="235" y2="500" stroke="#5a5040" stroke-width="1" opacity=".5"/>
+</svg>`,
+
+s3: `<svg viewBox="0 0 400 620" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-height:85vh;height:auto;display:block;margin:auto">
+  <line x1="28" y1="30" x2="28" y2="590" stroke="#2e2a25" stroke-width="1.5"/>
+
+  <circle cx="28" cy="55" r="5" fill="#3d3830"/>
+  <rect x="50" y="20" width="335" height="80" rx="7" fill="#1e1b18" stroke="#3d3830" stroke-width="1"/>
+  <text x="70" y="44" fill="#e8e0d4" font-family="Arial,sans-serif" font-size="13" font-weight="bold">Platon — Antiquité</text>
+  <text x="70" y="62" fill="#7a7060" font-family="Arial,sans-serif" font-size="10">Raison pure — le monde sensible est trompeur</text>
+  <text x="70" y="80" fill="#c47a5a" font-family="Arial,sans-serif" font-size="9.5" font-style="italic">« La science ne comporte rien de sensible » — La République</text>
+
+  <circle cx="28" cy="160" r="5" fill="#3d3830"/>
+  <rect x="50" y="125" width="335" height="80" rx="7" fill="#1e1b18" stroke="#3d3830" stroke-width="1"/>
+  <text x="70" y="149" fill="#e8e0d4" font-family="Arial,sans-serif" font-size="13" font-weight="bold">Descartes — 17e s.</text>
+  <text x="70" y="167" fill="#7a7060" font-family="Arial,sans-serif" font-size="10">Inspection de l'esprit</text>
+  <text x="70" y="185" fill="#c47a5a" font-family="Arial,sans-serif" font-size="9.5" font-style="italic">La cire fond et change d'aspect, Descartes sait que c'est la même — sans voir</text>
+
+  <circle cx="28" cy="270" r="5" fill="#3d3830"/>
+  <rect x="50" y="235" width="335" height="80" rx="7" fill="#1e1b18" stroke="#3d3830" stroke-width="1"/>
+  <text x="70" y="259" fill="#e8e0d4" font-family="Arial,sans-serif" font-size="13" font-weight="bold">Hume — 18e s.</text>
+  <text x="70" y="277" fill="#7a7060" font-family="Arial,sans-serif" font-size="10">Empirisme — sans expérience, pas de connaissance</text>
+  <text x="70" y="295" fill="#c47a5a" font-family="Arial,sans-serif" font-size="9.5" font-style="italic">Sans voir le feu brûler, je ne peux pas savoir qu'il brûle</text>
+
+  <circle cx="28" cy="385" r="6" fill="#5a8c7a"/>
+  <rect x="50" y="345" width="335" height="95" rx="7" fill="#0f1a16" stroke="#5a8c7a" stroke-width="1.3"/>
+  <text x="70" y="369" fill="#6ea88e" font-family="Arial,sans-serif" font-size="13" font-weight="bold">Kant — 18e s. (synthèse clé)</text>
+  <text x="70" y="387" fill="#3d6050" font-family="Arial,sans-serif" font-size="10">4 facultés : raison + entendement + imagination + sensibilité</text>
+  <text x="70" y="406" fill="#5a8c7a" font-family="Arial,sans-serif" font-size="9.5" font-style="italic">Newton théorise les corpuscules (raison),</text>
+  <text x="70" y="420" fill="#5a8c7a" font-family="Arial,sans-serif" font-size="9.5" font-style="italic">Huygens observe la zone d'ombre (sensibilité) → les deux sont nécessaires</text>
+
+  <circle cx="28" cy="505" r="5" fill="#b8922a"/>
+  <rect x="50" y="470" width="335" height="95" rx="7" fill="#1a1410" stroke="#b8922a" stroke-width="1"/>
+  <text x="70" y="494" fill="#d4a93c" font-family="Arial,sans-serif" font-size="13" font-weight="bold">Popper — 20e s.</text>
+  <text x="70" y="512" fill="#806020" font-family="Arial,sans-serif" font-size="10">Falsifiabilité — toute science est provisoire</text>
+  <text x="70" y="531" fill="#c47a5a" font-family="Arial,sans-serif" font-size="9.5" font-style="italic">Newton fut réfuté par la zone d'ombre :</text>
+  <text x="70" y="545" fill="#c47a5a" font-family="Arial,sans-serif" font-size="9.5" font-style="italic">c'est ce qui fait avancer la science</text>
+</svg>`,
+
+s4: `<svg viewBox="0 0 400 460" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-height:85vh;height:auto;display:block;margin:auto">
+  <defs>
+    <marker id="ag2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M2 1L8 5L2 9" fill="none" stroke="#b8922a" stroke-width="1.5" stroke-linecap="round"/></marker>
+    <marker id="av2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M2 1L8 5L2 9" fill="none" stroke="#5a8c7a" stroke-width="1.5" stroke-linecap="round"/></marker>
+  </defs>
+
+  <rect x="15" y="15" width="370" height="110" rx="8" fill="#1a1410" stroke="#b8922a" stroke-width="1.5"/>
+  <text x="200" y="42" text-anchor="middle" fill="#d4a93c" font-family="Georgia,serif" font-size="15" font-style="italic">Théorie / Hypothèse</text>
+  <text x="200" y="62" text-anchor="middle" fill="#806020" font-family="Arial,sans-serif" font-size="11">construction de l'esprit</text>
+  <text x="200" y="82" text-anchor="middle" fill="#c47a5a" font-family="Arial,sans-serif" font-size="10" font-style="italic">Newton : la lumière est faite de corpuscules,</text>
+  <text x="200" y="97" text-anchor="middle" fill="#c47a5a" font-family="Arial,sans-serif" font-size="10" font-style="italic">donc 2 faisceaux croisés doivent s'additionner</text>
+
+  <line x1="200" y1="127" x2="200" y2="158" stroke="#b8922a" stroke-width="1.5" opacity=".7" marker-end="url(#ag2)"/>
+  <text x="215" y="147" fill="#806020" font-family="Arial,sans-serif" font-size="10">on teste dans la réalité</text>
+
+  <rect x="15" y="160" width="370" height="110" rx="8" fill="#0f1a16" stroke="#5a8c7a" stroke-width="1.5"/>
+  <text x="200" y="188" text-anchor="middle" fill="#6ea88e" font-family="Georgia,serif" font-size="15" font-style="italic">Expérience</text>
+  <text x="200" y="208" text-anchor="middle" fill="#3d6050" font-family="Arial,sans-serif" font-size="11">confrontation à la réalité</text>
+  <text x="200" y="228" text-anchor="middle" fill="#5a8c7a" font-family="Arial,sans-serif" font-size="10" font-style="italic">Huygens croise 2 faisceaux sur un écran :</text>
+  <text x="200" y="243" text-anchor="middle" fill="#5a8c7a" font-family="Arial,sans-serif" font-size="10" font-style="italic">l'intersection est une zone d'ombre → Newton réfuté ✗</text>
+
+  <line x1="200" y1="272" x2="200" y2="305" stroke="#5a8c7a" stroke-width="1.5" opacity=".7" marker-end="url(#av2)"/>
+  <text x="215" y="293" fill="#3d6050" font-family="Arial,sans-serif" font-size="10">confirme ✓ ou réfute ✗</text>
+
+  <rect x="15" y="308" width="370" height="130" rx="8" fill="#1a1814" stroke="#2e2a25" stroke-width="1"/>
+  <text x="200" y="334" text-anchor="middle" fill="#a09278" font-family="Arial,sans-serif" font-size="13" font-weight="bold">Si réfutée → nouvelle théorie</text>
+  <text x="200" y="356" text-anchor="middle" fill="#c47a5a" font-family="Arial,sans-serif" font-size="10" font-style="italic">Huygens propose que la lumière est une onde :</text>
+  <text x="200" y="371" text-anchor="middle" fill="#c47a5a" font-family="Arial,sans-serif" font-size="10" font-style="italic">les ondes se repoussent → la zone d'ombre s'explique ✓</text>
+  <text x="200" y="394" text-anchor="middle" fill="#7a7060" font-family="Arial,sans-serif" font-size="10" font-style="italic">Autre ex. : Fleming laisse une préparation au soleil,</text>
+  <text x="200" y="409" text-anchor="middle" fill="#7a7060" font-family="Arial,sans-serif" font-size="10" font-style="italic">découvre par hasard que la moisissure tue les germes → pénicilline ✓</text>
+</svg>`,
+
+s5: `<svg viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-height:85vh;height:auto;display:block;margin:auto">
+  <rect x="75" y="15" width="250" height="70" rx="8" fill="#1a1410" stroke="#b8922a" stroke-width="1.5"/>
+  <text x="200" y="40" text-anchor="middle" fill="#d4a93c" font-family="Arial,sans-serif" font-size="14" font-weight="bold">Théorie scientifique</text>
+  <text x="200" y="60" text-anchor="middle" fill="#806020" font-family="Arial,sans-serif" font-size="10">toujours exposée à l'expérience — Popper</text>
+
+  <line x1="155" y1="85" x2="95" y2="155" stroke="#5a5040" stroke-width="1.5" opacity=".7"/>
+  <line x1="245" y1="85" x2="305" y2="155" stroke="#5a5040" stroke-width="1.5" opacity=".7"/>
+
+  <rect x="8" y="155" width="188" height="120" rx="7" fill="#0f1a16" stroke="#5a8c7a" stroke-width="1"/>
+  <text x="102" y="180" text-anchor="middle" fill="#6ea88e" font-family="Arial,sans-serif" font-size="13" font-weight="bold">✓ Confirmée</text>
+  <text x="102" y="200" text-anchor="middle" fill="#3d6050" font-family="Arial,sans-serif" font-size="10">provisoirement vraie</text>
+  <text x="102" y="220" text-anchor="middle" fill="#5a8c7a" font-family="Arial,sans-serif" font-size="9.5" font-style="italic">Le Verrier calcule qu'un astre</text>
+  <text x="102" y="234" text-anchor="middle" fill="#5a8c7a" font-family="Arial,sans-serif" font-size="9.5" font-style="italic">dévie Uranus → le télescope</text>
+  <text x="102" y="248" text-anchor="middle" fill="#5a8c7a" font-family="Arial,sans-serif" font-size="9.5" font-style="italic">pointe et trouve Neptune ✓</text>
+
+  <rect x="204" y="155" width="188" height="120" rx="7" fill="#1f1410" stroke="#c47a5a" stroke-width="1"/>
+  <text x="298" y="180" text-anchor="middle" fill="#c47a5a" font-family="Arial,sans-serif" font-size="13" font-weight="bold">✗ Réfutée</text>
+  <text x="298" y="200" text-anchor="middle" fill="#7a4030" font-family="Arial,sans-serif" font-size="10">→ nouvelle hypothèse</text>
+  <text x="298" y="220" text-anchor="middle" fill="#c47a5a" font-family="Arial,sans-serif" font-size="9.5" font-style="italic">Newton prédit que 2 faisceaux</text>
+  <text x="298" y="234" text-anchor="middle" fill="#c47a5a" font-family="Arial,sans-serif" font-size="9.5" font-style="italic">s'additionnent → zone d'ombre</text>
+  <text x="298" y="248" text-anchor="middle" fill="#c47a5a" font-family="Arial,sans-serif" font-size="9.5" font-style="italic">réfute Newton → Huygens ✓</text>
+
+  <rect x="8" y="300" width="384" height="180" rx="7" fill="#1a1814" stroke="#2e2a25" stroke-width="1"/>
+  <text x="200" y="326" text-anchor="middle" fill="#a09278" font-family="Arial,sans-serif" font-size="12" font-weight="bold">Popper — critère de falsifiabilité</text>
+  <text x="200" y="348" text-anchor="middle" fill="#7a7060" font-family="Arial,sans-serif" font-size="10" font-style="italic">Une théorie est scientifique seulement</text>
+  <text x="200" y="363" text-anchor="middle" fill="#7a7060" font-family="Arial,sans-serif" font-size="10" font-style="italic">si elle peut être réfutée par l'expérience.</text>
+  <text x="200" y="383" text-anchor="middle" fill="#7a7060" font-family="Arial,sans-serif" font-size="10" font-style="italic">Conséquence : aucune vérité scientifique</text>
+  <text x="200" y="398" text-anchor="middle" fill="#7a7060" font-family="Arial,sans-serif" font-size="10" font-style="italic">n'est définitive — toutes sont provisoires.</text>
+  <text x="200" y="420" text-anchor="middle" fill="#5a5040" font-family="Arial,sans-serif" font-size="9.5" font-style="italic">« Les théories sont des filets — ils laissent</text>
+  <text x="200" y="435" text-anchor="middle" fill="#5a5040" font-family="Arial,sans-serif" font-size="9.5" font-style="italic">toujours échapper l'essentiel » — Popper</text>
+</svg>`
+
+};
+
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeZoom();});
+
+/* SCROLL PROGRESS */
+window.addEventListener('scroll',function(){
+  const s=document.documentElement.scrollTop;
+  const h=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+  document.getElementById('progress').style.width=(h>0?Math.min(100,s/h*100):0)+'%';
+});
+</script>
+</body>
+</html>
