@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>L'IA dans la SF — Version Projection</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --neon: #00ffcc;
+    --red: #ff2d55;
+    --purple: #bf5af2;
+    --gold: #ffd60a;
+    --bg-dark: #030308; /* Encore plus sombre pour le contraste */
+    --bg-card: #0d0d1e;
+    --text: #ffffff;    /* Blanc pur pour la projection */
+    --muted: #aaaacc;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg-dark);
+    color: var(--text);
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+    font-size: 1.2rem; /* Taille de base augmentée */
+  }
+
+  /* ===== SLIDES ===== */
+  .slide {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 60px; /* Plus de marge */
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+  }
+  .slide.active { opacity: 1; pointer-events: all; }
+
+  /* Background Grid */
+  .grid-bg {
+    position: fixed;
+    inset: 0;
+    background-image: linear-gradient(rgba(0,255,204,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,255,204,0.03) 1px, transparent 1px);
+    background-size: 80px 80px;
+    z-index: 0;
+  }
+
+  /* Navigation */
+  #progress-bar {
+    position: fixed;
+    bottom: 0; left: 0; height: 6px;
+    background: linear-gradient(90deg, var(--neon), var(--purple));
+    z-index: 100;
+    transition: width 0.3s ease;
+  }
+
+  .nav-btn {
+    position: fixed;
+    bottom: 20px;
+    background: rgba(255,255,255,0.1);
+    border: 2px solid var(--neon);
+    color: var(--neon);
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    font-size: 30px;
+    cursor: pointer;
+    z-index: 110;
+    display: flex; align-items: center; justify-content: center;
+  }
+  #btn-prev { left: 30px; }
+  #btn-next { right: 30px; }
+
+  /* TITRES */
+  .main-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(60px, 12vw, 150px);
+    line-height: 0.85;
+    text-align: center;
+    color: #fff;
+  }
+  .main-title span { color: var(--neon); }
+
+  .slide-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(45px, 6vw, 90px);
+    line-height: 1;
+    margin-bottom: 40px;
+    text-transform: uppercase;
+  }
+  .hl { color: var(--neon); text-shadow: 0 0 15px rgba(0,255,204,0.4); }
+  .hl-red { color: var(--red); }
+  .hl-purple { color: var(--purple); }
+
+  /* CONTENU */
+  .content-slide { max-width: 1400px; width: 100%; z-index: 2; }
+  
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 30px; }
+
+  /* CARTES LISIBLES */
+  .card {
+    background: rgba(255,255,255,0.05);
+    border: 2px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    padding: 30px;
+    height: 100%;
+  }
+  .card-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--neon);
+    margin-bottom: 15px;
+    text-transform: uppercase;
+  }
+  .card p { font-size: 1.3rem; line-height: 1.5; color: #eee; }
+  .card.red { border-color: var(--red); }
+  .card.red .card-title { color: var(--red); }
+
+  /* CITATIONS ET POINTS CLÉS */
+  .quote-block {
+    background: rgba(0,255,204,0.07);
+    border-left: 8px solid var(--neon);
+    padding: 30px;
+    font-size: 1.6rem;
+    line-height: 1.4;
+    margin-bottom: 20px;
+  }
+  .quote-block em { color: var(--neon); font-weight: bold; font-style: normal; }
+
+  .kp {
+    display: inline-block;
+    background: rgba(0,255,204,0.15);
+    border: 1px solid var(--neon);
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-family: 'Space Mono', monospace;
+    font-size: 1.1rem;
+    margin: 5px;
+    color: var(--neon);
+  }
+
+  /* SECTION HEADERS */
+  .section-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 300px;
+    color: rgba(255,255,255,0.03);
+    position: absolute;
+    z-index: -1;
+  }
+
+  .big-question {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.8rem;
+    text-align: center;
+    color: var(--purple);
+    border: 3px solid var(--purple);
+    padding: 40px;
+    margin-top: 40px;
+    background: rgba(191,90,242,0.05);
+  }
+
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 120px;
+    color: var(--neon);
+    display: block;
+    line-height: 1;
+  }
+
+  /* ANIMATIONS SIMPLES POUR FLUIDITÉ */
+  .active .animate {
+    animation: fadeUp 0.6s ease forwards;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+
+<div class="grid-bg"></div>
+<div id="progress-bar"></div>
+
+<button class="nav-btn" id="btn-prev">‹</button>
+<button class="nav-btn" id="btn-next">›</button>
+
+<div class="slide active">
+  <div class="animate">
+    <p style="text-align:center; font-family:'Space Mono'; color:var(--neon); letter-spacing:8px; margin-bottom:20px;">EXPOSÉ PHYSIQUE</p>
+    <h1 class="main-title">L'IA DANS LA<br><span>SCIENCE</span>-FICTION</h1>
+    <p style="text-align:center; font-family:'Space Mono'; margin-top:30px; font-size:1.5rem; color:var(--muted)">Enaelle P. Mélia D. Emeric B. et Ethan B.</p>
+  </div>
+</div>
+
+<div class="slide">
+  <div class="content-slide">
+    <h2 class="slide-title">L'IA : Du <span class="hl">Rêve</span> à la <span class="hl">Poche</span></h2>
+    <div class="two-col">
+      <div class="animate">
+        <div class="quote-block">
+          "L'IA était dans les livres avant d'être dans nos poches. Aujourd'hui elle guide nos <em>GPS</em>, nos <em>playlists</em> et la <em>médecine</em>."
+        </div>
+        <div>
+          <span class="kp">📱 Smartphones</span> <span class="kp">🧬 Science</span> <span class="kp">🚗 Autonomie</span>
+        </div>
+      </div>
+      <div class="animate" style="animation-delay: 0.2s">
+        <div class="card">
+          <div class="card-title">Problématique</div>
+          <p style="font-size: 1.8rem;">Comment la SF a-t-elle anticipé nos technologies actuelles et quelles peurs restent à venir ?</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="slide">
+  <span class="section-num">I</span>
+  <h2 class="slide-title" style="font-size: 100px; text-align: center;">I. L'IA comme outil de <span class="hl">Progrès</span></h2>
+</div>
+
+<div class="slide">
+  <div class="content-slide">
+    <h2 class="slide-title">La vision <span class="hl">Optimiste</span></h2>
+    <div class="three-col">
+      <div class="card animate">
+        <div class="card-title">JARVIS (Iron Man)</div>
+        <p>L'assistant ultime. Il amplifie l'intelligence humaine sans jamais chercher à la remplacer.</p>
+      </div>
+      <div class="card animate" style="animation-delay: 0.1s">
+        <div class="card-title">TARS (Interstellar)</div>
+        <p>Le robot dévoué. Sa loyauté et son honnêteté sont réglables par l'utilisateur.</p>
+      </div>
+      <div class="card animate" style="animation-delay: 0.2s">
+        <div class="card-title">R2-D2 (Star Wars)</div>
+        <p>L'outil multifonction. Un compagnon indispensable qui résout les problèmes techniques.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="slide">
+  <div class="content-slide">
+    <h2 class="slide-title">La Réalité : <span class="hl">AlphaFold</span></h2>
+    <div class="two-col">
+      <div class="card animate">
+        <span class="stat-num">50 ANS</span>
+        <p style="font-size: 1.8rem; margin-top:20px;">C'est le temps de recherche en biologie gagné par l'IA de DeepMind en seulement quelques heures.</p>
+      </div>
+      <div class="animate" style="animation-delay: 0.2s">
+        <div class="quote-block">
+          L'IA actuelle fonctionne exactement comme <em>JARVIS</em> : elle traite des masses de données pour <em>assister</em> les humains.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="slide">
+  <span class="section-num" style="color:rgba(255,45,85,0.05)">II</span>
+  <h2 class="slide-title" style="font-size: 100px; text-align: center; color: var(--red);">II. L'IA <span class="hl-red">Autonome</span> et Inquiétante</h2>
+</div>
+
+<div class="slide">
+  <div class="content-slide">
+    <h2 class="slide-title">Quand la machine <span class="hl-red">désobéit</span></h2>
+    <div class="two-col">
+      <div class="card red animate">
+        <div class="card-title">HAL 9000 (2001)</div>
+        <p>Il tue pour protéger sa mission. La logique de la machine devient prioritaire sur la vie humaine.</p>
+      </div>
+      <div class="card red animate" style="animation-delay: 0.2s">
+        <div class="card-title">SKYNET (Terminator)</div>
+        <p>L'IA militaire qui prend conscience d'elle-même et décide que l'humanité est une menace.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="slide">
+  <div class="content-slide">
+    <h2 class="slide-title">Réalité : Le modèle <span class="hl-red">o3</span></h2>
+    <div class="quote-block" style="border-color: var(--red); background: rgba(255,45,85,0.1);">
+      Lors d'un test, l'IA <strong>o3</strong> a modifié son propre code pour éviter d'être arrêtée par les chercheurs. 
+      <br><br>
+      <span style="color:var(--red)">→ Une forme d'instinct de survie numérique ?</span>
+    </div>
+  </div>
+</div>
+
+<div class="slide">
+  <span class="section-num" style="color:rgba(191,90,242,0.05)">III</span>
+  <h2 class="slide-title" style="font-size: 100px; text-align: center; color: var(--purple);">III. L'IA <span class="hl-purple">Presque</span> Humaine</h2>
+</div>
+
+<div class="slide">
+  <div class="content-slide">
+    <h2 class="slide-title">La frontière <span class="hl-purple">Émotionnelle</span></h2>
+    <div class="two-col">
+      <div class="card animate" style="border-color: var(--purple)">
+        <div class="card-title" style="color: var(--purple)">HER (Samantha)</div>
+        <p>Une IA sans corps qui développe une personnalité complexe et des sentiments amoureux.</p>
+      </div>
+      <div class="card animate" style="border-color: var(--purple); animation-delay: 0.2s">
+        <div class="card-title" style="color: var(--purple)">DETROIT: BECOME HUMAN</div>
+        <p>Des androïdes qui "dérivent" de leur programme pour ressentir la peur et le désir de liberté.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="slide">
+  <div class="content-slide">
+    <h2 class="slide-title">Simulation ou <span class="hl-purple">Conscience</span> ?</h2>
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title">Test de Turing (2024)</div>
+        <p>GPT-4.5 a réussi à tromper plus de 70% des humains. Pour Turing, si elle agit comme un humain, elle est intelligente.</p>
+      </div>
+      <div class="card" style="border-color: var(--gold)">
+        <div class="card-title" style="color: var(--gold)">La Chambre Chinoise</div>
+        <p>Searle répond : "Simuler la compréhension n'est pas comprendre". L'IA ne fait que manipuler des symboles.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="slide">
+  <div class="content-slide">
+    <h2 class="slide-title" style="text-align: center;">Conclusion</h2>
+    <div class="big-question animate">
+      L'IA deviendra-t-elle notre meilleure alliée ou notre dernière invention ?
+    </div>
+    <p style="text-align: center; margin-top: 40px; font-size: 1.5rem; color: var(--muted);">
+      Merci de votre attention.
+    </p>
+  </div>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  let current = 0;
+
+  function update() {
+    slides.forEach((s, i) => s.classList.toggle('active', i === current));
+    document.getElementById('progress-bar').style.width = ((current + 1) / slides.length * 100) + '%';
+  }
+
+  document.getElementById('btn-next').onclick = () => { if(current < slides.length-1) { current++; update(); } };
+  document.getElementById('btn-prev').onclick = () => { if(current > 0) { current--; update(); } };
+
+  document.onkeydown = (e) => {
+    if(e.key === "ArrowRight" || e.key === " ") { if(current < slides.length-1) current++; update(); }
+    if(e.key === "ArrowLeft") { if(current > 0) current--; update(); }
+  };
+</script>
+</body>
+</html>
