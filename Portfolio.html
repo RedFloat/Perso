@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Rouby - Galerie</title>
+    <style>
+        :root {
+            --bg-color: #000000;
+            --accent-color: #d4af37;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: var(--bg-color);
+            font-family: sans-serif;
+        }
+
+        /* Conteneur principal */
+        .slider-container {
+            display: flex;
+            width: 1200vw; /* 12 slides de 100vw */
+            height: 100vh;
+            transition: transform 0.6s cubic-bezier(0.45, 0, 0.55, 1);
+        }
+
+        /* Chaque Slide */
+        .slide {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        /* Style des images */
+        .slide img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain; /* Garde les proportions sans couper l'image */
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+        }
+
+        /* Boutons de navigation */
+        .nav-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.05);
+            border: none;
+            color: white;
+            padding: 30px 15px;
+            cursor: pointer;
+            font-size: 30px;
+            z-index: 100;
+            transition: 0.3s;
+            opacity: 0; /* Cachés par défaut, apparaissent au survol */
+        }
+
+        body:hover .nav-button { opacity: 1; }
+        .nav-button:hover { background: rgba(255, 255, 255, 0.2); }
+        .prev { left: 0; border-radius: 0 10px 10px 0; }
+        .next { right: 0; border-radius: 10px 0 0 10px; }
+
+        /* Indicateur de progression */
+        .progress {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+            z-index: 100;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transition: 0.3s;
+        }
+
+        .dot.active {
+            background: var(--accent-color);
+            transform: scale(1.3);
+        }
+    </style>
+</head>
+<body>
+
+    <button class="nav-button prev" onclick="moveSlide(-1)">&#10094;</button>
+    <button class="nav-button next" onclick="moveSlide(1)">&#10095;</button>
+
+    <div class="slider-container" id="slider">
+        <div class="slide"><img src="images/1.jpg" alt="Page 1"></div>
+        <div class="slide"><img src="images/2.jpg" alt="Page 2"></div>
+        <div class="slide"><img src="images/3.jpg" alt="Page 3"></div>
+        <div class="slide"><img src="images/4.jpg" alt="Page 4"></div>
+        <div class="slide"><img src="images/5.jpg" alt="Page 5"></div>
+        <div class="slide"><img src="images/6.jpg" alt="Page 6"></div>
+        <div class="slide"><img src="images/7.jpg" alt="Page 7"></div>
+        <div class="slide"><img src="images/8.jpg" alt="Page 8"></div>
+        <div class="slide"><img src="images/9.jpg" alt="Page 9"></div>
+        <div class="slide"><img src="images/10.jpg" alt="Page 10"></div>
+        <div class="slide"><img src="images/11.jpg" alt="Page 11"></div>
+        <div class="slide"><img src="images/12.jpg" alt="Page 12"></div>
+    </div>
+
+    <div class="progress" id="dots"></div>
+
+    <script>
+        let currentSlide = 0;
+        const totalSlides = 12;
+        const slider = document.getElementById('slider');
+        const dotsContainer = document.getElementById('dots');
+
+        // Génération des points
+        for (let i = 0; i < totalSlides; i++) {
+            const dot = document.createElement('div');
+            dot.classList.add('dot');
+            if (i === 0) dot.classList.add('active');
+            dotsContainer.appendChild(dot);
+        }
+
+        function updateSlider() {
+            slider.style.transform = `translateX(-${currentSlide * 100}vw)`;
+            
+            // Mise à jour des points
+            const dots = document.querySelectorAll('.dot');
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentSlide);
+            });
+
+            // Passage en plein écran automatique après la première slide
+            if (currentSlide === 1 && !document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(e => console.log(e));
+            }
+        }
+
+        function moveSlide(direction) {
+            currentSlide = (currentSlide + direction + totalSlides) % totalSlides;
+            updateSlider();
+        }
+
+        // Contrôles Clavier
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') moveSlide(1);
+            if (e.key === 'ArrowLeft') moveSlide(-1);
+        });
+
+        // Contrôles Swipe (Tactile)
+        let touchStartX = 0;
+        document.addEventListener('touchstart', e => touchStartX = e.changedTouches[0].screenX);
+        document.addEventListener('touchend', e => {
+            let touchEndX = e.changedTouches[0].screenX;
+            if (touchStartX - touchEndX > 50) moveSlide(1);
+            if (touchEndX - touchStartX > 50) moveSlide(-1);
+        });
+    </script>
+</body>
+</html>
