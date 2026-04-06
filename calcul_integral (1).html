@@ -1,0 +1,1419 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calcul Intégral — Révisions</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<style>
+  :root {
+    --bg: #0d0d0f;
+    --bg2: #13131a;
+    --bg3: #1a1a24;
+    --card: #16161f;
+    --border: #2a2a3a;
+    --accent: #c8a96e;
+    --accent2: #7c6de0;
+    --accent3: #4ecdc4;
+    --text: #e8e6f0;
+    --text2: #9890b0;
+    --correct: #4ecdc4;
+    --wrong: #e07c7c;
+    --highlight: rgba(200, 169, 110, 0.08);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* BG grain effect */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.6;
+  }
+
+  .container {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* HEADER */
+  header {
+    text-align: center;
+    margin-bottom: 60px;
+    padding-top: 20px;
+  }
+
+  header .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    opacity: 0.9;
+  }
+
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.2rem, 5vw, 3.4rem);
+    font-weight: 700;
+    line-height: 1.1;
+    background: linear-gradient(135deg, var(--accent) 0%, #e8d5a8 50%, var(--accent2) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 12px;
+  }
+
+  header p {
+    color: var(--text2);
+    font-size: 0.95rem;
+    font-weight: 300;
+  }
+
+  /* SECTION TITLES */
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    color: var(--accent);
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-title .num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    background: var(--accent);
+    color: var(--bg);
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+  }
+
+  section { margin-bottom: 60px; }
+
+  /* LIATE TABLE */
+  .liate-grid {
+    display: grid;
+    grid-template-columns: auto 1fr 1fr;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .liate-header {
+    background: var(--bg3);
+    padding: 14px 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    color: var(--text2);
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .liate-row {
+    display: contents;
+  }
+
+  .liate-cell {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: background 0.2s;
+  }
+
+  .liate-row:last-child .liate-cell { border-bottom: none; }
+
+  .liate-row:hover .liate-cell { background: var(--highlight); }
+
+  .liate-letter {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    font-style: italic;
+    min-width: 40px;
+    text-align: center;
+    line-height: 1;
+  }
+
+  .liate-priority {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--text2);
+    padding: 2px 6px;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+  }
+
+  .rule-box {
+    background: var(--card);
+    border: 1px solid var(--accent);
+    border-left: 4px solid var(--accent);
+    border-radius: 0 10px 10px 0;
+    padding: 20px 24px;
+    margin: 24px 0;
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+
+  .rule-box strong { color: var(--accent); }
+
+  /* PRIMITIVES TABLE */
+  .prim-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .prim-table thead tr {
+    background: var(--bg3);
+  }
+
+  .prim-table th {
+    padding: 14px 20px;
+    text-align: left;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    color: var(--text2);
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--border);
+    font-weight: 600;
+  }
+
+  .prim-table td {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+    font-size: 1.05rem;
+  }
+
+  .prim-table tbody tr:last-child td { border-bottom: none; }
+
+  .prim-table tbody tr:hover td { background: var(--highlight); }
+
+  .prim-table .cond {
+    font-size: 0.78rem;
+    color: var(--text2);
+    font-family: 'JetBrains Mono', monospace;
+    margin-top: 4px;
+  }
+
+  /* IPP FORMULA */
+  .formula-box {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 30px;
+    text-align: center;
+    margin: 24px 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .formula-box::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent2), var(--accent), var(--accent3));
+  }
+
+  .formula-box .formula-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    color: var(--text2);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .formula-box .katex-display { margin: 0 !important; }
+
+  /* EXERCISES */
+  .exo-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    transition: border-color 0.3s;
+  }
+
+  .exo-card.answered-correct { border-color: var(--correct); }
+  .exo-card.answered-wrong { border-color: var(--wrong); }
+
+  .exo-header {
+    padding: 18px 24px;
+    background: var(--bg3);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .exo-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    color: var(--accent);
+    text-transform: uppercase;
+  }
+
+  .exo-diff {
+    font-size: 0.75rem;
+    color: var(--text2);
+    display: flex;
+    gap: 3px;
+  }
+
+  .exo-diff span { color: var(--accent); }
+
+  .exo-body { padding: 24px; }
+
+  .exo-question {
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    color: var(--text);
+  }
+
+  /* Step-by-step area */
+  .steps-container { margin-bottom: 20px; }
+
+  .step {
+    display: none;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 10px;
+    font-size: 0.92rem;
+    line-height: 1.7;
+    animation: fadeIn 0.3s ease;
+  }
+
+  .step.visible { display: block; }
+
+  .step .step-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--accent2);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Buttons */
+  .btn {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.02em;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: var(--bg);
+  }
+
+  .btn-primary:hover { background: #dbbe82; transform: translateY(-1px); }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--text2);
+    border: 1px solid var(--border);
+  }
+
+  .btn-ghost:hover { background: var(--bg3); color: var(--text); }
+
+  .btn-accent2 {
+    background: var(--accent2);
+    color: white;
+  }
+
+  .btn-accent2:hover { background: #9080f0; transform: translateY(-1px); }
+
+  .btn-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  /* Answer reveal */
+  .answer-block {
+    display: none;
+    margin-top: 16px;
+    padding: 16px 20px;
+    border-radius: 8px;
+    font-size: 0.92rem;
+    line-height: 1.8;
+    animation: fadeIn 0.3s ease;
+  }
+
+  .answer-block.correct-ans {
+    background: rgba(78, 205, 196, 0.08);
+    border: 1px solid rgba(78, 205, 196, 0.3);
+  }
+
+  .answer-block.correct-ans .ans-label {
+    color: var(--correct);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .answer-block.show { display: block; }
+
+  /* IPP choice game */
+  .uv-choice {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 16px 0;
+  }
+
+  .uv-btn {
+    font-family: 'DM Sans', sans-serif;
+    padding: 12px 16px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--bg2);
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 0.88rem;
+    text-align: left;
+  }
+
+  .uv-btn:hover { background: var(--bg3); border-color: var(--accent2); }
+  .uv-btn.selected-correct { background: rgba(78,205,196,0.12); border-color: var(--correct); color: var(--correct); }
+  .uv-btn.selected-wrong { background: rgba(224,124,124,0.12); border-color: var(--wrong); color: var(--wrong); }
+
+  .feedback {
+    display: none;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 0.88rem;
+    margin-top: 10px;
+    animation: fadeIn 0.3s ease;
+  }
+
+  .feedback.show { display: block; }
+  .feedback.ok { background: rgba(78,205,196,0.1); border: 1px solid rgba(78,205,196,0.3); color: var(--correct); }
+  .feedback.ko { background: rgba(224,124,124,0.1); border: 1px solid rgba(224,124,124,0.3); color: var(--wrong); }
+
+  /* Progress tracker */
+  .progress-bar {
+    height: 3px;
+    background: var(--border);
+    border-radius: 2px;
+    margin-bottom: 40px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent2), var(--accent));
+    border-radius: 2px;
+    transition: width 0.5s ease;
+  }
+
+  /* Nav tabs */
+  .tabs {
+    display: flex;
+    gap: 4px;
+    background: var(--bg2);
+    padding: 4px;
+    border-radius: 10px;
+    margin-bottom: 40px;
+    border: 1px solid var(--border);
+  }
+
+  .tab {
+    flex: 1;
+    padding: 10px 12px;
+    border-radius: 7px;
+    border: none;
+    background: transparent;
+    color: var(--text2);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+  }
+
+  .tab.active {
+    background: var(--card);
+    color: var(--text);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+  }
+
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* score */
+  .score-display {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--text2);
+    text-align: right;
+    margin-bottom: 16px;
+  }
+
+  .score-display span { color: var(--accent); font-size: 1rem; }
+
+  /* FULLSCREEN btn */
+  .fs-btn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 100;
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--text2);
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.1em;
+  }
+
+  .fs-btn:hover { background: var(--bg3); color: var(--text); border-color: var(--accent); }
+
+  /* responsive */
+  @media (max-width: 600px) {
+    .liate-grid { grid-template-columns: auto 1fr; }
+    .liate-header:nth-child(3), .liate-cell:nth-child(3n) { display: none; }
+    .uv-choice { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<button class="fs-btn" onclick="goFS()">⛶ PLEIN ÉCRAN</button>
+
+<div class="container">
+
+  <header>
+    <div class="eyebrow">Terminale Spé Maths</div>
+    <h1>Calcul Intégral</h1>
+    <p>Méthodes · Formules · Entraînement</p>
+  </header>
+
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('liate', this)">LIATE</button>
+    <button class="tab" onclick="switchTab('primitives', this)">Primitives</button>
+    <button class="tab" onclick="switchTab('ipp', this)">Int. par parties</button>
+    <button class="tab" onclick="switchTab('exos', this)">Exercices</button>
+    <button class="tab" onclick="switchTab('eval', this)" style="color:var(--accent); font-weight:600;">Éval 45 min</button>
+  </div>
+
+  <!-- ===== LIATE ===== -->
+  <div class="tab-content active" id="tab-liate">
+    <section>
+      <div class="section-title"><span class="num">01</span> La règle LIATE</div>
+
+      <div class="rule-box">
+        Dans une intégration par parties, on pose <strong>v = la fonction la plus haute dans LIATE</strong> (celle qu'on va dériver), et <strong>u' = l'autre</strong> (celle qu'on va intégrer).
+      </div>
+
+      <div class="liate-grid">
+        <div class="liate-header">Lettre</div>
+        <div class="liate-header">Type</div>
+        <div class="liate-header">Exemples → v (à dériver)</div>
+
+        <div class="liate-row">
+          <div class="liate-cell" style="background:rgba(200,169,110,0.06)">
+            <span class="liate-letter" style="color:#c8a96e">L</span>
+            <span class="liate-priority">1er</span>
+          </div>
+          <div class="liate-cell" style="background:rgba(200,169,110,0.06)">Logarithme</div>
+          <div class="liate-cell" style="background:rgba(200,169,110,0.06)">\(\ln(x)\), \(\ln(x+1)\), \(\log\)</div>
+        </div>
+
+        <div class="liate-row">
+          <div class="liate-cell">
+            <span class="liate-letter" style="color:#a07ed0">I</span>
+            <span class="liate-priority">2ème</span>
+          </div>
+          <div class="liate-cell">Inverse / Arc</div>
+          <div class="liate-cell">\(\arctan(x)\), \(\arcsin(x)\)</div>
+        </div>
+
+        <div class="liate-row">
+          <div class="liate-cell" style="background:rgba(124,109,224,0.06)">
+            <span class="liate-letter" style="color:#7c6de0">A</span>
+            <span class="liate-priority">3ème</span>
+          </div>
+          <div class="liate-cell" style="background:rgba(124,109,224,0.06)">Algébrique</div>
+          <div class="liate-cell" style="background:rgba(124,109,224,0.06)">\(x\), \(x^2\), \(x^3\), \(\sqrt{x}\)</div>
+        </div>
+
+        <div class="liate-row">
+          <div class="liate-cell">
+            <span class="liate-letter" style="color:#4ecdc4">T</span>
+            <span class="liate-priority">4ème</span>
+          </div>
+          <div class="liate-cell">Trigonométrique</div>
+          <div class="liate-cell">\(\cos(x)\), \(\sin(x)\)</div>
+        </div>
+
+        <div class="liate-row">
+          <div class="liate-cell" style="background:rgba(78,205,196,0.04)">
+            <span class="liate-letter" style="color:#6db3c8">E</span>
+            <span class="liate-priority">5ème</span>
+          </div>
+          <div class="liate-cell" style="background:rgba(78,205,196,0.04)">Exponentielle</div>
+          <div class="liate-cell" style="background:rgba(78,205,196,0.04)">\(e^x\), \(e^{2x}\)</div>
+        </div>
+      </div>
+
+      <div style="margin-top: 28px;">
+        <div class="section-title" style="font-size:1.1rem; margin-bottom:16px;">Exemples rapides</div>
+        <div style="display:grid; gap:10px;">
+          <div class="rule-box" style="border-left-color: var(--accent2);">
+            \(\int x \cdot e^x\,dx\) → <strong>v = x</strong> (A avant E), \(u' = e^x\)
+          </div>
+          <div class="rule-box" style="border-left-color: var(--accent2);">
+            \(\int \ln(x) \cdot x^2\,dx\) → <strong>v = ln(x)</strong> (L avant A), \(u' = x^2\)
+          </div>
+          <div class="rule-box" style="border-left-color: var(--accent2);">
+            \(\int x^2 \cdot \cos(x)\,dx\) → <strong>v = x²</strong> (A avant T), \(u' = \cos(x)\)
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ===== PRIMITIVES ===== -->
+  <div class="tab-content" id="tab-primitives">
+    <section>
+      <div class="section-title"><span class="num">02</span> Tableau des primitives</div>
+
+      <table class="prim-table">
+        <thead>
+          <tr>
+            <th>Fonction \(f(x)\)</th>
+            <th>Primitive \(F(x)\)</th>
+            <th>Condition</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>\(k\) (constante)</td>
+            <td>\(kx\)</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>\(x^n\)</td>
+            <td>\(\dfrac{x^{n+1}}{n+1}\)</td>
+            <td>\(n \neq -1\)</td>
+          </tr>
+          <tr>
+            <td>\(\dfrac{1}{x}\)</td>
+            <td>\(\ln|x|\)</td>
+            <td>\(x \neq 0\)</td>
+          </tr>
+          <tr>
+            <td>\(\dfrac{1}{x+a}\)</td>
+            <td>\(\ln|x+a|\)</td>
+            <td>\(x \neq -a\)</td>
+          </tr>
+          <tr>
+            <td>\(\dfrac{u'}{u}\)</td>
+            <td>\(\ln|u|\)</td>
+            <td>\(u \neq 0\)</td>
+          </tr>
+          <tr>
+            <td>\(e^x\)</td>
+            <td>\(e^x\)</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>\(e^{ax+b}\)</td>
+            <td>\(\dfrac{1}{a}e^{ax+b}\)</td>
+            <td>\(a \neq 0\)</td>
+          </tr>
+          <tr>
+            <td>\(\cos(x)\)</td>
+            <td>\(\sin(x)\)</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>\(\sin(x)\)</td>
+            <td>\(-\cos(x)\)</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>\(\cos(ax+b)\)</td>
+            <td>\(\dfrac{1}{a}\sin(ax+b)\)</td>
+            <td>\(a \neq 0\)</td>
+          </tr>
+          <tr>
+            <td>\(\sin(ax+b)\)</td>
+            <td>\(-\dfrac{1}{a}\cos(ax+b)\)</td>
+            <td>\(a \neq 0\)</td>
+          </tr>
+          <tr>
+            <td>\(\sqrt{x}\)</td>
+            <td>\(\dfrac{2}{3}x^{3/2}\)</td>
+            <td>\(x > 0\)</td>
+          </tr>
+          <tr>
+            <td>\(\dfrac{1}{\sqrt{x}}\)</td>
+            <td>\(2\sqrt{x}\)</td>
+            <td>\(x > 0\)</td>
+          </tr>
+          <tr>
+            <td>\(\ln(x)\)</td>
+            <td>\(x\ln(x) - x\)</td>
+            <td>\(x > 0\)</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="rule-box" style="margin-top: 24px;">
+        <strong>Astuce mémo :</strong> Pour \(e^{ax+b}\), on divise par \(a\). Pour \(\cos(ax+b)\) / \(\sin(ax+b)\), même principe — on divise par \(a\) (et \(\sin\) prend un \(-\)).
+      </div>
+    </section>
+  </div>
+
+  <!-- ===== IPP ===== -->
+  <div class="tab-content" id="tab-ipp">
+    <section>
+      <div class="section-title"><span class="num">03</span> Intégration par parties</div>
+
+      <div class="formula-box">
+        <div class="formula-label">Formule fondamentale</div>
+        $$\int_a^b u'(x) \cdot v(x)\,dx = \Big[u(x) \cdot v(x)\Big]_a^b - \int_a^b u(x) \cdot v'(x)\,dx$$
+      </div>
+
+      <div class="rule-box">
+        <strong>Méthode en 4 temps :</strong><br>
+        1. Identifier \(u'\) et \(v\) avec LIATE<br>
+        2. Calculer \(u\) (primitive de \(u'\)) et \(v'\) (dérivée de \(v\))<br>
+        3. Calculer le crochet \(\Big[u \cdot v\Big]_a^b\)<br>
+        4. Calculer la nouvelle intégrale \(\int_a^b u \cdot v'\,dx\) (souvent plus simple)
+      </div>
+
+      <div style="margin-top: 24px;">
+        <div class="section-title" style="font-size:1.1rem; margin-bottom:16px;">Exemple guidé : \(\displaystyle\int_0^1 x\,e^x\,dx\)</div>
+
+        <div id="ipp-steps">
+          <div class="step visible">
+            <div class="step-label">Étape 1 — Choix LIATE</div>
+            \(u' = e^x\) (E) et \(v = x\) (A avant E selon LIATE)
+          </div>
+          <div class="step visible">
+            <div class="step-label">Étape 2 — Calcul</div>
+            \(u = e^x\) (primitive de \(e^x\)) &nbsp;·&nbsp; \(v' = 1\) (dérivée de \(x\))
+          </div>
+          <div class="step visible">
+            <div class="step-label">Étape 3 — Application</div>
+            $$\int_0^1 xe^x\,dx = \Big[xe^x\Big]_0^1 - \int_0^1 e^x\,dx$$
+          </div>
+          <div class="step visible">
+            <div class="step-label">Étape 4 — Calcul du crochet</div>
+            \(\Big[xe^x\Big]_0^1 = 1 \cdot e^1 - 0 \cdot e^0 = e\)
+          </div>
+          <div class="step visible">
+            <div class="step-label">Étape 5 — Intégrale restante</div>
+            $$\int_0^1 e^x\,dx = \Big[e^x\Big]_0^1 = e - 1$$
+          </div>
+          <div class="step visible">
+            <div class="step-label">Résultat final</div>
+            $$\int_0^1 xe^x\,dx = e - (e-1) = \boxed{1}$$
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ===== EXERCICES ===== -->
+  <div class="tab-content" id="tab-exos">
+    <section>
+      <div class="section-title"><span class="num">04</span> Exercices d'entraînement</div>
+
+      <div class="score-display">Score : <span id="score-val">0</span> / <span id="score-total">0</span></div>
+
+      <!-- EXO 1 : choix LIATE -->
+      <div class="exo-card" id="exo1">
+        <div class="exo-header">
+          <span class="exo-badge">Exercice 1 — Choix LIATE</span>
+          <span class="exo-diff"><span>★</span>☆☆</span>
+        </div>
+        <div class="exo-body">
+          <div class="exo-question">
+            Pour calculer \(\displaystyle\int_0^{\pi} x\sin(x)\,dx\), quel est le bon choix ?
+          </div>
+          <div class="uv-choice">
+            <button class="uv-btn" onclick="checkChoice(this, false, 'exo1')">
+              \(u' = x\), \(v = \sin(x)\)
+            </button>
+            <button class="uv-btn" onclick="checkChoice(this, true, 'exo1')">
+              \(u' = \sin(x)\), \(v = x\)
+            </button>
+            <button class="uv-btn" onclick="checkChoice(this, false, 'exo1')">
+              \(u' = \sin(x)\), \(v = \sin(x)\)
+            </button>
+            <button class="uv-btn" onclick="checkChoice(this, false, 'exo1')">
+              \(u' = x\), \(v = x\)
+            </button>
+          </div>
+          <div class="feedback" id="fb-exo1"></div>
+        </div>
+      </div>
+
+      <!-- EXO 2 : choix LIATE ln -->
+      <div class="exo-card" id="exo2">
+        <div class="exo-header">
+          <span class="exo-badge">Exercice 2 — LIATE avec ln</span>
+          <span class="exo-diff"><span>★</span>☆☆</span>
+        </div>
+        <div class="exo-body">
+          <div class="exo-question">
+            Pour \(\displaystyle\int_1^e x^2\ln(x)\,dx\), quel est le bon choix ?
+          </div>
+          <div class="uv-choice">
+            <button class="uv-btn" onclick="checkChoice(this, false, 'exo2')">
+              \(u' = \ln(x)\), \(v = x^2\)
+            </button>
+            <button class="uv-btn" onclick="checkChoice(this, true, 'exo2')">
+              \(u' = x^2\), \(v = \ln(x)\)
+            </button>
+            <button class="uv-btn" onclick="checkChoice(this, false, 'exo2')">
+              \(u' = x^2\), \(v = x^2\)
+            </button>
+            <button class="uv-btn" onclick="checkChoice(this, false, 'exo2')">
+              Les deux fonctions sont équivalentes
+            </button>
+          </div>
+          <div class="feedback" id="fb-exo2"></div>
+        </div>
+      </div>
+
+      <!-- EXO 3 : calcul complet guidé -->
+      <div class="exo-card" id="exo3">
+        <div class="exo-header">
+          <span class="exo-badge">Exercice 3 — Calcul complet</span>
+          <span class="exo-diff"><span>★★</span>☆</span>
+        </div>
+        <div class="exo-body">
+          <div class="exo-question">
+            Calculer \(\displaystyle\int_0^{\pi} x\cos(x)\,dx\)
+            <br><small style="color:var(--text2)">Déroule les étapes une à une.</small>
+          </div>
+
+          <div class="steps-container" id="steps-exo3"></div>
+
+          <div class="btn-row">
+            <button class="btn btn-primary" onclick="nextStep('exo3')" id="btn-exo3">Voir étape suivante</button>
+            <button class="btn btn-ghost" onclick="resetSteps('exo3')">Recommencer</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- EXO 4 : deux IPP successives -->
+      <div class="exo-card" id="exo4">
+        <div class="exo-header">
+          <span class="exo-badge">Exercice 4 — Deux IPP successives</span>
+          <span class="exo-diff"><span>★★★</span></span>
+        </div>
+        <div class="exo-body">
+          <div class="exo-question">
+            Calculer \(\displaystyle\int_0^1 x^2\sin(x)\,dx\)
+            <br><small style="color:var(--text2)">Nécessite deux intégrations par parties.</small>
+          </div>
+
+          <div class="steps-container" id="steps-exo4"></div>
+
+          <div class="btn-row">
+            <button class="btn btn-accent2" onclick="nextStep('exo4')" id="btn-exo4">Voir étape suivante</button>
+            <button class="btn btn-ghost" onclick="resetSteps('exo4')">Recommencer</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- EXO 5 : encadrement -->
+      <div class="exo-card" id="exo5">
+        <div class="exo-header">
+          <span class="exo-badge">Exercice 5 — Encadrement d'intégrale</span>
+          <span class="exo-diff"><span>★★</span>☆</span>
+        </div>
+        <div class="exo-body">
+          <div class="exo-question">
+            On sait que pour tout \(x \in [0,1]\) : \(\dfrac{1}{2} \leq e^{-x^2} \leq 1\)<br><br>
+            En déduire un encadrement de \(\displaystyle\int_0^1 e^{-x^2}\,dx\).
+          </div>
+
+          <div class="steps-container" id="steps-exo5"></div>
+
+          <div class="btn-row">
+            <button class="btn btn-primary" onclick="nextStep('exo5')" id="btn-exo5">Voir la solution</button>
+            <button class="btn btn-ghost" onclick="resetSteps('exo5')">Recommencer</button>
+          </div>
+        </div>
+      </div>
+
+    </section>
+  </div>
+
+  <!-- ===== ÉVAL ===== -->
+  <div class="tab-content" id="tab-eval">
+    <section>
+      <div class="section-title"><span class="num">05</span> Évaluation — 45 minutes</div>
+
+      <!-- TIMER + CONTROLS -->
+      <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-bottom:28px;">
+        <div id="timer-display" style="font-family:'JetBrains Mono',monospace; font-size:2rem; color:var(--accent); letter-spacing:0.05em;">45:00</div>
+        <div class="btn-row">
+          <button class="btn btn-primary" id="timer-btn" onclick="toggleTimer()">▶ Démarrer</button>
+          <button class="btn btn-ghost" onclick="resetTimer()">↺ Réinitialiser</button>
+          <button class="btn btn-accent2" onclick="showAllCorrections()">Voir toutes les corrections</button>
+        </div>
+      </div>
+
+      <div style="background:var(--card); border:1px solid var(--border); border-radius:10px; padding:14px 20px; margin-bottom:32px; font-size:0.85rem; color:var(--text2); line-height:1.6;">
+        <strong style="color:var(--accent);">Consigne :</strong> Traite les exercices dans l'ordre. Montre toutes tes étapes. Pour chaque correction, essaie d'abord par toi-même avant de cliquer.
+      </div>
+
+      <!-- ====== EXERCICE I ====== -->
+      <div class="eval-exo" id="eval-exo1">
+        <div class="eval-exo-header">
+          <span class="eval-exo-title">Exercice I — Intégration par parties <span style="font-size:0.8rem; color:var(--text2); font-family:'JetBrains Mono',monospace;">(6 pts)</span></span>
+        </div>
+        <div class="eval-exo-body">
+
+          <div class="eval-q">
+            <span class="eval-qnum">1.</span>
+            <div>
+              Calculer \(\displaystyle I = \int_1^e \ln(x)\,dx\)
+              <div class="eval-hint">Aide : poser \(u' = 1\) et \(v = \ln(x)\)</div>
+            </div>
+          </div>
+          <div class="eval-corr-toggle">
+            <button class="btn btn-ghost btn-sm" onclick="toggleCorr('c1-1')">Voir la correction</button>
+          </div>
+          <div class="eval-correction" id="c1-1">
+            <div class="corr-label">Correction</div>
+            <p>On pose \(u' = 1\) et \(v = \ln(x)\), donc \(u = x\) et \(v' = \dfrac{1}{x}\).</p>
+            $$I = \Big[x\ln(x)\Big]_1^e - \int_1^e x \cdot \frac{1}{x}\,dx = \Big[x\ln(x)\Big]_1^e - \int_1^e 1\,dx$$
+            $$= \Big[x\ln(x)\Big]_1^e - \Big[x\Big]_1^e$$
+            <p>Crochet 1 : \(e\ln(e) - 1\cdot\ln(1) = e \cdot 1 - 0 = e\)</p>
+            <p>Crochet 2 : \(e - 1\)</p>
+            $$\boxed{I = e - (e-1) = 1}$$
+          </div>
+
+          <div class="eval-q" style="margin-top:20px;">
+            <span class="eval-qnum">2.</span>
+            <div>
+              Calculer \(\displaystyle J = \int_0^1 (2x+1)e^x\,dx\)
+            </div>
+          </div>
+          <div class="eval-corr-toggle">
+            <button class="btn btn-ghost btn-sm" onclick="toggleCorr('c1-2')">Voir la correction</button>
+          </div>
+          <div class="eval-correction" id="c1-2">
+            <div class="corr-label">Correction</div>
+            <p>LIATE : A avant E, donc \(u' = e^x\), \(v = 2x+1\), d'où \(u = e^x\) et \(v' = 2\).</p>
+            $$J = \Big[(2x+1)e^x\Big]_0^1 - \int_0^1 2e^x\,dx$$
+            <p>Crochet : \(3e^1 - 1 \cdot e^0 = 3e - 1\)</p>
+            $$\int_0^1 2e^x\,dx = \Big[2e^x\Big]_0^1 = 2e - 2$$
+            $$\boxed{J = (3e - 1) - (2e - 2) = e + 1}$$
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ====== EXERCICE II ====== -->
+      <div class="eval-exo" id="eval-exo2">
+        <div class="eval-exo-header">
+          <span class="eval-exo-title">Exercice II — Encadrement et suite <span style="font-size:0.8rem; color:var(--text2); font-family:'JetBrains Mono',monospace;">(7 pts)</span></span>
+        </div>
+        <div class="eval-exo-body">
+
+          <p style="margin-bottom:18px; line-height:1.7; color:var(--text2);">
+            Pour tout entier naturel \(n \geq 1\), on pose \(\displaystyle I_n = \int_0^1 \frac{x^n}{1+x}\,dx\).
+          </p>
+
+          <div class="eval-q">
+            <span class="eval-qnum">1.</span>
+            <div>Montrer que pour tout \(x \in [0\,;\,1]\) : \(\dfrac{x^n}{2} \leq \dfrac{x^n}{1+x} \leq x^n\)</div>
+          </div>
+          <div class="eval-corr-toggle">
+            <button class="btn btn-ghost btn-sm" onclick="toggleCorr('c2-1')">Voir la correction</button>
+          </div>
+          <div class="eval-correction" id="c2-1">
+            <div class="corr-label">Correction</div>
+            <p>Sur \([0\,;\,1]\) : \(1 \leq 1+x \leq 2\)</p>
+            <p>En prenant les inverses (et en inversant les inégalités) :</p>
+            $$\frac{1}{2} \leq \frac{1}{1+x} \leq 1$$
+            <p>En multipliant par \(x^n \geq 0\) :</p>
+            $$\frac{x^n}{2} \leq \frac{x^n}{1+x} \leq x^n \quad \blacksquare$$
+          </div>
+
+          <div class="eval-q" style="margin-top:20px;">
+            <span class="eval-qnum">2.</span>
+            <div>En déduire que : \(\dfrac{1}{2(n+1)} \leq I_n \leq \dfrac{1}{n+1}\)</div>
+          </div>
+          <div class="eval-corr-toggle">
+            <button class="btn btn-ghost btn-sm" onclick="toggleCorr('c2-2')">Voir la correction</button>
+          </div>
+          <div class="eval-correction" id="c2-2">
+            <div class="corr-label">Correction</div>
+            <p>On intègre les trois membres sur \([0\,;\,1]\) :</p>
+            $$\int_0^1 \frac{x^n}{2}\,dx \leq \int_0^1 \frac{x^n}{1+x}\,dx \leq \int_0^1 x^n\,dx$$
+            $$\frac{1}{2}\cdot\frac{1}{n+1} \leq I_n \leq \frac{1}{n+1}$$
+            $$\boxed{\frac{1}{2(n+1)} \leq I_n \leq \frac{1}{n+1}}$$
+          </div>
+
+          <div class="eval-q" style="margin-top:20px;">
+            <span class="eval-qnum">3.</span>
+            <div>En déduire la limite de \((I_n)\) quand \(n \to +\infty\).</div>
+          </div>
+          <div class="eval-corr-toggle">
+            <button class="btn btn-ghost btn-sm" onclick="toggleCorr('c2-3')">Voir la correction</button>
+          </div>
+          <div class="eval-correction" id="c2-3">
+            <div class="corr-label">Correction</div>
+            <p>On a \(\displaystyle\lim_{n\to+\infty} \frac{1}{2(n+1)} = 0\) et \(\displaystyle\lim_{n\to+\infty} \frac{1}{n+1} = 0\).</p>
+            <p>D'après le <strong>théorème des gendarmes</strong> :</p>
+            $$\boxed{\lim_{n \to +\infty} I_n = 0}$$
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ====== EXERCICE III ====== -->
+      <div class="eval-exo" id="eval-exo3">
+        <div class="eval-exo-header">
+          <span class="eval-exo-title">Exercice III — Aires et valeur moyenne <span style="font-size:0.8rem; color:var(--text2); font-family:'JetBrains Mono',monospace;">(7 pts)</span></span>
+        </div>
+        <div class="eval-exo-body">
+
+          <p style="margin-bottom:18px; line-height:1.7; color:var(--text2);">
+            On considère les fonctions \(f(x) = x^2 - 2x\) et \(g(x) = x\) définies sur \(\mathbb{R}\).
+          </p>
+
+          <div class="eval-q">
+            <span class="eval-qnum">1.</span>
+            <div>Déterminer les points d'intersection des courbes \(\mathcal{C}_f\) et \(\mathcal{C}_g\).</div>
+          </div>
+          <div class="eval-corr-toggle">
+            <button class="btn btn-ghost btn-sm" onclick="toggleCorr('c3-1')">Voir la correction</button>
+          </div>
+          <div class="eval-correction" id="c3-1">
+            <div class="corr-label">Correction</div>
+            <p>On résout \(f(x) = g(x)\) :</p>
+            $$x^2 - 2x = x \implies x^2 - 3x = 0 \implies x(x-3) = 0$$
+            <p>Les courbes se croisent en \(x = 0\) et \(x = 3\).</p>
+          </div>
+
+          <div class="eval-q" style="margin-top:20px;">
+            <span class="eval-qnum">2.</span>
+            <div>Étudier le signe de \(g(x) - f(x)\) sur \([0\,;\,3]\), puis calculer l'aire du domaine délimité par \(\mathcal{C}_f\) et \(\mathcal{C}_g\) sur \([0\,;\,3]\).</div>
+          </div>
+          <div class="eval-corr-toggle">
+            <button class="btn btn-ghost btn-sm" onclick="toggleCorr('c3-2')">Voir la correction</button>
+          </div>
+          <div class="eval-correction" id="c3-2">
+            <div class="corr-label">Correction</div>
+            <p>\(g(x) - f(x) = x - (x^2 - 2x) = 3x - x^2 = x(3-x)\)</p>
+            <p>Sur \([0\,;\,3]\) : \(x \geq 0\) et \(3-x \geq 0\), donc \(g(x) - f(x) \geq 0\) : \(\mathcal{C}_g\) est au-dessus.</p>
+            $$\mathcal{A} = \int_0^3 (3x - x^2)\,dx = \left[\frac{3x^2}{2} - \frac{x^3}{3}\right]_0^3$$
+            $$= \frac{27}{2} - \frac{27}{3} = \frac{27}{2} - 9 = \frac{9}{2}$$
+            $$\boxed{\mathcal{A} = \frac{9}{2} \text{ u.a.}}$$
+          </div>
+
+          <div class="eval-q" style="margin-top:20px;">
+            <span class="eval-qnum">3.</span>
+            <div>Calculer la valeur moyenne de \(f\) sur \([0\,;\,3]\).</div>
+          </div>
+          <div class="eval-corr-toggle">
+            <button class="btn btn-ghost btn-sm" onclick="toggleCorr('c3-3')">Voir la correction</button>
+          </div>
+          <div class="eval-correction" id="c3-3">
+            <div class="corr-label">Correction</div>
+            $$\mu = \frac{1}{3-0}\int_0^3 (x^2 - 2x)\,dx = \frac{1}{3}\left[\frac{x^3}{3} - x^2\right]_0^3$$
+            $$= \frac{1}{3}\left(9 - 9\right) = \frac{1}{3} \times 0$$
+            $$\boxed{\mu = 0}$$
+          </div>
+
+        </div>
+      </div>
+
+    </section>
+  </div>
+
+</div>
+
+<style>
+  /* EVAL STYLES */
+  .eval-exo {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 28px;
+  }
+
+  .eval-exo-header {
+    background: var(--bg3);
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .eval-exo-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+    color: var(--text);
+  }
+
+  .eval-exo-body {
+    padding: 24px;
+  }
+
+  .eval-q {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    line-height: 1.7;
+    font-size: 0.97rem;
+  }
+
+  .eval-qnum {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--accent);
+    font-weight: 600;
+    min-width: 24px;
+    padding-top: 2px;
+  }
+
+  .eval-hint {
+    margin-top: 6px;
+    font-size: 0.82rem;
+    color: var(--text2);
+    font-style: italic;
+  }
+
+  .eval-corr-toggle {
+    margin: 12px 0 4px 38px;
+  }
+
+  .btn-sm {
+    font-size: 0.78rem;
+    padding: 7px 14px;
+  }
+
+  .eval-correction {
+    display: none;
+    margin: 10px 0 6px 0;
+    background: var(--bg2);
+    border: 1px solid rgba(78,205,196,0.25);
+    border-left: 3px solid var(--correct);
+    border-radius: 0 8px 8px 0;
+    padding: 18px 22px;
+    font-size: 0.92rem;
+    line-height: 1.8;
+    animation: fadeIn 0.3s ease;
+  }
+
+  .eval-correction.show { display: block; }
+
+  .corr-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.15em;
+    color: var(--correct);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .eval-correction p { margin-bottom: 6px; }
+
+  /* timer colors */
+  .timer-warning { color: #e0a050 !important; }
+  .timer-danger { color: var(--wrong) !important; }
+</style>
+
+<script>
+// ---- TIMER ----
+let timerInterval = null;
+let timerSeconds = 45 * 60;
+let timerRunning = false;
+
+function formatTime(s) {
+  const m = Math.floor(s / 60);
+  const sec = s % 60;
+  return String(m).padStart(2,'0') + ':' + String(sec).padStart(2,'0');
+}
+
+function toggleTimer() {
+  const btn = document.getElementById('timer-btn');
+  if (!timerRunning) {
+    timerRunning = true;
+    btn.textContent = '⏸ Pause';
+    timerInterval = setInterval(() => {
+      timerSeconds--;
+      const disp = document.getElementById('timer-display');
+      disp.textContent = formatTime(timerSeconds);
+      disp.className = '';
+      if (timerSeconds <= 300) disp.classList.add('timer-danger');
+      else if (timerSeconds <= 600) disp.classList.add('timer-warning');
+      if (timerSeconds <= 0) {
+        clearInterval(timerInterval);
+        disp.textContent = '00:00';
+        btn.textContent = '⏱ Terminé';
+        btn.disabled = true;
+      }
+    }, 1000);
+  } else {
+    timerRunning = false;
+    btn.textContent = '▶ Reprendre';
+    clearInterval(timerInterval);
+  }
+}
+
+function resetTimer() {
+  clearInterval(timerInterval);
+  timerRunning = false;
+  timerSeconds = 45 * 60;
+  document.getElementById('timer-display').textContent = '45:00';
+  document.getElementById('timer-display').className = '';
+  const btn = document.getElementById('timer-btn');
+  btn.textContent = '▶ Démarrer';
+  btn.disabled = false;
+}
+
+// ---- CORRECTIONS ----
+function toggleCorr(id) {
+  const el = document.getElementById(id);
+  const btn = el.previousElementSibling.querySelector('button');
+  if (el.classList.contains('show')) {
+    el.classList.remove('show');
+    btn.textContent = 'Voir la correction';
+  } else {
+    el.classList.add('show');
+    btn.textContent = 'Masquer';
+    renderMath(el);
+  }
+}
+
+function showAllCorrections() {
+  document.querySelectorAll('.eval-correction').forEach(el => {
+    el.classList.add('show');
+    renderMath(el);
+  });
+  document.querySelectorAll('.eval-corr-toggle button').forEach(btn => {
+    btn.textContent = 'Masquer';
+  });
+}
+
+// ---- FULLSCREEN ----
+function goFS() {
+  const el = document.documentElement;
+  if (!document.fullscreenElement) {
+    el.requestFullscreen && el.requestFullscreen();
+  } else {
+    document.exitFullscreen && document.exitFullscreen();
+  }
+}
+
+// All buttons trigger FS on first press
+document.querySelectorAll('button').forEach(btn => {
+  btn.addEventListener('click', goFS, { once: true });
+});
+
+// ---- TABS ----
+function switchTab(id, el) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  el.classList.add('active');
+}
+
+// ---- SCORE ----
+let score = 0, total = 0;
+const answered = {};
+
+function updateScore() {
+  document.getElementById('score-val').textContent = score;
+  document.getElementById('score-total').textContent = total;
+}
+
+// ---- LIATE CHOICE ----
+function checkChoice(btn, isCorrect, exoId) {
+  if (answered[exoId]) return;
+  answered[exoId] = true;
+  total++;
+
+  const fb = document.getElementById('fb-' + exoId);
+  const card = document.getElementById(exoId);
+
+  // Disable all buttons in this card
+  btn.closest('.uv-choice').querySelectorAll('.uv-btn').forEach(b => b.style.pointerEvents = 'none');
+
+  if (isCorrect) {
+    btn.classList.add('selected-correct');
+    fb.className = 'feedback show ok';
+    fb.innerHTML = '✓ Correct ! ' + getFeedback(exoId, true);
+    card.classList.add('answered-correct');
+    score++;
+  } else {
+    btn.classList.add('selected-wrong');
+    fb.className = 'feedback show ko';
+    fb.innerHTML = '✗ Raté. ' + getFeedback(exoId, false);
+    card.classList.add('answered-wrong');
+    // Show correct
+    btn.closest('.uv-choice').querySelectorAll('.uv-btn').forEach(b => {
+      if (b.onclick.toString().includes('true')) b.classList.add('selected-correct');
+    });
+  }
+  updateScore();
+  renderMath(fb);
+}
+
+function getFeedback(exoId, correct) {
+  const fb = {
+    exo1: {
+      ok: "A (algébrique) est avant T (trig) dans LIATE → on met \\(v = x\\) pour le dériver en \\(1\\), et \\(u' = \\sin(x)\\) dont la primitive est \\(-\\cos(x)\\).",
+      ko: "Rappel LIATE : A vient avant T. On met \\(v = x\\) (algébrique) et \\(u' = \\sin(x)\\) (trig)."
+    },
+    exo2: {
+      ok: "L (logarithme) est avant A (algébrique) dans LIATE → \\(v = \\ln(x)\\), \\(u' = x^2\\). On évite d'intégrer \\(\\ln\\) !",
+      ko: "L vient avant A dans LIATE. On ne peut pas facilement intégrer \\(\\ln(x)\\), donc il va en \\(v\\) (côté dérivée)."
+    }
+  };
+  return fb[exoId] ? fb[exoId][correct ? 'ok' : 'ko'] : '';
+}
+
+// ---- STEP-BY-STEP ----
+const stepData = {
+  exo3: [
+    { label: "Étape 1 — Choix LIATE", content: "A avant T : \\(u' = \\cos(x)\\) et \\(v = x\\)" },
+    { label: "Étape 2 — Calcul de u et v'", content: "\\(u = \\sin(x)\\) (primitive de \\(\\cos x\\)) &nbsp;·&nbsp; \\(v' = 1\\)" },
+    { label: "Étape 3 — Application de la formule", content: "$$\\int_0^{\\pi} x\\cos(x)\\,dx = \\Big[x\\sin(x)\\Big]_0^{\\pi} - \\int_0^{\\pi} \\sin(x)\\,dx$$" },
+    { label: "Étape 4 — Crochet", content: "\\(\\Big[x\\sin(x)\\Big]_0^{\\pi} = \\pi \\cdot \\sin(\\pi) - 0 \\cdot \\sin(0) = \\pi \\times 0 - 0 = 0\\)" },
+    { label: "Étape 5 — Intégrale restante", content: "$$\\int_0^{\\pi} \\sin(x)\\,dx = \\Big[-\\cos(x)\\Big]_0^{\\pi} = -\\cos(\\pi) + \\cos(0) = 1 + 1 = 2$$" },
+    { label: "Résultat", content: "$$\\int_0^{\\pi} x\\cos(x)\\,dx = 0 - 2 = \\boxed{-2}$$" }
+  ],
+  exo4: [
+    { label: "1ère IPP — Choix", content: "A avant T : \\(u' = \\sin(x)\\), \\(v = x^2\\) → \\(u = -\\cos(x)\\), \\(v' = 2x\\)" },
+    { label: "1ère IPP — Application", content: "$$\\int_0^1 x^2\\sin(x)\\,dx = \\Big[-x^2\\cos(x)\\Big]_0^1 + \\int_0^1 2x\\cos(x)\\,dx$$" },
+    { label: "1ère IPP — Crochet", content: "\\(\\Big[-x^2\\cos(x)\\Big]_0^1 = -\\cos(1) - 0 = -\\cos(1)\\)" },
+    { label: "2ème IPP — Sur \\(\\int_0^1 2x\\cos(x)\\,dx\\)", content: "A avant T : \\(u' = \\cos(x)\\), \\(v = 2x\\) → \\(u = \\sin(x)\\), \\(v' = 2\\)" },
+    { label: "2ème IPP — Application", content: "$$\\int_0^1 2x\\cos(x)\\,dx = \\Big[2x\\sin(x)\\Big]_0^1 - \\int_0^1 2\\sin(x)\\,dx$$" },
+    { label: "2ème IPP — Calcul", content: "\\(\\Big[2x\\sin(x)\\Big]_0^1 = 2\\sin(1)\\)<br>\\(\\int_0^1 2\\sin(x)\\,dx = \\Big[-2\\cos(x)\\Big]_0^1 = -2\\cos(1) + 2\\)<br>Donc : \\(2\\sin(1) - (-2\\cos(1)+2) = 2\\sin(1) + 2\\cos(1) - 2\\)" },
+    { label: "Résultat final", content: "$$\\int_0^1 x^2\\sin(x)\\,dx = -\\cos(1) + 2\\sin(1) + 2\\cos(1) - 2 = \\boxed{\\cos(1) + 2\\sin(1) - 2}$$" }
+  ],
+  exo5: [
+    { label: "Propriété à utiliser", content: "Si \\(f(x) \\leq g(x)\\) sur \\([a;b]\\), alors \\(\\int_a^b f(x)\\,dx \\leq \\int_a^b g(x)\\,dx\\)" },
+    { label: "Application", content: "On a \\(\\dfrac{1}{2} \\leq e^{-x^2} \\leq 1\\) sur \\([0,1]\\), donc en intégrant sur \\([0,1]\\) :" },
+    { label: "Calcul des bornes", content: "$$\\int_0^1 \\frac{1}{2}\\,dx \\leq \\int_0^1 e^{-x^2}\\,dx \\leq \\int_0^1 1\\,dx$$" },
+    { label: "Résultat", content: "$$\\frac{1}{2} \\leq \\int_0^1 e^{-x^2}\\,dx \\leq 1$$<br><small style='color:var(--text2)'>On ne peut pas calculer exactement cette intégrale (pas de primitive simple), mais on l'encadre !</small>" }
+  ]
+};
+
+const stepCounters = { exo3: 0, exo4: 0, exo5: 0 };
+
+function nextStep(exoId) {
+  const steps = stepData[exoId];
+  const counter = stepCounters[exoId];
+  const container = document.getElementById('steps-' + exoId);
+  const btn = document.getElementById('btn-' + exoId);
+
+  if (counter >= steps.length) return;
+
+  const step = steps[counter];
+  const div = document.createElement('div');
+  div.className = 'step visible';
+  div.innerHTML = `<div class="step-label">${step.label}</div>${step.content}`;
+  container.appendChild(div);
+  renderMath(div);
+
+  stepCounters[exoId]++;
+
+  if (stepCounters[exoId] >= steps.length) {
+    btn.textContent = '✓ Terminé';
+    btn.disabled = true;
+    btn.style.opacity = '0.5';
+  }
+}
+
+function resetSteps(exoId) {
+  stepCounters[exoId] = 0;
+  const container = document.getElementById('steps-' + exoId);
+  container.innerHTML = '';
+  const btn = document.getElementById('btn-' + exoId);
+  btn.textContent = exoId === 'exo4' ? 'Voir étape suivante' : 'Voir étape suivante';
+  btn.disabled = false;
+  btn.style.opacity = '1';
+  if (exoId === 'exo5') btn.textContent = 'Voir la solution';
+}
+
+// ---- KATEX ----
+function renderMath(el) {
+  if (window.renderMathInElement) {
+    renderMathInElement(el, {
+      delimiters: [
+        { left: "$$", right: "$$", display: true },
+        { left: "\\(", right: "\\)", display: false },
+        { left: "\\[", right: "\\]", display: true }
+      ],
+      throwOnError: false
+    });
+  }
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+  renderMath(document.body);
+});
+</script>
+</body>
+</html>
