@@ -1,0 +1,1120 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Révisions Terminale · Anglais & Espagnol</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,500;0,700;0,900;1,300;1,700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0c0c10;
+  --surface: #141418;
+  --surface2: #1c1c24;
+  --border: rgba(255,255,255,0.07);
+  --text: #eeeef2;
+  --muted: #6b6b80;
+
+  --en: #5bc4ff;
+  --en-dim: rgba(91,196,255,0.12);
+  --en-border: rgba(91,196,255,0.25);
+
+  --es: #ff9f4a;
+  --es-dim: rgba(255,159,74,0.12);
+  --es-border: rgba(255,159,74,0.25);
+
+  --gold: #f5c842;
+  --green: #5bffb0;
+
+  --r: 14px;
+  --r-sm: 10px;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Outfit',sans-serif;
+  font-weight:400;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+/* ══════════ HOME ══════════ */
+#home{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:2rem 1.2rem;
+  position:relative;
+}
+#home::before{
+  content:'';
+  position:fixed;inset:0;
+  background:
+    radial-gradient(ellipse 60% 60% at 20% 20%, rgba(91,196,255,.07) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 60% at 80% 80%, rgba(255,159,74,.07) 0%, transparent 70%);
+  pointer-events:none;
+}
+.home-wrap{
+  position:relative;z-index:1;
+  max-width:520px;width:100%;
+  text-align:center;
+}
+.home-eyebrow{
+  display:inline-flex;align-items:center;gap:.5rem;
+  font-size:.68rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--muted);
+  border:1px solid var(--border);border-radius:100px;
+  padding:.35rem 1rem;margin-bottom:2.2rem;
+}
+.home-eyebrow span{font-size:.9rem;}
+h1.home-title{
+  font-family:'Fraunces',serif;
+  font-size:clamp(2.6rem,10vw,4.2rem);
+  font-weight:700;line-height:1.0;
+  margin-bottom:.8rem;
+  letter-spacing:-.02em;
+}
+h1.home-title em{
+  font-style:italic;font-weight:300;
+  background:linear-gradient(135deg,var(--en),var(--es));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.home-sub{
+  color:var(--muted);font-size:.92rem;line-height:1.7;
+  margin-bottom:2.8rem;max-width:380px;margin-left:auto;margin-right:auto;
+}
+
+.lang-grid{display:grid;grid-template-columns:1fr 1fr;gap:.9rem;margin-bottom:1.4rem;}
+.lang-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--r);
+  padding:1.4rem 1.2rem;
+  cursor:pointer;
+  transition:all .22s ease;
+  text-align:left;
+  position:relative;overflow:hidden;
+}
+.lang-card::before{
+  content:'';position:absolute;inset:0;opacity:0;
+  transition:opacity .22s;
+}
+.lang-card.en::before{background:linear-gradient(135deg,rgba(91,196,255,.08),transparent);}
+.lang-card.es::before{background:linear-gradient(135deg,rgba(255,159,74,.08),transparent);}
+.lang-card:hover{transform:translateY(-3px);border-color:var(--border);}
+.lang-card.en:hover{border-color:var(--en-border);box-shadow:0 12px 40px rgba(91,196,255,.14);}
+.lang-card.en:hover::before{opacity:1;}
+.lang-card.es:hover{border-color:var(--es-border);box-shadow:0 12px 40px rgba(255,159,74,.14);}
+.lang-card.es:hover::before{opacity:1;}
+.lang-card .flag{font-size:2.2rem;display:block;margin-bottom:.7rem;}
+.lang-card .lname{
+  font-family:'Fraunces',serif;font-size:1.25rem;font-weight:700;display:block;
+  margin-bottom:.2rem;
+}
+.lang-card.en .lname{color:var(--en);}
+.lang-card.es .lname{color:var(--es);}
+.lang-card .lsub{font-size:.75rem;color:var(--muted);}
+
+.home-note{
+  font-size:.75rem;color:var(--muted);
+  border:1px dashed var(--border);border-radius:var(--r-sm);
+  padding:.7rem 1rem;line-height:1.5;
+}
+
+/* ══════════ SCREEN ══════════ */
+.screen{display:none;flex-direction:column;min-height:100vh;}
+.screen.active{display:flex;}
+
+/* ── TOPBAR ── */
+.topbar{
+  position:sticky;top:0;z-index:200;
+  background:rgba(12,12,16,.88);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:.8rem;
+  padding:.8rem 1rem;
+}
+.btn-icon{
+  background:var(--surface2);border:1px solid var(--border);
+  color:var(--text);border-radius:var(--r-sm);
+  padding:.4rem .8rem;font-size:.8rem;cursor:pointer;
+  font-family:'Outfit',sans-serif;font-weight:500;
+  transition:all .18s;white-space:nowrap;
+  display:flex;align-items:center;gap:.4rem;
+}
+.btn-icon:hover{background:var(--surface);border-color:rgba(255,255,255,.15);}
+.topbar-title{
+  font-family:'Fraunces',serif;font-size:1rem;font-weight:700;flex:1;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.topbar-title.en{color:var(--en);}
+.topbar-title.es{color:var(--es);}
+
+/* ── NAV TABS ── */
+.nav-tabs{
+  display:flex;gap:0;
+  overflow-x:auto;
+  border-bottom:1px solid var(--border);
+  background:var(--surface);
+  scrollbar-width:none;
+}
+.nav-tabs::-webkit-scrollbar{display:none;}
+.nav-tab{
+  padding:.75rem 1.1rem;
+  font-size:.8rem;font-weight:600;
+  color:var(--muted);cursor:pointer;
+  border:none;background:none;
+  font-family:'Outfit',sans-serif;
+  border-bottom:2px solid transparent;
+  transition:all .18s;white-space:nowrap;
+  position:relative;
+}
+.nav-tab:hover{color:var(--text);}
+.nav-tab.active{color:var(--text);}
+.nav-tab.en.active{color:var(--en);border-bottom-color:var(--en);}
+.nav-tab.es.active{color:var(--es);border-bottom-color:var(--es);}
+
+/* ── PANELS ── */
+.panel{display:none;flex:1;overflow-y:auto;}
+.panel.active{display:block;}
+
+/* ── CONTENT LAYOUT ── */
+.content{max-width:720px;margin:0 auto;padding:1.4rem 1rem 5rem;}
+
+/* ── SECTION LABEL ── */
+.s-label{
+  font-size:.65rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:.7rem;margin-top:1.6rem;
+}
+.s-label:first-child{margin-top:0;}
+
+/* ── CARDS ── */
+.card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r);padding:1rem 1.1rem;
+  margin-bottom:.6rem;font-size:.86rem;line-height:1.7;
+}
+.card.accent-en{border-left:3px solid var(--en);}
+.card.accent-es{border-left:3px solid var(--es);}
+.card.accent-gold{border-left:3px solid var(--gold);background:rgba(245,200,66,.04);}
+.card strong{font-weight:600;display:block;margin-bottom:.3rem;}
+.card.en strong{color:var(--en);}
+.card.es strong{color:var(--es);}
+.card.gold strong{color:var(--gold);}
+
+/* ── HIGHLIGHT BOX ── */
+.hbox{
+  border-radius:var(--r);
+  padding:1.1rem 1.2rem;
+  margin-bottom:.8rem;
+  font-size:.88rem;line-height:1.7;
+}
+.hbox.en{background:var(--en-dim);border:1px solid var(--en-border);}
+.hbox.es{background:var(--es-dim);border:1px solid var(--es-border);}
+.hbox.gold{background:rgba(245,200,66,.1);border:1px solid rgba(245,200,66,.3);}
+.hbox .label{
+  font-size:.65rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;
+  margin-bottom:.5rem;display:block;
+}
+.hbox.en .label{color:var(--en);}
+.hbox.es .label{color:var(--es);}
+.hbox.gold .label{color:var(--gold);}
+.hbox .title{
+  font-family:'Fraunces',serif;font-size:1.15rem;font-weight:700;
+  margin-bottom:.4rem;line-height:1.2;
+}
+
+/* ── VOCAB GRID ── */
+.vocab-grid{display:grid;grid-template-columns:1fr 1fr;gap:.4rem;margin-bottom:.6rem;}
+@media(max-width:420px){.vocab-grid{grid-template-columns:1fr;}}
+.vocab-item{
+  background:var(--surface2);border:1px solid var(--border);
+  border-radius:var(--r-sm);padding:.65rem .85rem;
+}
+.vocab-item .w{font-weight:600;font-size:.85rem;}
+.vocab-item.en .w{color:var(--en);}
+.vocab-item.es .w{color:var(--es);}
+.vocab-item .d{font-size:.76rem;color:var(--muted);margin-top:.1rem;}
+
+/* ── GRAMMAR TABLE ── */
+.gtable{width:100%;border-collapse:collapse;font-size:.81rem;margin-bottom:.6rem;}
+.gtable th{
+  text-align:left;padding:.5rem .7rem;font-weight:600;font-size:.72rem;
+  letter-spacing:.08em;text-transform:uppercase;
+}
+.gtable.en th{background:var(--en-dim);color:var(--en);}
+.gtable.es th{background:var(--es-dim);color:var(--es);}
+.gtable td{padding:.55rem .7rem;border-top:1px solid var(--border);vertical-align:top;line-height:1.5;}
+.gtable em{color:var(--muted);font-style:italic;}
+.gtable tr:hover td{background:var(--surface2);}
+
+/* ── Q&A ── */
+.qa{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r);margin-bottom:.5rem;overflow:hidden;
+}
+.qa-q{
+  padding:.9rem 1rem;cursor:pointer;
+  display:flex;justify-content:space-between;align-items:flex-start;gap:.6rem;
+  font-weight:600;font-size:.85rem;line-height:1.4;
+  transition:background .15s;
+}
+.qa-q:hover{background:var(--surface2);}
+.qa-q .ico{
+  font-size:1rem;color:var(--muted);
+  flex-shrink:0;margin-top:.05rem;
+  transition:transform .2s;
+}
+.qa.open .ico{transform:rotate(45deg);}
+.qa-a{
+  display:none;
+  border-top:1px solid var(--border);
+  padding:.85rem 1rem;
+  font-size:.83rem;line-height:1.7;color:var(--muted);
+  animation:fadeIn .2s ease;
+}
+.qa.open .qa-a{display:block;}
+.qa-a strong{color:var(--text);font-weight:600;}
+
+/* ── STEPS (methodology) ── */
+.steps{display:flex;flex-direction:column;gap:.5rem;}
+.step{
+  display:flex;gap:.9rem;align-items:flex-start;
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r);padding:1rem;
+}
+.step-num{
+  font-family:'Fraunces',serif;font-size:1.6rem;font-weight:700;
+  line-height:1;flex-shrink:0;opacity:.35;min-width:2rem;
+}
+.step.en .step-num{color:var(--en);}
+.step.es .step-num{color:var(--es);}
+.step-body{flex:1;}
+.step-title{font-weight:700;font-size:.88rem;margin-bottom:.3rem;}
+.step.en .step-title{color:var(--en);}
+.step.es .step-title{color:var(--es);}
+.step-text{font-size:.82rem;line-height:1.65;color:var(--muted);}
+
+/* ── TIP ── */
+.tip{
+  background:rgba(245,200,66,.07);
+  border:1px dashed rgba(245,200,66,.3);
+  border-radius:var(--r-sm);
+  padding:.8rem 1rem;font-size:.81rem;
+  line-height:1.6;color:var(--muted);margin-bottom:.8rem;
+}
+.tip b{color:var(--gold);}
+
+/* ── PROBLEMATIQUE BOX ── */
+.probbox{
+  background:linear-gradient(135deg,rgba(91,196,255,.08),rgba(255,159,74,.06));
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:var(--r);padding:1rem 1.2rem;
+  margin-bottom:.8rem;
+}
+.probbox .ptag{font-size:.65rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:.4rem;}
+.probbox .ptext{font-family:'Fraunces',serif;font-size:1rem;font-weight:500;font-style:italic;line-height:1.4;}
+
+/* ── PILL ── */
+.pill{
+  display:inline-block;
+  font-size:.68rem;font-weight:600;
+  padding:.2rem .6rem;border-radius:100px;
+  margin:.15rem;
+}
+.pill.en{background:var(--en-dim);color:var(--en);}
+.pill.es{background:var(--es-dim);color:var(--es);}
+.pill.gold{background:rgba(245,200,66,.15);color:var(--gold);}
+.pill.green{background:rgba(91,255,176,.12);color:var(--green);}
+
+/* ── TENSION TABLE ── */
+.tension-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;margin-bottom:.8rem;}
+@media(max-width:480px){.tension-grid{grid-template-columns:1fr;}}
+.tension-item{
+  background:var(--surface2);border:1px solid var(--border);
+  border-radius:var(--r-sm);padding:.8rem;
+  font-size:.78rem;line-height:1.5;
+}
+.tension-item .tn{font-weight:700;font-size:.8rem;margin-bottom:.3rem;}
+.tension-item.en .tn{color:var(--en);}
+.tension-item.es .tn{color:var(--es);}
+
+/* ── QUOTE ── */
+.quote{
+  border-left:3px solid var(--gold);
+  padding:.8rem 1rem;
+  font-family:'Fraunces',serif;font-style:italic;font-size:.95rem;
+  color:var(--muted);margin-bottom:.8rem;
+  line-height:1.5;
+}
+.quote cite{display:block;font-size:.72rem;font-style:normal;margin-top:.4rem;color:var(--muted);opacity:.7;}
+
+/* ── ANIM ── */
+@keyframes fadeIn{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:translateY(0);}}
+
+/* ── RESPONSIVE ── */
+@media(max-width:480px){
+  .lang-grid{grid-template-columns:1fr;}
+  .content{padding:1.1rem .85rem 5rem;}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════
+     HOME
+═══════════════════════════════════════ -->
+<div id="home">
+  <div class="home-wrap">
+    <div class="home-eyebrow"><span>📚</span> Terminale · Oral LV1/LV2 · Certification</div>
+    <h1 class="home-title">Tes révisions<br><em>sur mesure</em></h1>
+    <p class="home-sub">Méthodologie officielle, résumés des axes, vocab, grammaire, questions examinateur — tout ce qu'il faut pour assurer ton oral.</p>
+    <div class="lang-grid">
+      <button class="lang-card en" onclick="openScreen('en')">
+        <span class="flag">🇬🇧</span>
+        <span class="lname">Anglais LV1</span>
+        <span class="lsub">3 axes · Méthodologie · Q&A</span>
+      </button>
+      <button class="lang-card es" onclick="openScreen('es')">
+        <span class="flag">🇪🇸</span>
+        <span class="lname">Espagnol LV2</span>
+        <span class="lsub">4 séquences · Méthodologie · Q&A</span>
+      </button>
+    </div>
+    <div class="home-note">💡 Ouvre ce site sur ton téléphone la veille. Chaque onglet = une étape de révision. Le bouton ⛶ passe en plein écran.</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     ENGLISH SCREEN
+═══════════════════════════════════════ -->
+<div id="screen-en" class="screen">
+  <div class="topbar">
+    <button class="btn-icon" onclick="goHome()">← Accueil</button>
+    <div class="topbar-title en">🇬🇧 Anglais LV1</div>
+    <button class="btn-icon" onclick="toggleFS()">⛶</button>
+  </div>
+
+  <div class="nav-tabs" id="en-tabs">
+    <button class="nav-tab en active" onclick="switchPanel('en','method',this)">📋 Méthode</button>
+    <button class="nav-tab en" onclick="switchPanel('en','ax1',this)">Axe 1 · Citizenship</button>
+    <button class="nav-tab en" onclick="switchPanel('en','ax2',this)">Axe 2 · Identities</button>
+    <button class="nav-tab en" onclick="switchPanel('en','ax3',this)">Axe 3 · Innovations</button>
+    <button class="nav-tab en" onclick="switchPanel('en','grammar',this)">📐 Grammaire</button>
+  </div>
+
+  <!-- ── MÉTHODE ── -->
+  <div class="panel active" id="en-method">
+    <div class="content">
+
+      <div class="hbox gold">
+        <span class="label">⚠️ L'épreuve officielle — à connaître par cœur</span>
+        <div class="title">Expression Orale LVA / LVB Anglais</div>
+        <div style="font-size:.85rem;margin-top:.5rem;line-height:1.7;">
+          <b>2 parties</b> · 10 min de préparation · 10 min au total<br>
+          <span class="pill gold">Partie 1</span> Exposé libre — 5 min<br>
+          <span class="pill gold">Partie 2</span> Échange avec l'examinateur — 5 min
+        </div>
+      </div>
+
+      <div class="tip">L'examinateur te propose <b>2 documents iconographiques</b> ou <b>1 document + 1 citation</b>. Tu choisis lequel est le plus pertinent pour l'axe — tu n'es pas noté sur le choix mais sur <b>ta capacité à le justifier</b>.</div>
+
+      <div class="s-label">Partie 1 — Exposé libre (5 min) : le plan en 3 étapes</div>
+      <div class="steps">
+        <div class="step en">
+          <div class="step-num">I</div>
+          <div class="step-body">
+            <div class="step-title">Présente le(s) document(s)</div>
+            <div class="step-text">→ Identifie la <b>nature</b> du document (photo, dessin, pub, extrait de film…)<br>→ <b>Contextualise</b> : temps, lieu, personnes concernées<br>→ <b>Commente</b> ce que tu vois, émet des hypothèses plausibles<br>→ Si citation : explique-la et contextualise l'auteur + l'époque</div>
+          </div>
+        </div>
+        <div class="step en">
+          <div class="step-num">II</div>
+          <div class="step-body">
+            <div class="step-title">Justifie ton choix — relie à l'axe</div>
+            <div class="step-text">a) Quel(s) aspect(s) de l'axe le document illustre-t-il précisément ?<br>b) Appuie sur des <b>exemples étudiés en classe</b> (Never Alone, Into the Wild, #FeesMustFall…)<br>c) <b>Réutilise les termes de l'axe</b> régulièrement dans ta prise de parole<br>d) Tu peux aussi emprunter des exemples personnels</div>
+          </div>
+        </div>
+        <div class="step en">
+          <div class="step-num">III</div>
+          <div class="step-body">
+            <div class="step-title">Conclus</div>
+            <div class="step-text">→ Mets en avant l'intérêt et la spécificité du document<br>→ Réponds à ta <b>problématique</b> formulée au début</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="s-label">⚠️ N'oublie pas la problématique !</div>
+      <div class="card accent-gold">
+        <strong style="color:var(--gold);">Exemple officiel (donné par le prof)</strong>
+        Thème : Alaska · Axe : Identities & Exchanges<br>
+        <b style="color:var(--en);">Problématique : "To what extent is Alaska an attractive land?"</b><br><br>
+        Format à adapter : <em>"To what extent…" / "How far…" / "Can… really…" / "In what ways…"</em>
+      </div>
+
+      <div class="s-label">Partie 2 — Échange avec l'examinateur (5 min)</div>
+      <div class="card accent-en">
+        <strong>LVB (B1) — Écoute et réagis de façon adaptée et fluide</strong>
+        Montre que tu comprends les questions et que tu peux y répondre sans trop hésiter. Reste calme.
+      </div>
+      <div class="card accent-en">
+        <strong>LVA (B2) — Relance la discussion et argumente</strong>
+        Tu peux approuver OU exprimer un avis différent. Donne ton opinion, argumente. Montre ta réflexion interculturelle.
+      </div>
+      <div class="tip">
+        <b>Rappels clés :</b><br>
+        • Le but = <b>développer le sujet et tes connaissances de l'axe</b><br>
+        • Exprime tes <b>sentiments</b> face au document ("This image strikes me because…")<br>
+        • L'examinateur peut aussi interroger sur ton <b>travail réalisé en cours</b><br>
+        • Tu peux très bien dire que tu n'es pas d'accord avec lui
+      </div>
+
+      <div class="s-label">Les 7 axes du programme (à connaître)</div>
+      <div class="vocab-grid">
+        <div class="vocab-item en"><div class="w">Identities & Exchanges</div><div class="d">Identités et échanges</div></div>
+        <div class="vocab-item en"><div class="w">Public & Private Spaces</div><div class="d">Espace privé/public</div></div>
+        <div class="vocab-item en"><div class="w">Art & Power</div><div class="d">Art et pouvoir</div></div>
+        <div class="vocab-item en"><div class="w">Citizenship & Virtual Worlds</div><div class="d">Citoyenneté et mondes virtuels</div></div>
+        <div class="vocab-item en"><div class="w">Fictions & Realities</div><div class="d">Fictions et réalités</div></div>
+        <div class="vocab-item en"><div class="w">Scientific Innovations & Responsibility</div><div class="d">Innovations scientifiques</div></div>
+        <div class="vocab-item en"><div class="w">Diversity & Inclusion</div><div class="d">Diversité et inclusion</div></div>
+      </div>
+
+      <div class="s-label">Phrases utiles pour l'oral</div>
+      <div class="card">
+        <strong style="color:var(--en);">Présenter un document</strong>
+        "This document is a [photo / cartoon / advertisement]…" · "It was taken / published in [year], in [place]…" · "We can see / notice that…" · "This seems to suggest that…"
+      </div>
+      <div class="card">
+        <strong style="color:var(--en);">Relier à l'axe</strong>
+        "This document clearly illustrates the axis [Identities & Exchanges] because…" · "It connects to the theme of… in the sense that…" · "This relates to what we studied in class, namely…"
+      </div>
+      <div class="card">
+        <strong style="color:var(--en);">Argumenter / donner son avis</strong>
+        "In my opinion…" · "I would argue that…" · "While I understand your point, I believe…" · "This raises the question of…" · "To a certain extent…"
+      </div>
+      <div class="card">
+        <strong style="color:var(--en);">Conclure</strong>
+        "To conclude…" · "All things considered…" · "This document is particularly relevant because…" · "It forces us to reflect on…"
+      </div>
+    </div>
+  </div>
+
+  <!-- ── AXE 1 : CITIZENSHIP ── -->
+  <div class="panel" id="en-ax1">
+    <div class="content">
+
+      <div class="hbox en">
+        <span class="label">Axe 1</span>
+        <div class="title">Citizenship & Virtual Worlds</div>
+        <div style="margin-top:.5rem;font-size:.85rem;">Digital Activism in South Africa</div>
+      </div>
+
+      <div class="probbox">
+        <div class="ptag">Problématique suggérée</div>
+        <div class="ptext">"To what extent can digital activism truly transform society in South Africa?"</div>
+      </div>
+
+      <div class="quote">"Social media is the new weapon of mass mobilization."<cite>— Contexte Afrique du Sud</cite></div>
+
+      <div class="s-label">Contexte — Afrique du Sud</div>
+      <div class="vocab-grid">
+        <div class="vocab-item en"><div class="w">Rainbow Nation</div><div class="d">Ex-colonisé Néerlandais & Britanniques</div></div>
+        <div class="vocab-item en"><div class="w">Apartheid</div><div class="d">46 ans · Nelson Mandela leader</div></div>
+        <div class="vocab-item en"><div class="w">3 capitales</div><div class="d">Pretoria · Cape Town · Bloemfontein</div></div>
+        <div class="vocab-item en"><div class="w">Indépendance</div><div class="d">31 mai 1910</div></div>
+        <div class="vocab-item en"><div class="w">Infra. ferrroviaires</div><div class="d">80% de l'Afrique</div></div>
+        <div class="vocab-item en"><div class="w">Rugby</div><div class="d">Une des meilleures équipes mondiales</div></div>
+      </div>
+
+      <div class="s-label">Documents clés étudiés en cours</div>
+      <div class="card accent-en">
+        <strong>#StopRacism — Pretoria Girls High</strong>
+        École de Pretoria interdit aux filles noires de porter leurs cheveux naturels (jugés "non soignés"). → Elles se sentent forcées dans un "moule blanc". Manifestations organisées. <b>#StopRacism partagé 150 000 fois sur Twitter → viral mondial.</b>
+      </div>
+      <div class="card accent-en">
+        <strong>Amandla.mobi (NGO)</strong>
+        Utilise les téléphones pour dénoncer discriminations contre femmes noires (expulsions forcées). Téléphones = accessibles en Afrique du Sud. Permet connexion nationale → être entendues, organiser des actions. <b>Donne une voix aux marginalisés.</b>
+      </div>
+      <div class="card accent-en">
+        <strong>#Iam4Rhinos — WWF-SA</strong>
+        Campagne contre le braconnage des rhinocéros (pour cornes → médecine traditionnelle asiatique + statut social). Viral 6 jours en Afrique du Sud. <b>320 millions d'impressions · 100+ pays.</b>
+      </div>
+
+      <div class="s-label">Du PowerPoint du prof — informations supplémentaires</div>
+      <div class="card accent-en">
+        <strong>#FeesMustFall (2015)</strong>
+        Mouvement étudiant contre la hausse des frais d'université. Commence sur les campus, devient viral → <b>négociations gouvernementales forcées, gel des frais</b>. Victoire politique concrète née en ligne.
+      </div>
+      <div class="card accent-en">
+        <strong>#AmINext (2019)</strong>
+        Réponse aux taux de féminicides croissants. Permet aux survivantes de partager leurs témoignages publiquement → <b>le gouvernement déclare une "deuxième pandémie" de violences basées sur le genre.</b>
+      </div>
+
+      <div class="s-label">Les 3 tensions clés (cours du prof)</div>
+      <div class="tension-grid">
+        <div class="tension-item en">
+          <div class="tn">✅ Reach & Mobilization</div>
+          Contourne les gatekeepers traditionnels. Organisation à vitesse et échelle sans précédent, même avec peu de ressources.
+        </div>
+        <div class="tension-item en">
+          <div class="tn">⚠️ Structural Limits</div>
+          "Hashtag activism" risque de substituer l'engagement en ligne à l'action physique. Sans pression soutenue, les campagnes s'évaporent.
+        </div>
+        <div class="tension-item en">
+          <div class="tn">❌ Digital Divide</div>
+          Les inégalités d'accès à internet excluent paradoxalement les communautés les plus marginalisées que l'activisme cherche à représenter.
+        </div>
+      </div>
+
+      <div class="s-label">Vocabulaire essentiel</div>
+      <div class="vocab-grid">
+        <div class="vocab-item en"><div class="w">Clicktivism / Slacktivism</div><div class="d">Activisme en ligne (péjoratif)</div></div>
+        <div class="vocab-item en"><div class="w">Echo chamber</div><div class="d">Chambre d'écho algorithmique</div></div>
+        <div class="vocab-item en"><div class="w">Filter bubble</div><div class="d">Bulle de filtre</div></div>
+        <div class="vocab-item en"><div class="w">Grassroots</div><div class="d">Mouvement de base, citoyen</div></div>
+        <div class="vocab-item en"><div class="w">Mobilise</div><div class="d">Rassembler / organiser</div></div>
+        <div class="vocab-item en"><div class="w">Poaching</div><div class="d">Braconnage</div></div>
+        <div class="vocab-item en"><div class="w">Viral</div><div class="d">Qui se répand massivement</div></div>
+        <div class="vocab-item en"><div class="w">Awareness</div><div class="d">Prise de conscience</div></div>
+        <div class="vocab-item en"><div class="w">Unprecedented</div><div class="d">Sans précédent</div></div>
+        <div class="vocab-item en"><div class="w">Femicide</div><div class="d">Féminicide</div></div>
+      </div>
+
+      <div class="s-label">Q&A — Questions examinateur</div>
+      <div class="qa"><div class="qa-q" onclick="tqa(this)">What is digital activism and what are its limits? <span class="ico">+</span></div><div class="qa-a">Digital activism — also called "slacktivism" by critics — uses internet and social media to push for political or social change. It has existed since the 1990s and allows people to mobilise globally at low cost. However, its limits include: <strong>unequal internet access</strong> (the digital divide in South Africa), <strong>filter bubbles</strong> (algorithms only show you content you agree with), and <strong>echo chambers</strong>. Its impact is more theoretical than universal.</div></div>
+      <div class="qa"><div class="qa-q" onclick="tqa(this)">How did #StopRacism illustrate the power of social media? <span class="ico">+</span></div><div class="qa-a">In a Pretoria high school, Black girls were forbidden from wearing their natural hair, which the school deemed untidy. Students felt <strong>discriminated against</strong>, forced into a "white mould." They organised protests and launched #StopRacism on Twitter — it was shared <strong>150,000 times and went viral worldwide</strong>. This shows how social media can amplify a local injustice to a global audience and create pressure for change.</div></div>
+      <div class="qa"><div class="qa-q" onclick="tqa(this)">Can hashtags really change the world? <span class="ico">+</span></div><div class="qa-a">#Iam4Rhinos reached <strong>320 million impressions</strong> in 100+ countries. #FeesMustFall led to a <strong>concrete policy victory</strong> — fee increases were frozen. #AmINext forced the government to declare GBV a "second pandemic." But raising awareness ≠ structural change. Real power comes when digital activism combines with <strong>on-the-ground mobilisation and sustained pressure</strong>.</div></div>
+      <div class="qa"><div class="qa-q" onclick="tqa(this)">To what extent can digital activism truly transform South Africa? <span class="ico">+</span></div><div class="qa-a">Digital activism has achieved real victories: #FeesMustFall froze university fees, #AmINext forced a government response. It bypasses traditional gatekeepers and allows rapid mass organisation. <strong>However</strong>, the digital divide means the most marginalised communities — those without internet access — are often excluded. And without sustained offline pressure and institutional allies, online campaigns risk fading as quickly as trending topics. So digital activism is a <strong>powerful tool, but not sufficient alone</strong> for lasting transformation.</div></div>
+    </div>
+  </div>
+
+  <!-- ── AXE 2 : IDENTITIES ── -->
+  <div class="panel" id="en-ax2">
+    <div class="content">
+
+      <div class="hbox en">
+        <span class="label">Axe 2</span>
+        <div class="title">Identities & Exchanges</div>
+        <div style="margin-top:.5rem;font-size:.85rem;">Alaska — The Last Frontier</div>
+      </div>
+
+      <div class="probbox">
+        <div class="ptag">Problématique officielle (donnée par le prof)</div>
+        <div class="ptext">"To what extent is Alaska an attractive land?"</div>
+      </div>
+
+      <div class="quote">"Alaska is what America used to be."<cite>— James A. Michener</cite></div>
+
+      <div class="s-label">Définitions de l'axe</div>
+      <div class="card accent-en">
+        <strong>Identity</strong>
+        Who a person is, or the qualities of a person/group that make them <b>different</b>. Alaska = terre à identité multiple (natifs, migrants, nature).
+      </div>
+      <div class="card accent-en">
+        <strong>Exchange</strong>
+        The act of giving something to someone and them giving something else back. Alaska = lieu d'échanges entre cultures, entre attentes et réalité.
+      </div>
+
+      <div class="s-label">Les 3 tensions clés (cours du prof)</div>
+      <div class="tension-grid">
+        <div class="tension-item en">
+          <div class="tn">Tradition vs Modernity</div>
+          Les communautés indigènes naviguent entre protection de leurs langues/cérémonies et pressions d'adaptation au monde moderne.
+        </div>
+        <div class="tension-item en">
+          <div class="tn">Extraction vs Conservation</div>
+          Les revenus pétroliers financent l'État mais menacent les écosystèmes. Le débat sur le forage en zones protégées = enjeu national.
+        </div>
+        <div class="tension-item en">
+          <div class="tn">Isolation vs Globalisation</div>
+          Villages reculés face à l'homogénéisation culturelle apportée par la TV satellite, internet, chaînes mondiales d'approvisionnement.
+        </div>
+      </div>
+
+      <div class="s-label">Documents clés étudiés en cours</div>
+      <div class="card accent-en">
+        <strong>"Into the Wild" — Jon Krakauer (1996)</strong>
+        Biographie de Chris McCandless alias "Alex" : ado qui part en Alaska fuir la société. Rencontre Jim Gallien (natif alaskan) qui l'avertit des dangers. McCandless finit par mourir. → <b>Rêves vs réalité</b> = thème central. L'Alaska comme terre de fantasme et de déception.
+      </div>
+      <div class="card accent-en">
+        <strong>Never Alone (Kisima Ingitchuna)</strong>
+        Jeu Xbox One basé sur le folklore du peuple Iñupiat. Nuna + son renard traversent l'Alaska. Créé <b>avec</b> la communauté native. Valeurs : <b>résilience, interdépendance, échange intergénérationnel.</b>
+      </div>
+      <div class="card accent-en">
+        <strong>Alaska.org — "Must Sees in Alaska"</strong>
+        Vidéo promotionnelle : glaciers, midnight sun, Mount Denali, faune, habitants accueillants. → Image idéalisée, tourisme, échanges humains.
+      </div>
+      <div class="card accent-en">
+        <strong>"Alaska, the Last Frontier" (vidéo)</strong>
+        Migration pour l'industrie pétrolière. Barrow : natifs 99% → ~60%. <b>Les autochtones luttent pour préserver leur culture.</b>
+      </div>
+
+      <div class="s-label">Peuples indigènes — informations supplémentaires (prof)</div>
+      <div class="card">
+        Alaska abrite <b>+200 communautés natives distinctes</b> : Inuit, Yupik, Athabascan, Tlingit… Traditions orales, chasse de subsistance, pratiques cérémonielles = épine dorsale de l'identité indigène. La jeunesse navigue entre <b>deux réalités simultanées</b> : le monde numérique globalisé ET les pratiques ancestrales liées à la terre.
+      </div>
+
+      <div class="s-label">Faits importants sur l'Alaska</div>
+      <div class="vocab-grid">
+        <div class="vocab-item en"><div class="w">Non-contiguous</div><div class="d">Pas relié aux 48 États (+ Hawaii)</div></div>
+        <div class="vocab-item en"><div class="w">Températures</div><div class="d">-80°F à +100°F</div></div>
+        <div class="vocab-item en"><div class="w">Glaciers</div><div class="d">>50% des glaciers mondiaux</div></div>
+        <div class="vocab-item en"><div class="w">Sport officiel</div><div class="d">Dog sledding</div></div>
+        <div class="vocab-item en"><div class="w">Drapeau</div><div class="d">Dessiné par un garçon de 13 ans</div></div>
+        <div class="vocab-item en"><div class="w">Vendu par</div><div class="d">La Russie aux USA</div></div>
+      </div>
+
+      <div class="s-label">Vocabulaire essentiel</div>
+      <div class="vocab-grid">
+        <div class="vocab-item en"><div class="w">Wilderness</div><div class="d">Nature sauvage / contrée sauvage</div></div>
+        <div class="vocab-item en"><div class="w">Disillusioned</div><div class="d">Désenchanté / déçu dans ses idéaux</div></div>
+        <div class="vocab-item en"><div class="w">Resilience</div><div class="d">Résilience / capacité à rebondir</div></div>
+        <div class="vocab-item en"><div class="w">Interdependence</div><div class="d">Interdépendance</div></div>
+        <div class="vocab-item en"><div class="w">Assimilation</div><div class="d">Assimilation culturelle</div></div>
+        <div class="vocab-item en"><div class="w">Subsistence</div><div class="d">Chasse/pêche de subsistance</div></div>
+        <div class="vocab-item en"><div class="w">Remote</div><div class="d">Éloigné / isolé</div></div>
+        <div class="vocab-item en"><div class="w">Genuine</div><div class="d">Authentique / véritable</div></div>
+      </div>
+
+      <div class="s-label">Q&A — Questions examinateur</div>
+      <div class="qa"><div class="qa-q" onclick="tqa(this)">Why is Alaska called "The Last Frontier"? <span class="ico">+</span></div><div class="qa-a">Alaska is the largest and most sparsely populated U.S. state — a land of extreme climate, vast wilderness, and extraordinary cultural plurality. The phrase "The Last Frontier" is more than a motto: it's a <strong>philosophical statement</strong> about raw possibility, exploration, freedom, and the unresolved tension between tradition and modernity. It evokes a place where nature still dominates human settlement.</div></div>
+      <div class="qa"><div class="qa-q" onclick="tqa(this)">How does "Into the Wild" show the gap between expectations and reality? <span class="ico">+</span></div><div class="qa-a">Chris McCandless idealised Alaska as a place of freedom and self-sufficiency — a dream land. But Jim Gallien warns him the bush is <strong>unforgiving</strong>: dangerous wildlife, no food, extreme cold. McCandless eventually <strong>dies</strong>. The book illustrates how people project romantic fantasies onto Alaska rather than understanding its harsh reality. The gap between what people expect and what they find can be deadly.</div></div>
+      <div class="qa"><div class="qa-q" onclick="tqa(this)">How does "Never Alone" connect to Identities & Exchanges? <span class="ico">+</span></div><div class="qa-a">The game was created <strong>in collaboration</strong> with the Iñupiat people — an exchange between indigenous culture and modern gaming. It promotes three core values: <strong>resilience</strong> (surviving harsh conditions), <strong>interdependence</strong> (relying on others and nature), and <strong>intergenerational exchange</strong> (elders sharing stories with youth). It shows how cultural identity can be preserved and shared through new forms of media.</div></div>
+      <div class="qa"><div class="qa-q" onclick="tqa(this)">To what extent is Alaska an attractive land? <span class="ico">+</span></div><div class="qa-a">Alaska attracts people for many reasons: its <strong>breathtaking wilderness</strong> (glaciers, midnight sun, Mount Denali), its image as the "Last Frontier" promising freedom, and its economic opportunities (oil industry). However, reality often disappoints dreamers — as illustrated by McCandless in "Into the Wild." Moreover, migration threatens indigenous communities who struggle to <strong>preserve their identity</strong>. So Alaska is attractive as an idea, but complex and sometimes dangerous as a reality.</div></div>
+    </div>
+  </div>
+
+  <!-- ── AXE 3 : INNOVATIONS ── -->
+  <div class="panel" id="en-ax3">
+    <div class="content">
+
+      <div class="hbox en">
+        <span class="label">Axe 3</span>
+        <div class="title">Scientific Innovations & Responsibility</div>
+        <div style="margin-top:.5rem;font-size:.85rem;">Future Food in the USA</div>
+      </div>
+
+      <div class="probbox">
+        <div class="ptag">Problématique suggérée</div>
+        <div class="ptext">"Can future food be both sustainable and accepted by society?"</div>
+      </div>
+
+      <div class="quote">"The future of food is not meat as we know it."<cite>— Bill Gates</cite></div>
+
+      <div class="s-label">Définition de l'axe</div>
+      <div class="card accent-en">
+        <strong>Scientific Innovations & Responsibility</strong>
+        Explore les bénéfices du progrès scientifique ET ses conséquences éthiques/environnementales. La responsabilité des sociétés d'utiliser l'innovation <b>avec sagesse</b>.
+      </div>
+
+      <div class="s-label">Chiffres clés (cours du prof)</div>
+      <div class="vocab-grid">
+        <div class="vocab-item en"><div class="w">14.5%</div><div class="d">Des émissions GES mondiales = élevage conventionnel</div></div>
+        <div class="vocab-item en"><div class="w">10 milliards</div><div class="d">Population mondiale projetée en 2050</div></div>
+        <div class="vocab-item en"><div class="w">$1.8 trillion</div><div class="d">Activité économique industrie alimentaire US</div></div>
+        <div class="vocab-item en"><div class="w">95%</div><div class="d">Eau économisée par les fermes verticales vs agriculture classique</div></div>
+        <div class="vocab-item en"><div class="w">2023</div><div class="d">1ère approbation réglementaire US de la viande de culture</div></div>
+        <div class="vocab-item en"><div class="w">68%</div><div class="d">Augmentation moyenne des profits des agriculteurs OGM</div></div>
+      </div>
+
+      <div class="s-label">Documents clés étudiés en cours</div>
+      <div class="card accent-en">
+        <strong>Beyond Meat & Impossible Foods (prof)</strong>
+        Protéines végétales (pois, soja, blé) ingéniées pour reproduire le goût et la texture de la viande. Distribution en supermarché et fast-food prouvée → <b>viabilité à grande échelle démontrée.</b>
+      </div>
+      <div class="card accent-en">
+        <strong>Viande de laboratoire (Cultured Meat)</strong>
+        Cultivée depuis des cellules animales en bioréacteurs sans abattage. 1ère approbation US en 2023. Profil nutritionnel identique, fraction des terres/eau/émissions requises.
+      </div>
+      <div class="card accent-en">
+        <strong>Vertical Farming / Aerofarming</strong>
+        Entrepôts urbains multi-étages. Éclairage LED. Systèmes hydroponiques. Production toute l'année, indépendante du climat. Près des centres urbains → réduction transport. <b>-95% eau vs agriculture classique.</b>
+      </div>
+      <div class="card accent-en">
+        <strong>OGM (GMO) — Genetically Modified Organisms</strong>
+        1er OGM animal approuvé : saumon. Résistance herbicides/insectes/virus. 18M agriculteurs dans le monde. +68% profits. <b>Mais : scepticisme public (santé), Monsanto controversé.</b>
+      </div>
+      <div class="card accent-en">
+        <strong>Insectes & Algues — Nourritures du futur</strong>
+        Insectes = riches en protéines, pourraient lutter contre la faim mondiale (mais tabou en Occident). Algues = fondation de l'agriculture de demain, cultivées dans le désert du Nouveau-Mexique.
+      </div>
+
+      <div class="s-label">Le défi de l'acceptation sociale (prof)</div>
+      <div class="card">
+        La faisabilité technologique ne garantit pas l'adoption. <b>3 barrières majeures :</b> scepticisme consommateur autour de la nourriture "de labo", traditions culturelles alimentaires, accessibilité économique (prix). → <b>Un défi profondément social et politique, pas seulement scientifique.</b>
+      </div>
+
+      <div class="s-label">Vocabulaire essentiel</div>
+      <div class="vocab-grid">
+        <div class="vocab-item en"><div class="w">Lab-grown meat</div><div class="d">Viande de laboratoire</div></div>
+        <div class="vocab-item en"><div class="w">Sustainable</div><div class="d">Durable / soutenable</div></div>
+        <div class="vocab-item en"><div class="w">Greenhouse gas</div><div class="d">Gaz à effet de serre</div></div>
+        <div class="vocab-item en"><div class="w">Crop</div><div class="d">Culture agricole / récolte</div></div>
+        <div class="vocab-item en"><div class="w">Livestock</div><div class="d">Bétail</div></div>
+        <div class="vocab-item en"><div class="w">Processed food</div><div class="d">Nourriture transformée</div></div>
+        <div class="vocab-item en"><div class="w">Scepticism</div><div class="d">Méfiance / doute</div></div>
+        <div class="vocab-item en"><div class="w">Bioreactor</div><div class="d">Bioréacteur (viande de culture)</div></div>
+      </div>
+
+      <div class="s-label">Q&A — Questions examinateur</div>
+      <div class="qa"><div class="qa-q" onclick="tqa(this)">What are the main future food technologies in the USA? <span class="ico">+</span></div><div class="qa-a">Several technologies are reshaping the food system: <strong>plant-based alternatives</strong> (Beyond Meat, Impossible Foods) that replicate meat taste using plant proteins; <strong>cultured meat</strong> grown from animal cells without slaughter (US regulatory approval in 2023); <strong>vertical farming</strong> using LED and hydroponics in urban warehouses (95% less water); and emerging solutions like <strong>edible insects and algae</strong>. Each promises to decouple food production from its environmental costs.</div></div>
+      <div class="qa"><div class="qa-q" onclick="tqa(this)">Why is the social acceptance of future food a challenge? <span class="ico">+</span></div><div class="qa-a">Technological feasibility alone doesn't guarantee adoption. Three major barriers remain: <strong>consumer scepticism</strong> around "lab-grown" food (fears about safety and "unnaturalness"); <strong>cultural food traditions</strong> (eating insects is normal in many cultures but taboo in the West); and <strong>price accessibility</strong> (lab-grown meat remains expensive). This makes future food adoption as much a <strong>social and political challenge as a scientific one</strong>.</div></div>
+      <div class="qa"><div class="qa-q" onclick="tqa(this)">Can future food be both sustainable and accepted by society? <span class="ico">+</span></div><div class="qa-a">Future food <strong>can be sustainable</strong>: cultured meat uses a fraction of land, water and emissions; vertical farming uses 95% less water; plant-based proteins have a much lower carbon footprint. But societal acceptance remains uncertain. Cultural resistance, scepticism, and price barriers are real. <strong>However</strong>, Beyond Meat and Impossible Foods have already achieved mainstream distribution — proving that with the right product and marketing, society <strong>can adapt</strong>. The challenge is making sustainable options accessible and appealing to all.</div></div>
+      <div class="qa"><div class="qa-q" onclick="tqa(this)">In what ways does food innovation reflect scientific responsibility? <span class="ico">+</span></div><div class="qa-a">The food industry illustrates the tension between profit and responsibility. GMO companies claim to fight hunger, but their monopoly on seeds raises ethical questions. Lab-grown meat reduces animal suffering and emissions. Vertical farming slashes water use. But <strong>each innovation comes with the responsibility</strong> to consider social, environmental and health impacts. The question is: who benefits, who decides, and who bears the risks?</div></div>
+    </div>
+  </div>
+
+  <!-- ── GRAMMAIRE ANGLAIS ── -->
+  <div class="panel" id="en-grammar">
+    <div class="content">
+      <div class="hbox en">
+        <span class="label">Grammaire essentielle</span>
+        <div class="title">Les structures à maîtriser pour l'oral</div>
+      </div>
+
+      <div class="s-label">Le futur — 3 formes</div>
+      <table class="gtable en">
+        <tr><th>Règle</th><th>Structure</th><th>Exemple</th></tr>
+        <tr><td>Projet planifié / intention</td><td><b>BE GOING TO + BV</b></td><td><em>Are you going to buy lab-grown meat?</em></td></tr>
+        <tr><td>Promesse / prédiction logique<br><small>⚠️ Jamais dans subordonnée de temps</small></td><td><b>WILL + BV</b></td><td><em>I will show you the aerofarm when you visit.</em></td></tr>
+        <tr><td>Action très imminente</td><td><b>BE + V-ING</b></td><td><em>Are you leaving for California tomorrow?</em></td></tr>
+      </table>
+
+      <div class="s-label">Questions en anglais</div>
+      <table class="gtable en">
+        <tr><th>Type</th><th>Structure</th><th>Exemple</th></tr>
+        <tr><td>Fermée (oui/non)</td><td><b>(Aux.) + sujet + verbe + ?</b></td><td><em>Do you prepare for a food shortage?</em></td></tr>
+        <tr><td>Ouverte (wh-)</td><td><b>Wh- + aux. + sujet + verbe</b></td><td><em>When are people going to stop eating meat?</em></td></tr>
+        <tr><td>Sujet = mot interrogatif</td><td><b>Wh- + verbe direct</b></td><td><em>Who taught you to grow organic food?</em></td></tr>
+      </table>
+
+      <div class="s-label">Phrases clivées (Cleft sentences)</div>
+      <div class="card accent-en">
+        <strong>It is… that… / What… is…</strong>
+        Mettre en valeur un élément de la phrase (= phrase clivée).<br>
+        <em>"It is the tomato that grew in my garden."</em> (= This tomato grew…)<br>
+        <em>"What she wants is fresh organic food."</em> (= She wants…)
+      </div>
+
+      <div class="s-label">For / Since / Ago — Prétérit ou Present Perfect ?</div>
+      <table class="gtable en">
+        <tr><th>Situation</th><th>Temps</th><th>Exemple</th></tr>
+        <tr><td>Action terminée, précise dans le temps</td><td><b>PRÉTÉRIT + ago / during</b></td><td><em>He became a lawyer 60 years ago.</em></td></tr>
+        <tr><td>Action continue jusqu'à aujourd'hui</td><td><b>PRESENT PERFECT + for / since</b></td><td><em>South Africa has changed since 1994.</em></td></tr>
+      </table>
+
+      <div class="s-label">Subordonnées en IF — Hypothèses</div>
+      <table class="gtable en">
+        <tr><th>Type</th><th>Structure</th><th>Exemple</th></tr>
+        <tr><td>Probable (simple)</td><td><b>If + présent + WILL + BV</b></td><td><em>If your action gains followers, it will be strengthened.</em></td></tr>
+        <tr><td>Incertain</td><td><b>If + prétérit + WOULD + BV</b></td><td><em>If your action gained followers, it would be strengthened.</em></td></tr>
+        <tr><td>Irréel du passé</td><td><b>If + past perfect + WOULD HAVE + V-en</b></td><td><em>If it had gained followers, it would have been strengthened.</em></td></tr>
+      </table>
+
+      <div class="s-label">Connecteurs logiques utiles à l'oral</div>
+      <div class="vocab-grid">
+        <div class="vocab-item en"><div class="w">However / Yet</div><div class="d">Cependant / pourtant</div></div>
+        <div class="vocab-item en"><div class="w">Moreover / Furthermore</div><div class="d">De plus / par ailleurs</div></div>
+        <div class="vocab-item en"><div class="w">Therefore / Thus</div><div class="d">Donc / ainsi</div></div>
+        <div class="vocab-item en"><div class="w">Although / Even though</div><div class="d">Bien que / même si</div></div>
+        <div class="vocab-item en"><div class="w">In contrast / Whereas</div><div class="d">Au contraire / tandis que</div></div>
+        <div class="vocab-item en"><div class="w">To a certain extent</div><div class="d">Dans une certaine mesure</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     SPANISH SCREEN
+═══════════════════════════════════════ -->
+<div id="screen-es" class="screen">
+  <div class="topbar">
+    <button class="btn-icon" onclick="goHome()">← Accueil</button>
+    <div class="topbar-title es">🇪🇸 Espagnol LV2</div>
+    <button class="btn-icon" onclick="toggleFS()">⛶</button>
+  </div>
+
+  <div class="nav-tabs" id="es-tabs">
+    <button class="nav-tab es active" onclick="switchPanel('es','emethod',this)">📋 Método</button>
+    <button class="nav-tab es" onclick="switchPanel('es','es1',this)">Seq.1 · Digital</button>
+    <button class="nav-tab es" onclick="switchPanel('es','es2',this)">Seq.2 · Diversidad</button>
+    <button class="nav-tab es" onclick="switchPanel('es','es3',this)">Seq.3 · Mujeres</button>
+    <button class="nav-tab es" onclick="switchPanel('es','es4',this)">Seq.4 · Migrar</button>
+  </div>
+
+  <!-- ── MÉTODO ESPAÑOL ── -->
+  <div class="panel active" id="es-emethod">
+    <div class="content">
+      <div class="hbox gold">
+        <span class="label">⚠️ El examen oral — metodología</span>
+        <div class="title">Expression Orale — Espagnol LV2</div>
+        <div style="font-size:.85rem;margin-top:.5rem;line-height:1.7;">
+          Même format qu'en anglais : <b>10 min de préparation · 10 min d'oral</b><br>
+          <span class="pill gold">Partie 1</span> Exposé libre — 5 min<br>
+          <span class="pill gold">Partie 2</span> Échange avec l'examinateur — 5 min
+        </div>
+      </div>
+
+      <div class="tip">Le prof te propose <b>2 documents iconographiques</b> ou <b>1 document + 1 citation</b>. Choisis le plus pertinent pour l'axe tiré au sort. Tu n'es pas noté sur le choix mais sur <b>ta capacité à le justifier</b>.</div>
+
+      <div class="s-label">Plan de l'exposé en 3 étapes</div>
+      <div class="steps">
+        <div class="step es">
+          <div class="step-num">I</div>
+          <div class="step-body">
+            <div class="step-title">Presenta el/los documento(s)</div>
+            <div class="step-text">→ Identifica la <b>naturaleza</b> del documento (foto, cartel, ilustración…)<br>→ <b>Contextualiza</b>: tiempo, lugar, personas representadas<br>→ <b>Comenta</b> lo que ves, emite hipótesis plausibles<br>→ Si hay cita: explícala y contextualiza al autor y la época</div>
+          </div>
+        </div>
+        <div class="step es">
+          <div class="step-num">II</div>
+          <div class="step-body">
+            <div class="step-title">Justifica tu elección — conecta con el eje</div>
+            <div class="step-text">a) ¿Qué aspecto(s) del eje ilustra exactamente el documento?<br>b) Apóyate en <b>ejemplos estudiados en clase</b><br>c) <b>Reutiliza los términos del eje</b> regularmente<br>d) Formula una <b>problemática</b> clara desde el principio</div>
+          </div>
+        </div>
+        <div class="step es">
+          <div class="step-num">III</div>
+          <div class="step-body">
+            <div class="step-title">Concluye</div>
+            <div class="step-text">→ Destaca el interés y la especificidad del documento<br>→ Responde a tu problemática formulada al inicio</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="s-label">Frases útiles para el oral</div>
+      <div class="card accent-es">
+        <strong>Presentar un documento</strong>
+        "Se trata de un/a [foto / cartel / ilustración]…" · "Fue publicado/tomado en [año], en [lugar]…" · "Podemos ver / observar que…" · "Esto parece indicar que…"
+      </div>
+      <div class="card accent-es">
+        <strong>Relacionar con el eje</strong>
+        "Este documento ilustra claramente el eje [Identidades e Intercambios] porque…" · "Se relaciona con el tema de… en el sentido de que…" · "Esto me recuerda lo que estudiamos en clase, a saber…"
+      </div>
+      <div class="card accent-es">
+        <strong>Dar su opinión / argumentar</strong>
+        "En mi opinión…" · "Creo que…" · "Por una parte… por otra parte…" · "Aunque entiendo su punto de vista, considero que…" · "Esto plantea la cuestión de…"
+      </div>
+      <div class="card accent-es">
+        <strong>Concluir</strong>
+        "En conclusión…" · "En definitiva…" · "Este documento es especialmente relevante porque…" · "Nos invita a reflexionar sobre…"
+      </div>
+
+      <div class="s-label">Conectores lógicos esenciales</div>
+      <div class="vocab-grid">
+        <div class="vocab-item es"><div class="w">Sin embargo</div><div class="d">Cependant / pourtant</div></div>
+        <div class="vocab-item es"><div class="w">Además</div><div class="d">De plus / par ailleurs</div></div>
+        <div class="vocab-item es"><div class="w">Por lo tanto / Por eso</div><div class="d">Donc / c'est pourquoi</div></div>
+        <div class="vocab-item es"><div class="w">Aunque</div><div class="d">Bien que / même si</div></div>
+        <div class="vocab-item es"><div class="w">Por una parte… por otra</div><div class="d">D'un côté… de l'autre</div></div>
+        <div class="vocab-item es"><div class="w">En conclusión</div><div class="d">En conclusion</div></div>
+        <div class="vocab-item es"><div class="w">Es decir</div><div class="d">C'est-à-dire</div></div>
+        <div class="vocab-item es"><div class="w">A pesar de</div><div class="d">Malgré / en dépit de</div></div>
+      </div>
+
+      <div class="s-label">Les 4 séquences — repères</div>
+      <div class="vocab-grid">
+        <div class="vocab-item es"><div class="w">Seq.1 — Ciudadanía y Mundos Virtuales</div><div class="d">Volverse digital · uso del móvil</div></div>
+        <div class="vocab-item es"><div class="w">Seq.2 — Diversidad e Inclusión</div><div class="d">Lenguas de España · Atlético · San Juan</div></div>
+        <div class="vocab-item es"><div class="w">Seq.3 — Espacio Privado y Público</div><div class="d">Mujeres españolas · II República · Franquismo</div></div>
+        <div class="vocab-item es"><div class="w">Seq.4 — Identidades e Intercambios</div><div class="d">Migrar · Chicanos · Caravana</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SEQ 1 : DIGITAL ── -->
+  <div class="panel" id="es-es1">
+    <div class="content">
+      <div class="hbox es">
+        <span class="label">Secuencia 1</span>
+        <div class="title">Ciudadanía y Mundos Virtuales</div>
+        <div style="margin-top:.5rem;font-size:.85rem;">Volverse digital — ¿El móvil: avance o deshumanización?</div>
+      </div>
+      <div class="probbox">
+        <div class="ptag">Problemática sugerida</div>
+        <div class="ptext">"¿En qué medida el uso del móvil representa un avance o una deshumanización?"</div>
+      </div>
+      <div class="s-label">Documentos clave</div>
+      <div class="card accent-es"><strong>Fiona y la adicción a Instagram</strong>Usa Instagram al levantarse, en el tráfico, comiendo, en el baño, con alguien. Impacto negativo: pérdida de tiempo. Soluciones: limitar uso, no seguir cuentas tóxicas, no compararse, hablar cara a cara.</div>
+      <div class="card accent-es"><strong>El monte Neme (Galicia)</strong>Lago turquesa atractivo para Instagram. Pero agua contaminada con Wolframio → riesgo cáncer de piel, daños digestivos. Instagramers arriesgan su salud por una foto → actitud <b>inconsciente e imprudente.</b></div>
+      <div class="card accent-es"><strong>El teléfono como narrador (texto literario)</strong>Narrador = el móvil de Toni. Es su "memoria externa", "ventana al mundo", "compañero inseparable". Toni depende totalmente de él. El narrador tiene acceso a toda su vida privada.</div>
+      <div class="card accent-es"><strong>Hackeo en el instituto</strong>Alguien hackea los móviles. Miedo de que fotos/mensajes privados se hagan públicos → peleas, falta de confianza, escándalo. → Riesgos de la privacidad digital.</div>
+      <div class="s-label">Vocabulario esencial</div>
+      <div class="vocab-grid">
+        <div class="vocab-item es"><div class="w">La adicción</div><div class="d">L'addiction</div></div>
+        <div class="vocab-item es"><div class="w">Las redes sociales</div><div class="d">Les réseaux sociaux</div></div>
+        <div class="vocab-item es"><div class="w">Pegado/a al teléfono</div><div class="d">Collé à son téléphone</div></div>
+        <div class="vocab-item es"><div class="w">La deshumanización</div><div class="d">La déshumanisation</div></div>
+        <div class="vocab-item es"><div class="w">Hackear</div><div class="d">Pirater</div></div>
+        <div class="vocab-item es"><div class="w">La privacidad</div><div class="d">La vie privée</div></div>
+        <div class="vocab-item es"><div class="w">Inconsciente</div><div class="d">Inconscient / irresponsable</div></div>
+        <div class="vocab-item es"><div class="w">Compararse</div><div class="d">Se comparer</div></div>
+      </div>
+      <div class="s-label">Gramática — Comparativos</div>
+      <table class="gtable es">
+        <tr><th>Tipo</th><th>Estructura</th><th>Ejemplo</th></tr>
+        <tr><td>Igualdad (adj/adv)</td><td><b>tan + adj + como</b></td><td><em>Mi selfi es tan original como el tuyo.</em></td></tr>
+        <tr><td>Igualdad (verbo)</td><td><b>tanto + como</b></td><td><em>Me gusta tanto como a ti.</em></td></tr>
+        <tr><td>Igualdad (nombre)</td><td><b>tantos/as + nombre + como</b></td><td><em>Tengo tantas fotos como vosotras.</em></td></tr>
+      </table>
+      <div class="s-label">Preguntas del examinador</div>
+      <div class="qa"><div class="qa-q" onclick="tqa(this)">¿El uso del móvil representa un avance o una deshumanización? <span class="ico">+</span></div><div class="qa-a">Por una parte, es un avance: nos permite conectarnos e informarnos en cualquier momento. Sin embargo, como ilustra Fiona, puede convertirse en adicción. El caso del monte Neme demuestra que las redes sociales pueden incitar comportamientos peligrosos. En definitiva, el móvil es <strong>una herramienta poderosa pero su uso excesivo puede deshumanizarnos</strong>.</div></div>
+      <div class="qa"><div class="qa-q" onclick="tqa(this)">¿Cómo usar las redes sociales de manera responsable? <span class="ico">+</span></div><div class="qa-a">Es importante <strong>limitar el tiempo de uso</strong>, no utilizarlas por la mañana, no seguir cuentas tóxicas y no compararse con los demás para proteger la autoestima. Hay que ser conscientes de los riesgos de privacidad — como ilustra el hackeo en el instituto. Y priorizar las relaciones reales cara a cara.</div></div>
+      <div class="qa"><div class="qa-q" onclick="tqa(this)">¿Qué revela el texto del teléfono como narrador sobre nuestra relación con la tecnología? <span class="ico">+</span></div><div class="qa-a">El texto presenta el teléfono como un personaje que conoce todos los secretos de su dueño. Es su "memoria externa" y "ventana al mundo". Esta perspectiva revela nuestra <strong>dependencia total</strong> hacia los dispositivos digitales: les confiamos nuestra vida privada, recuerdos y relaciones. Invita a reflexionar sobre los riesgos de esta dependencia tecnológica.</div></div>
+    </div>
+  </div>
+
+  <!-- ── SEQ 2 : DIVERSIDAD ── -->
+  <div class="panel" id="es-es2">
+    <div class="content">
+      <div class="hbox es">
+        <span class="label">Secuencia 2</span>
+        <div class="title">Diversidad e Inclusión</div>
+        <div style="margin-top:.5rem;font-size:.85rem;">Lenguas de España · Atlético · Fiesta de San Juan</div>
+      </div>
+      <div class="probbox">
+        <div class="ptag">Problemática sugerida</div>
+        <div class="ptext">"¿Por qué es importante preservar y valorar la diversidad cultural y lingüística?"</div>
+      </div>
+      <div class="s-label">Documentos clave</div>
+      <div class="card accent-es"><strong>Texto: Amor a las lenguas de España</strong>Narrador extranjero enamorado del castellano y la diversidad lingüística (galego, catalán, euskera). Las compara con un piano: 27 letras + 88 teclas = milagros. Aprecia musicalidad, sonoridad y palabras expresivas: "petricor", "gruñir", "roncar", "escuchimizado".</div>
+      <div class="card accent-es"><strong>El euskera — "la lengua más bonita del mundo"</strong>Palabras poéticas: abuela = "buena madre", desierto = "bosque muerto", enamorado = "herido por amor". El euskera tiene un <b>origen desconocido</b> (≠ latín comme l'espagnol/français). Vocabulaire totalement différent.</div>
+      <div class="card accent-es"><strong>Atlético de Madrid — "Otra forma de entender la vida"</strong>El "equipo del pueblo" (clase popular) vs Real Madrid (élite). Valores: esfuerzo, humildad, unión. Vídeo del bebé: la pasión se transmite de generación en generación. Paradoja: jugadores valen millones pero espíritu popular.</div>
+      <div class="card accent-es"><strong>Fiesta de San Juan (23 de junio)</strong>Origen pre-cristiano. Rituales: saltar llamas, agua de hierbas, bañarse en el mar. Objetivo: salud, amor, dinero. Celebra la naturaleza y el cambio de estación (solsticio de verano).</div>
+      <div class="card accent-es"><strong>"No llores por mí, Inglaterra" (película)</strong>Los ingleses introdujeron el fútbol en Argentina (época colonial) para entretener y manipular a la población. En el tráiler: rivalidad humorística entre países ya rivales en la guerra.</div>
+      <div class="s-label">Vocabulario esencial</div>
+      <div class="vocab-grid">
+        <div class="vocab-item es"><div class="w">La sonoridad</div><div class="d">La sonorité</div></div>
+        <div class="vocab-item es"><div class="w">El patrimonio</div><div class="d">Le patrimoine</div></div>
+        <div class="vocab-item es"><div class="w">El mestizaje</div><div class="d">Le métissage</div></div>
+        <div class="vocab-item es"><div class="w">La humildad</div><div class="d">L'humilité</div></div>
+        <div class="vocab-item es"><div class="w">La hoguera</div><div class="d">Le feu de joie / bûcher</div></div>
+        <div class="vocab-item es"><div class="w">Transmitir</div><div class="d">Transmettre</div></div>
+        <div class="vocab-item es"><div class="w">Las raíces</div><div class="d">Les racines</div></div>
+        <div class="vocab-item es"><div class="w">La onomatopeya</div><div class="d">L'onomatopée</div></div>
+      </div>
+      <div class="s-label">Preguntas del examinador</div>
+      <div class="qa"><div class="qa-q" onclick="tqa(this)">¿Por qué es importante preservar la diversidad lingüística? <span class="ico">+</span></div><div class="qa-a">La diversidad lingüística es un patrimonio cultural invaluable. Como ilustra el texto, cada lengua tiene su propia musicalidad y palabras únicas — el euskera tiene "basamortu" (bosque muerto) pour dire "desierto". <strong>Perder una lengua es perder una forma de ver el mundo.</strong> Por eso, es fundamental protegerla y valorarla.</div></div>
+      <div class="qa"><div class="qa-q" onclick="tqa(this)">¿Cómo refleja el Atlético de Madrid la identidad popular española? <span class="ico">+</span></div><div class="qa-a">El Atlético es el "equipo del pueblo": representa la clase popular vs la élite del Real Madrid. Sus valores de humildad y esfuerzo reflejan una identidad colectiva. El vídeo del abuelo que regala la equipación al bebé ilustra cómo esta identidad <strong>se transmite de generación en generación</strong> como herencia cultural viva.</div></div>
+      <div class="qa"><div class="qa-q" onclick="tqa(this)">¿Qué revelan las tradiciones festivas sobre la identidad cultural española? <span class="ico">+</span></div><div class="qa-a">Fiestas como la de San Juan (23 de junio) revelan la <strong>profundidad y diversidad</strong> de la identidad cultural española. Tiene origen pre-cristiano, ligada a la naturaleza y el cambio de estación. Sus rituales mezclan tradición pagana y celebración colectiva. Ilustran cómo la identidad española es diversa, antigua y en constante <strong>diálogo entre pasado y presente</strong>.</div></div>
+    </div>
+  </div>
+
+  <!-- ── SEQ 3 : MUJERES ── -->
+  <div class="panel" id="es-es3">
+    <div class="content">
+      <div class="hbox es">
+        <span class="label">Secuencia 3</span>
+        <div class="title">Espacio Privado y Espacio Público</div>
+        <div style="margin-top:.5rem;font-size:.85rem;">Mujeres españolas — II República · Franquismo · Hoy</div>
+      </div>
+      <div class="probbox">
+        <div class="ptag">Problemática sugerida</div>
+        <div class="ptext">"¿En qué medida la mujer española ha conquistado el espacio público en el siglo XX y XXI?"</div>
+      </div>
+      <div class="s-label">Línea del tiempo</div>
+      <div class="card accent-es"><strong>1931 — II República (AVANCE)</strong>Constitución: igualdad jurídica. Mujeres pueden trabajar, votar (1933, primeras elecciones con sufragio femenino), divorciarse, participar en vida pública. → Gran avance.</div>
+      <div class="card accent-es"><strong>1945 — Franquismo (RETROCESO)</strong>Fuero de los Españoles: matrimonio indisoluble, el trabajo = participación del HOMBRE. Mujeres pierden derecho al divorcio, al trabajo, deben quedarse en casa. → Retroceso brutal bajo Franco.</div>
+      <div class="card accent-es"><strong>Lorena — mecánica (Doc 2)</strong>Mecánica, gerente de su propio taller. Enfrenta prejuicios: clientes no le dan el coche por ser mujer. Tiene que demostrar más. → <b>Todavía existen estereotipos en trabajos "masculinos".</b></div>
+      <div class="card accent-es"><strong>Apertura año judicial 2018 — Twitter</strong>Foto: todos los jueces del Tribunal Supremo son hombres mayores. Jonathan Martínez (sarcasmo): "ejercicio de agudeza visual". Leticia Dolera (repetición + exageración): "dosmildiecioooochoooo" → En 2018 aún no hay mujeres en puestos importantes.</div>
+      <div class="card accent-es"><strong>RAE y el lenguaje como arma (Doc 4)</strong>Fundada en 1713. 30 directores históricos, todos varones. Actualmente: 46 académicos, solo 8 mujeres (17%). DRAE perpetúa: "sexo débil" = mujeres, "histeria" = más frecuente en la mujer. 80.000 firmas para eliminar estas definiciones.</div>
+      <div class="s-label">Vocabulario esencial</div>
+      <div class="vocab-grid">
+        <div class="vocab-item es"><div class="w">El prejuicio</div><div class="d">Le préjugé</div></div>
+        <div class="vocab-item es"><div class="w">El techo de cristal</div><div class="d">Le plafond de verre</div></div>
+        <div class="vocab-item es"><div class="w">El retroceso</div><div class="d">Le recul / la régression</div></div>
+        <div class="vocab-item es"><div class="w">Visibilizar</div><div class="d">Rendre visible</div></div>
+        <div class="vocab-item es"><div class="w">Atreverse a</div><div class="d">Oser</div></div>
+        <div class="vocab-item es"><div class="w">Desmontar prejuicios</div><div class="d">Déconstruire les préjugés</div></div>
+        <div class="vocab-item es"><div class="w">La sumisión</div><div class="d">La soumission</div></div>
+        <div class="vocab-item es"><div class="w">El mundo laboral</div><div class="d">Le monde du travail</div></div>
+      </div>
+      <div class="s-label">Preguntas del examinador</div>
+      <div class="qa"><div class="qa-q" onclick="tqa(this)">¿Cómo ha evolucionado el lugar de la mujer en la sociedad española en el siglo XX? <span class="ico">+</span></div><div class="qa-a">Ha oscilado entre avance y retroceso. En 1931 (II República): igualdad jurídica, derecho a votar, trabajar y divorciarse. En 1945 (Franquismo): perdió todos estos derechos bajo Franco. Esto demuestra que <strong>los derechos conquistados pueden perderse bajo regímenes autoritarios</strong>. Hoy, aunque la situación ha mejorado, persisten estereotipos como ilustra el caso de Lorena.</div></div>
+      <div class="qa"><div class="qa-q" onclick="tqa(this)">¿Qué revela el caso de Lorena sobre la mujer en el mundo laboral? <span class="ico">+</span></div><div class="qa-a">Lorena es mecánica y gerente de su propio taller, pero enfrenta la desconfianza de los clientes que no le dejan el coche por ser mujer. Tiene que esforzarse más para ser reconocida. Esto confirma que aunque la situación ha mejorado, <strong>las mujeres deben demostrar más para superar estereotipos</strong>, especialmente en trabajos considerados "masculinos".</div></div>
+      <div class="qa"><div class="qa-q" onclick="tqa(this)">¿Puede el lenguaje ser un arma de discriminación? <span class="ico">+</span></div><div class="qa-a">Sí. Como explica la magistrada Glòria Poyatos Matas, el DRAE perpetúa expresiones machistas: "sexo débil" = conjunto de las mujeres, "histeria" = más frecuente en la mujer. El lenguaje no solo nombra la realidad: la <strong>construye e interpreta</strong>. Por eso, 80.000 personas firmaron para eliminar estas definiciones. El lenguaje puede ser instrumento de cambio o de discriminación.</div></div>
+    </div>
+  </div>
+
+  <!-- ── SEQ 4 : MIGRAR ── -->
+  <div class="panel" id="es-es4">
+    <div class="content">
+      <div class="hbox es">
+        <span class="label">Secuencia 4</span>
+        <div class="title">Identidades e Intercambios</div>
+        <div style="margin-top:.5rem;font-size:.85rem;">Migrar — Caravana · Chicanos · Pedro Morales</div>
+      </div>
+      <div class="probbox">
+        <div class="ptag">Problemática sugerida</div>
+        <div class="ptext">"¿En qué medida la migración transforma la identidad de las personas?"</div>
+      </div>
+      <div class="s-label">Definición del eje</div>
+      <div class="card accent-es"><strong>Identidades e Intercambios</strong>El eje remite a las características propias de un individuo o colectividad que lo hacen diferenciarse de los demás. El intercambio supone <b>cambios o modificaciones en la identidad individual o colectiva</b> de los interlocutores.</div>
+      <div class="s-label">Documentos clave</div>
+      <div class="card accent-es"><strong>La caravana de migrantes (2018)</strong>Marchas masivas de Centroamérica hacia EE.UU. Huyen de violencia (las maras), delincuencia y miseria. Viajan en grupos grandes: más seguros, sin "coyotes" (12.000$/viaje). Convocatorias en redes sociales.</div>
+      <div class="card accent-es"><strong>Manfred Kolla</strong>13 años, Africa → Europa por Melilla. Deja casa y familia. Su madre no comía. Condiciones miserables. Cruza desierto y mar (peligrosos). → Testimonio de la migración clandestina y sus riesgos.</div>
+      <div class="card accent-es"><strong>Los chicanos</strong>Nacidos en EE.UU. de origen mexicano OU descendientes de territorios que antes de 1848 pertenecían a México (Texas, California, Arizona…). "Chicano" peut être péjoratif MAIS aussi une <b>affirmation d'identité culturelle</b> : espanglish, murales, traditions.</div>
+      <div class="card accent-es"><strong>Pedro Morales — "El plan infinito" (Isabel Allende, 1991)</strong>Zacatecas → Tijuana → California. Migración ilegal. Corta alambres frontera. California: granja en granja, la Migra lo persigue. Se camufla: abandona ropa tradicional, aprende inglés. Visión de los gringos: raros (ponen duraznos con la carne) mais "se puede vivir bien si no los molestas".</div>
+      <div class="card accent-es"><strong>Las voces de la caravana</strong>Entrevistados: Orbelina, Milton, Edgar, Yesenia. Motivos: violencia, delincuencia, pobreza. Desean un futuro mejor para ellos y sus familias. Viajan juntos: más seguros, menos caros.</div>
+      <div class="s-label">Vocabulario esencial</div>
+      <div class="vocab-grid">
+        <div class="vocab-item es"><div class="w">La frontera</div><div class="d">La frontière</div></div>
+        <div class="vocab-item es"><div class="w">El exilio</div><div class="d">L'exil</div></div>
+        <div class="vocab-item es"><div class="w">Las raíces</div><div class="d">Les racines</div></div>
+        <div class="vocab-item es"><div class="w">El coyote</div><div class="d">Passeur illégal</div></div>
+        <div class="vocab-item es"><div class="w">La miseria</div><div class="d">La misère</div></div>
+        <div class="vocab-item es"><div class="w">Huir de</div><div class="d">Fuir de</div></div>
+        <div class="vocab-item es"><div class="w">La Migra</div><div class="d">Police d'immigration US</div></div>
+        <div class="vocab-item es"><div class="w">Camuflarse</div><div class="d">Se camoufler / se fondre dans</div></div>
+        <div class="vocab-item es"><div class="w">El mestizaje</div><div class="d">Le métissage</div></div>
+        <div class="vocab-item es"><div class="w">El bracero</div><div class="d">Ouvrier agricole non qualifié</div></div>
+      </div>
+      <div class="s-label">Preguntas del examinador</div>
+      <div class="qa"><div class="qa-q" onclick="tqa(this)">¿Por qué migran las personas de Centroamérica hacia EE.UU.? <span class="ico">+</span></div><div class="qa-a">Como ilustran los testimonios de la caravana y Manfred Kolla, las personas migran por violencia de las maras, delincuencia y miseria extrema. "Viajar más de 4.000 km <strong>nunca fue su primera opción</strong>." Migran porque quieren un futuro mejor para ellos y sus familias, y porque las condiciones de vida en sus países de origen son insostenibles.</div></div>
+      <div class="qa"><div class="qa-q" onclick="tqa(this)">¿Cómo afecta la migración a la identidad de las personas? <span class="ico">+</span></div><div class="qa-a">Como ilustra Pedro Morales, para sobrevivir en California tuvo que abandonar su ropa tradicional, adoptar el bluyín y aprender inglés para no ser detectado por la Migra. La migración obliga a <strong>redefinir la identidad</strong>. Sin embargo, los chicanos muestran que es posible construir una identidad <strong>híbrida y mestiza</strong>, combinando las dos culturas sin renunciar a ninguna.</div></div>
+      <div class="qa"><div class="qa-q" onclick="tqa(this)">¿Qué es un chicano y qué representa para la identidad cultural? <span class="ico">+</span></div><div class="qa-a">Un chicano es una persona nacida en EE.UU. de origen mexicano, o descendiente de territorios que antes de 1848 pertenecían a México. "Chicano" peut être racial, mais aussi une <strong>affirmation identitaire</strong>: espanglish, musique, traditions, murales dans les villes américaines. Los chicanos ilustran cómo la migración puede crear <strong>nuevas identidades híbridas</strong>, ni completamente mexicanas ni completamente americanas.</div></div>
+      <div class="qa"><div class="qa-q" onclick="tqa(this)">¿En qué medida la migración transforma la identidad? <span class="ico">+</span></div><div class="qa-a">La migración es una experiencia que transforma profundamente la identidad. Como ilustra Pedro Morales, el migrante debe adaptarse a la cultura de acogida — a veces perdiendo parte de su identidad original. Pero también puede <strong>crear nuevas identidades</strong>, como los chicanos que combinan dos culturas. Los intercambios generan mestizaje cultural y enriquecen tanto al individuo como a la sociedad de acogida.</div></div>
+    </div>
+  </div>
+</div>
+
+<script>
+function openScreen(lang){
+  document.getElementById('home').style.display='none';
+  document.getElementById('screen-'+lang).classList.add('active');
+  try{document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen();}catch(e){}
+  window.scrollTo(0,0);
+}
+function goHome(){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('home').style.display='flex';
+  try{document.exitFullscreen&&document.exitFullscreen();}catch(e){}
+  window.scrollTo(0,0);
+}
+function toggleFS(){
+  if(!document.fullscreenElement){
+    document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen();
+  } else {
+    document.exitFullscreen&&document.exitFullscreen();
+  }
+}
+function switchPanel(lang, id, btn){
+  const prefix = lang==='en' ? 'en-' : 'es-e';
+  document.querySelectorAll('#screen-'+lang+' .panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('#'+lang+'-tabs .nav-tab').forEach(b=>b.classList.remove('active'));
+  const panel = document.getElementById(lang==='en' ? 'en-'+id : 'es-'+id);
+  if(panel) panel.classList.add('active');
+  btn.classList.add('active');
+  window.scrollTo(0,0);
+}
+function tqa(el){
+  el.parentElement.classList.toggle('open');
+}
+</script>
+</body>
+</html>
