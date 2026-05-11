@@ -1,0 +1,1277 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fiches de Révision — Terminale</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0d0f14;
+  --surface: #151820;
+  --surface2: #1c2030;
+  --border: #2a2f3f;
+  --text: #e8eaf0;
+  --muted: #7a8099;
+  --hggsp: #f0a500;
+  --hggsp-dim: #f0a50022;
+  --emc: #3ecfb0;
+  --emc-dim: #3ecfb018;
+  --accent: #ff6b6b;
+  --accent2: #a78bfa;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── HOME ── */
+#home {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+#home::before {
+  content: '';
+  position: absolute;
+  width: 600px; height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #f0a50015 0%, transparent 70%);
+  top: -200px; right: -200px;
+  pointer-events: none;
+}
+#home::after {
+  content: '';
+  position: absolute;
+  width: 500px; height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #3ecfb012 0%, transparent 70%);
+  bottom: -150px; left: -150px;
+  pointer-events: none;
+}
+
+.home-badge {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  padding: 0.4rem 1rem;
+  border-radius: 100px;
+  margin-bottom: 2.5rem;
+}
+
+.home-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.8rem, 7vw, 5.5rem);
+  font-weight: 900;
+  text-align: center;
+  line-height: 1.05;
+  margin-bottom: 1.2rem;
+}
+.home-title span { color: var(--hggsp); }
+.home-title em { color: var(--emc); font-style: normal; }
+
+.home-sub {
+  font-size: 1.05rem;
+  color: var(--muted);
+  text-align: center;
+  max-width: 500px;
+  line-height: 1.7;
+  margin-bottom: 3.5rem;
+}
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.2rem;
+  max-width: 900px;
+  width: 100%;
+  z-index: 1;
+}
+
+.subject-card {
+  border-radius: 16px;
+  padding: 2rem;
+  cursor: pointer;
+  transition: transform 0.25s, box-shadow 0.25s;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+.subject-card:hover { transform: translateY(-4px); }
+
+.hggsp-card {
+  background: linear-gradient(135deg, #1a1500 0%, #251c00 100%);
+  border-color: #f0a50040;
+  box-shadow: 0 0 0 0 #f0a50030;
+}
+.hggsp-card:hover { box-shadow: 0 20px 50px #f0a50025; }
+
+.emc-card {
+  background: linear-gradient(135deg, #001a16 0%, #002520 100%);
+  border-color: #3ecfb040;
+  box-shadow: 0 0 0 0 #3ecfb030;
+}
+.emc-card:hover { box-shadow: 0 20px 50px #3ecfb025; }
+
+.card-tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 0.3rem 0.7rem;
+  border-radius: 100px;
+  display: inline-block;
+  margin-bottom: 1.2rem;
+  font-weight: 500;
+}
+.hggsp-card .card-tag { background: var(--hggsp-dim); color: var(--hggsp); }
+.emc-card .card-tag { background: var(--emc-dim); color: var(--emc); }
+
+.card-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.7rem;
+  line-height: 1.2;
+}
+.hggsp-card .card-title { color: #ffd57a; }
+.emc-card .card-title { color: #7efadf; }
+
+.card-desc {
+  font-size: 0.88rem;
+  color: var(--muted);
+  line-height: 1.65;
+  margin-bottom: 1.5rem;
+}
+
+.card-topics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 1.5rem;
+}
+.topic-pill {
+  font-size: 0.73rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  background: rgba(255,255,255,0.06);
+  color: var(--muted);
+}
+
+.card-btn {
+  width: 100%;
+  padding: 0.85rem;
+  border: none;
+  border-radius: 10px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.2s;
+  letter-spacing: 0.02em;
+}
+.card-btn:hover { opacity: 0.9; transform: scale(0.99); }
+.hggsp-card .card-btn { background: var(--hggsp); color: #000; }
+.emc-card .card-btn { background: var(--emc); color: #000; }
+
+/* ── MODAL ── */
+#modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  z-index: 1000;
+  overflow-y: auto;
+  animation: fadeIn 0.25s ease;
+}
+#modal.active { display: block; }
+
+@keyframes fadeIn { from { opacity:0; transform: translateY(10px); } to { opacity:1; transform:none; } }
+
+.modal-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  padding: 1rem 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  backdrop-filter: blur(12px);
+}
+.modal-close {
+  background: var(--surface2);
+  border: none;
+  color: var(--text);
+  font-size: 1.3rem;
+  width: 38px; height: 38px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex; align-items:center; justify-content:center;
+  transition: background 0.2s;
+  flex-shrink: 0;
+}
+.modal-close:hover { background: var(--border); }
+.modal-subject-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.7rem;
+  border-radius: 100px;
+}
+.modal-subject-label.hggsp { background: var(--hggsp-dim); color: var(--hggsp); }
+.modal-subject-label.emc { background: var(--emc-dim); color: var(--emc); }
+.modal-title { font-family:'Playfair Display',serif; font-size:1.2rem; font-weight:700; }
+
+.modal-nav {
+  display: flex;
+  gap: 0.5rem;
+  padding: 1rem 2rem;
+  overflow-x: auto;
+  border-bottom: 1px solid var(--border);
+  scrollbar-width: none;
+}
+.modal-nav::-webkit-scrollbar { display:none; }
+.nav-btn {
+  flex-shrink: 0;
+  padding: 0.5rem 1.1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--muted);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.nav-btn:hover, .nav-btn.active { background: var(--surface2); color: var(--text); border-color: #4a4f60; }
+.nav-btn.active.hggsp { border-color: var(--hggsp); color: var(--hggsp); }
+.nav-btn.active.emc { border-color: var(--emc); color: var(--emc); }
+
+.modal-content {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* ── SECTIONS ── */
+.section { display: none; }
+.section.active { display: block; animation: fadeIn 0.2s ease; }
+
+.section-hero {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+}
+.section-hero-tag {
+  font-family:'DM Mono',monospace;
+  font-size:0.65rem;
+  letter-spacing:0.15em;
+  text-transform:uppercase;
+  color: var(--muted);
+  margin-bottom:0.8rem;
+}
+.section-hero h2 {
+  font-family:'Playfair Display',serif;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight:700;
+  line-height:1.2;
+  margin-bottom:0.8rem;
+}
+.hggsp-mode .section-hero h2 { color: #ffd57a; }
+.emc-mode .section-hero h2 { color: #7efadf; }
+.section-hero p { color: var(--muted); line-height:1.7; font-size:0.95rem; }
+
+/* ── CARDS ── */
+.cards-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.info-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+.info-card-icon { font-size: 1.5rem; margin-bottom: 0.8rem; }
+.info-card h3 { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.6rem; }
+.info-card p, .info-card li { font-size: 0.85rem; color: var(--muted); line-height: 1.65; }
+.info-card ul { padding-left: 1.1rem; }
+.info-card li { margin-bottom: 0.3rem; }
+
+/* ── TIMELINE ── */
+.timeline { margin-bottom: 2rem; }
+.timeline-item {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 1rem;
+  margin-bottom: 0;
+  position: relative;
+}
+.timeline-item:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: 38px; top: 28px;
+  width: 2px;
+  height: calc(100% + 0px);
+  background: var(--border);
+}
+.timeline-date {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.72rem;
+  font-weight: 500;
+  text-align: right;
+  padding-top: 0.35rem;
+  color: var(--muted);
+  line-height: 1.3;
+}
+.timeline-body {
+  padding: 0.6rem 1rem 1.2rem 1rem;
+  position: relative;
+}
+.timeline-body::before {
+  content: '';
+  position: absolute;
+  left: -5px; top: 10px;
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  border: 2px solid;
+}
+.hggsp-mode .timeline-body::before { border-color: var(--hggsp); background: var(--bg); }
+.emc-mode .timeline-body::before { border-color: var(--emc); background: var(--bg); }
+.timeline-body strong { font-size: 0.9rem; display: block; margin-bottom: 0.3rem; }
+.timeline-body p { font-size: 0.82rem; color: var(--muted); line-height: 1.6; }
+
+/* ── HIGHLIGHT BOX ── */
+.highlight {
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  border-left: 4px solid;
+}
+.highlight.warn { background: #1f1500; border-color: var(--hggsp); }
+.highlight.info { background: #001a16; border-color: var(--emc); }
+.highlight.note { background: #1a1020; border-color: var(--accent2); }
+.highlight.danger { background: #1f0a0a; border-color: var(--accent); }
+.highlight h4 { font-size: 0.85rem; font-weight: 600; margin-bottom: 0.5rem; letter-spacing: 0.05em; }
+.highlight.warn h4 { color: var(--hggsp); }
+.highlight.info h4 { color: var(--emc); }
+.highlight.note h4 { color: var(--accent2); }
+.highlight.danger h4 { color: var(--accent); }
+.highlight p, .highlight li { font-size: 0.84rem; color: var(--muted); line-height: 1.65; }
+.highlight ul { padding-left: 1.1rem; }
+.highlight li { margin-bottom: 0.3rem; }
+
+/* ── KEY TERMS ── */
+.terms-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.8rem;
+  margin-bottom: 1.5rem;
+}
+.term {
+  background: var(--surface2);
+  border-radius: 10px;
+  padding: 1rem 1.2rem;
+  border: 1px solid var(--border);
+}
+.term-word {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.78rem;
+  font-weight: 500;
+  margin-bottom: 0.4rem;
+}
+.hggsp-mode .term-word { color: var(--hggsp); }
+.emc-mode .term-word { color: var(--emc); }
+.term-def { font-size: 0.8rem; color: var(--muted); line-height: 1.55; }
+
+/* ── SECTION DIVIDER ── */
+.section-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--border);
+  margin: 2rem 0 1.2rem;
+}
+
+/* ── ACTORS TABLE ── */
+.actors-list { margin-bottom: 1.5rem; }
+.actor {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1rem 1.2rem;
+  margin-bottom: 0.6rem;
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 1rem;
+  align-items: start;
+}
+.actor-name { font-weight: 600; font-size: 0.88rem; }
+.actor-role { font-size: 0.82rem; color: var(--muted); line-height: 1.6; }
+
+/* ── QUIZ CARD ── */
+.quiz-box {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+}
+.quiz-q { font-size: 0.9rem; font-weight: 600; margin-bottom: 1rem; }
+.quiz-answer {
+  font-size: 0.82rem;
+  color: var(--muted);
+  line-height: 1.65;
+  background: var(--bg);
+  border-radius: 8px;
+  padding: 0.8rem 1rem;
+  cursor: pointer;
+  border: 1px dashed var(--border);
+  position: relative;
+}
+.quiz-answer::before { content: '👁 Voir la réponse'; font-size: 0.75rem; color: var(--muted); }
+.quiz-answer.revealed::before { display: none; }
+.quiz-answer .ans { display: none; }
+.quiz-answer.revealed .ans { display: block; }
+
+/* ── RESPONSIVE ── */
+@media(max-width: 768px) {
+  .cards-grid { grid-template-columns: 1fr; max-width: 100%; }
+  .cards-row { grid-template-columns: 1fr; }
+  .terms-grid { grid-template-columns: 1fr 1fr; }
+  .actor { grid-template-columns: 1fr; gap: 0.2rem; }
+  .home-title { font-size: 2.4rem; }
+  .home-sub { font-size: 0.95rem; }
+  .subject-card { padding: 1.5rem; }
+}
+
+@media(max-width: 480px) {
+  .modal-header { padding: 0.7rem 0.8rem; gap: 0.6rem; }
+  .modal-title { font-size: 0.9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 160px; }
+  .modal-nav { padding: 0.6rem 0.8rem; gap: 0.35rem; }
+  .nav-btn { font-size: 0.7rem; padding: 0.38rem 0.7rem; }
+  .modal-content { padding: 0.8rem; }
+  .section-hero { padding: 1.1rem; }
+  .section-hero h2 { font-size: 1.25rem; }
+  .terms-grid { grid-template-columns: 1fr; }
+  .home-title { font-size: 1.8rem; }
+  .home-badge { font-size: 0.6rem; }
+  .card-btn { font-size: 0.83rem; padding: 0.72rem; }
+  .timeline-item { grid-template-columns: 56px 1fr; }
+  .timeline-date { font-size: 0.63rem; }
+  .highlight { padding: 1rem; }
+  .quiz-box { padding: 1rem; }
+  .info-card { padding: 1rem; }
+  #home { padding: 1.2rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════ HOME ══════════ -->
+<div id="home">
+  <div class="home-badge">Terminale · Révisions 2025</div>
+  <h1 class="home-title">Fiches de<br><span>révision</span> <em>complètes</em></h1>
+  <p class="home-sub">Toutes les notions clés, dates, acteurs et exemples pour maximiser ta note. Clique sur un sujet pour démarrer.</p>
+
+  <div class="cards-grid">
+
+    <!-- HGGSP -->
+    <div class="subject-card hggsp-card">
+      <div class="card-tag">HGGSP · Géopolitique</div>
+      <div class="card-title">L'environnement entre exploitation et protection</div>
+      <p class="card-desc">De la conquête de l'Ouest américain aux COP, tout le programme environnemental avec dates, exemples et acteurs clés.</p>
+      <div class="card-topics">
+        <span class="topic-pill">Wilderness</span>
+        <span class="topic-pill">Forêt française</span>
+        <span class="topic-pill">Petit âge glaciaire</span>
+        <span class="topic-pill">Anthropocène</span>
+        <span class="topic-pill">COP21</span>
+        <span class="topic-pill">États-Unis</span>
+        <span class="topic-pill">GIEC</span>
+      </div>
+      <button class="card-btn" onclick="openModal('hggsp')">📚 Ouvrir les fiches HGGSP</button>
+    </div>
+
+    <!-- EMC -->
+    <div class="subject-card emc-card">
+      <div class="card-tag">EMC · Citoyenneté</div>
+      <div class="card-title">S'engager dans la démocratie : la laïcité</div>
+      <p class="card-desc">Histoire, principes, lois et débats autour de la laïcité républicaine — tout ce qu'il faut savoir.</p>
+      <div class="card-topics">
+        <span class="topic-pill">Loi 1905</span>
+        <span class="topic-pill">Jules Ferry</span>
+        <span class="topic-pill">Liberté de conscience</span>
+        <span class="topic-pill">Charte 2013</span>
+        <span class="topic-pill">Neutralité</span>
+      </div>
+      <button class="card-btn" onclick="openModal('emc')">📖 Ouvrir les fiches EMC</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════ MODAL ══════════ -->
+<div id="modal">
+  <div class="modal-header">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div id="modal-subject-label" class="modal-subject-label"></div>
+    <div id="modal-title" class="modal-title"></div>
+  </div>
+
+  <div class="modal-nav" id="modal-nav"></div>
+
+  <div class="modal-content" id="modal-content"></div>
+</div>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────────────
+
+const HGGSP_SECTIONS = [
+  { id:'intro', label:'🌍 C\'est quoi l\'environnement ?' },
+  { id:'axe1a', label:'🌲 La forêt française' },
+  { id:'axe1b', label:'🏭 Néolithique & Industrie' },
+  { id:'axe2a', label:'❄️ Histoire du climat' },
+  { id:'axe2b', label:'🌡️ Géopolitique climatique' },
+  { id:'otc',   label:'🇺🇸 Les États-Unis' },
+  { id:'quiz_hggsp', label:'🎯 Quiz' },
+];
+
+const EMC_SECTIONS = [
+  { id:'laicite1', label:'⚖️ Origines & principes' },
+  { id:'laicite2', label:'📜 Lois & histoire' },
+  { id:'laicite3', label:'🏫 L\'école laïque' },
+  { id:'laicite4', label:'💬 Débats actuels' },
+  { id:'quiz_emc',  label:'🎯 Quiz' },
+];
+
+// ── HGGSP CONTENT ─────────────────────────────────────────────────────
+
+const hggsp_intro = `
+<div class="section-hero">
+  <div class="section-hero-tag">Introduction générale · HGGSP 5</div>
+  <h2>Qu'est-ce que l'environnement ?</h2>
+  <p>La géographe <strong>Yvette Veyret</strong> le définit comme « les relations d'interdépendance complexes existant entre l'homme, les sociétés et les composantes physiques, chimiques, biotiques d'une nature anthropisée. » Autrement dit : l'environnement c'est <em>la relation</em> entre les humains et leur milieu, pas juste la nature.</p>
+</div>
+
+<div class="terms-grid">
+  <div class="term"><div class="term-word">Environnement</div><div class="term-def">Terme apparu au Moyen Âge en France, répandu au XVIIe s en Angleterre. Prend un sens politique au XXe s.</div></div>
+  <div class="term"><div class="term-word">Anthropocène</div><div class="term-def">Époque géologique actuelle où l'humain est le principal moteur des transformations de la planète. Notion du chimiste Paul Crutzen.</div></div>
+  <div class="term"><div class="term-word">Écologie</div><div class="term-def">Mot inventé par le naturaliste allemand Ernst Haeckel en 1866. L'écologie comme enjeu politique émerge dans les années 1960.</div></div>
+  <div class="term"><div class="term-word">Développement durable</div><div class="term-def">Répondre aux besoins du présent sans compromettre ceux des générations futures. Officialisé au Sommet de Rio (1992).</div></div>
+  <div class="term"><div class="term-word">Rapport Meadows</div><div class="term-def">"Les limites de la croissance" (1972) — commandé par le Club de Rome, il pose la question de la durabilité du modèle de développement.</div></div>
+  <div class="term"><div class="term-word">Silent Spring</div><div class="term-def">Ouvrage de Rachel Carson (1962) dénonçant les pesticides. Ouvre l'ère de l'environnementalisme américain.</div></div>
+</div>
+
+<div class="section-label">Chronologie clé</div>
+<div class="timeline">
+  <div class="timeline-item"><div class="timeline-date">1866</div><div class="timeline-body"><strong>Naissance du mot écologie</strong><p>Ernst Haeckel, naturaliste allemand, crée le terme.</p></div></div>
+  <div class="timeline-item"><div class="timeline-date">1962</div><div class="timeline-body"><strong>Silent Spring – Rachel Carson</strong><p>Dénonce les pesticides. Déclencheur de la conscience environnementale américaine.</p></div></div>
+  <div class="timeline-item"><div class="timeline-date">1968</div><div class="timeline-body"><strong>"Tragedy of the Commons" – Garrett Hardin</strong><p>Traite de la surexploitation des ressources communes.</p></div></div>
+  <div class="timeline-item"><div class="timeline-date">1970</div><div class="timeline-body"><strong>Earth Day (22 avril)</strong><p>20 millions d'Américains manifestent. Date fondatrice de l'environnementalisme.</p></div></div>
+  <div class="timeline-item"><div class="timeline-date">1971</div><div class="timeline-body"><strong>Greenpeace & 1er ministère de l'environnement</strong><p>Fondation de Greenpeace. En France, Pompidou crée le 1er ministère de l'environnement.</p></div></div>
+  <div class="timeline-item"><div class="timeline-date">1972</div><div class="timeline-body"><strong>Rapport Meadows + Stockholm</strong><p>Club de Rome publie "Les limites de la croissance". 1re conférence ONU sur l'environnement à Stockholm → création du PNUE.</p></div></div>
+  <div class="timeline-item"><div class="timeline-date">1992</div><div class="timeline-body"><strong>Sommet de la Terre – Rio</strong><p>Concept de développement durable adopté. Signature de la CCNUCC.</p></div></div>
+  <div class="timeline-item"><div class="timeline-date">2005</div><div class="timeline-body"><strong>Charte de l'Environnement</strong><p>Intégrée à la Constitution française — consécration politique de l'enjeu environnemental.</p></div></div>
+  <div class="timeline-item"><div class="timeline-date">2018</div><div class="timeline-body"><strong>L'Affaire du siècle (France)</strong><p>Collectif porte plainte contre l'État pour inaction climatique. L'État condamné en 2021 et 2022.</p></div></div>
+</div>
+
+<div class="highlight note">
+  <h4>💡 À retenir pour le devoir</h4>
+  <p>L'environnement n'est pas seulement un sujet scientifique : c'est un <strong>enjeu géopolitique</strong>, social et économique majeur. Les premières alertes viennent des États-Unis dans les années 1960. La France institutionnalise la question à partir de 1971.</p>
+</div>
+
+<div class="highlight warn">
+  <h4>⚠️ Le débat sur l'Anthropocène</h4>
+  <ul>
+    <li><strong>Date de début contestée</strong> : industrialisation (XIXe s) vs 1950 (accélération des impacts humains)</li>
+    <li><strong>Notion critiquée</strong> par les climato-sceptiques</li>
+    <li>Certains préfèrent "évènements anthropocènes" (réversibles ?) plutôt qu'un âge géologique</li>
+  </ul>
+</div>
+`;
+
+const hggsp_axe1a = `
+<div class="section-hero">
+  <div class="section-hero-tag">Axe 1 · La forêt française depuis Colbert</div>
+  <h2>Exploiter, préserver, protéger la forêt française</h2>
+  <p>L'histoire de la forêt française est un parfait cas d'étude des tensions entre exploitation économique et protection environnementale. De Colbert à nos jours, l'État a sans cesse cherché à <em>protéger pour exploiter</em>, avant d'évoluer vers une gestion multifonctionnelle.</p>
+</div>
+
+<div class="section-label">La formule clé : les 3P</div>
+<div class="cards-row">
+  <div class="info-card"><div class="info-card-icon">🌳</div><h3>Production</h3><p>Le bois est une ressource économique majeure (construction, énergie, industrie). Logique productiviste dominante jusqu'au XXe s.</p></div>
+  <div class="info-card"><div class="info-card-icon">🚶</div><h3>Promenade</h3><p>Fonction récréative et sociale développée surtout pendant les Trente Glorieuses (1945-1975), avec l'urbanisation et les loisirs.</p></div>
+  <div class="info-card"><div class="info-card-icon">🛡️</div><h3>Protection</h3><p>Protection écologique, biodiversité, lutte contre l'érosion et le changement climatique. Renforcée après Rio 1992.</p></div>
+</div>
+
+<div class="section-label">Chronologie de la forêt française</div>
+<div class="timeline">
+  <div class="timeline-item"><div class="timeline-date">XIIe–XIIIe s</div><div class="timeline-body"><strong>Grands défrichements médiévaux</strong><p>Ordonnances encadrant l'exploitation dès Saint Louis (XIIIe s). 1ère ordonnance forestière : Philippe le Bel (1346).</p></div></div>
+  <div class="timeline-item"><div class="timeline-date">1669</div><div class="timeline-body"><strong>Ordonnance des eaux et forêts — Colbert</strong><p>Objectif : protéger pour mieux exploiter. Colbert veut des forêts pour construire les navires de Louis XIV (marines marchande et militaire). La réforme échoue partiellement : la forêt continue à diminuer.</p></div></div>
+  <div class="timeline-item"><div class="timeline-date">1827</div><div class="timeline-body"><strong>Nouveau Code forestier</strong><p>La forêt atteint son minimum : 7,5 millions d'hectares. Même logique que Colbert : protéger pour exploiter.</p></div></div>
+  <div class="timeline-item"><div class="timeline-date">1829</div><div class="timeline-body"><strong>🌲 Guerre des Demoiselles (Ariège)</strong><p>ANECDOTE PARFAITE : des paysans déguisés en femmes s'opposent aux gardes forestiers qui limitent l'accès à la forêt. Illustre les conflits d'usage entre gestion étatique et populations locales.</p></div></div>
+  <div class="timeline-item"><div class="timeline-date">1857</div><div class="timeline-body"><strong>Napoléon III — Landes de Gascogne</strong><p>Loi pour assécher les landes et créer une forêt de pin maritime. Développement économique d'une région pauvre.</p></div></div>
+  <div class="timeline-item"><div class="timeline-date">1861</div><div class="timeline-body"><strong>1ère réserve artistique : Fontainebleau</strong><p>Précède Yellowstone (1872) ! Première protection d'un espace naturel pour des raisons patrimoniales dans le monde.</p></div></div>
+  <div class="timeline-item"><div class="timeline-date">1992</div><div class="timeline-body"><strong>Rio → Développement durable</strong><p>Le Code forestier intègre le principe de développement durable. Les 3P (protection, promenade, production) deviennent le cadre de gestion.</p></div></div>
+</div>
+
+<div class="highlight warn">
+  <h4>🎯 Citation à connaître — Paul Arnould</h4>
+  <p>La géographe de la forêt parle de <strong>« la tyrannie des trois pro »</strong> : produisons du bois, promenons-nous dans les bois, protégeons les forêts. Utile pour montrer que les objectifs sont parfois contradictoires.</p>
+</div>
+
+<div class="section-label">Conflits actuels de la forêt</div>
+<div class="cards-row">
+  <div class="info-card"><div class="info-card-icon">🐺</div><h3>Loup et ours</h3><p>Réintroduction d'espèces prédatrices : conflit entre éleveurs (qui perdent des bêtes) et écologistes (protection de la biodiversité).</p></div>
+  <div class="info-card"><div class="info-card-icon">🌲</div><h3>Pin Douglas</h3><p>Monocultures de résineux (Morvan, Millevaches) critiquées pour l'acidification des sols et la perte de biodiversité.</p></div>
+  <div class="info-card"><div class="info-card-icon">🏕️</div><h3>Forêts périurbaines</h3><p>Tensions entre touristes/promeneurs et filière de production de bois. La multifonctionnalité génère des conflits d'usage.</p></div>
+</div>
+
+<div class="highlight info">
+  <h4>📊 Chiffre clé</h4>
+  <p>La forêt couvre aujourd'hui <strong>31 % du territoire français</strong> — soit une remontée spectaculaire depuis le creux de 1827 (7,5 millions d'ha). Le reboisement du XIXe et XXe s a transformé le paysage.</p>
+</div>
+`;
+
+const hggsp_axe1b = `
+<div class="section-hero">
+  <div class="section-hero-tag">Axe 1 · Révolution néolithique & industrielle</div>
+  <h2>Comment les sociétés ont-elles transformé leur environnement ?</h2>
+  <p>Deux ruptures majeures marquent l'histoire des relations entre sociétés et environnement : la <strong>révolution néolithique</strong> (–10 000 ans) et la <strong>révolution industrielle</strong> (XVIIIe–XIXe s). Ensemble, elles constituent les deux grandes étapes de l'Anthropocène.</p>
+</div>
+
+<div class="section-label">I. La Révolution néolithique</div>
+
+<div class="cards-row">
+  <div class="info-card"><div class="info-card-icon">🌾</div><h3>Quand et où ?</h3><p>Vers –10 000 avant JC. Nait dans le <strong>Croissant Fertile</strong> (–10 000 / –9 000), puis en Chine, Nouvelle-Guinée, Mexique, Andes, Afrique centrale. Fin progressive à partir du IVe millénaire avec l'écriture.</p></div>
+  <div class="info-card"><div class="info-card-icon">🏡</div><h3>La sédentarisation</h3><p>Abandon progressif de la chasse-cueillette → agriculture (céréales) + élevage. Villages, greniers, stockage du grain. Premières inégalités sociales.</p></div>
+  <div class="info-card"><div class="info-card-icon">🌱</div><h3>Impacts environnementaux</h3><p>Premiers défrichements par le feu et la hache. Domestication des animaux. Nouvelles maladies (contacts avec animaux). Érosion des sols. Transformation <em>irréversible</em> des milieux.</p></div>
+</div>
+
+<div class="highlight note">
+  <h4>💬 Révolution ou néolithisation ?</h4>
+  <p>Le terme "révolution" suppose une rupture rapide. Les archéologues contemporains préfèrent parler de <strong>néolithisation</strong> : une transformation <em>lente</em>, sur un temps long, différente selon les régions. L'Europe du Nord ou l'Amérique adoptent le modèle beaucoup plus tard.</p>
+</div>
+
+<div class="section-label">II. La Révolution industrielle</div>
+
+<div class="cards-row">
+  <div class="info-card"><div class="info-card-icon">⚙️</div><h3>Machine à vapeur</h3><p>James Watt développe la machine à vapeur alimentée au charbon → augmentation de la production industrielle → développement du chemin de fer → urbanisation accélérée.</p></div>
+  <div class="info-card"><div class="info-card-icon">💨</div><h3>Dégradation des milieux</h3><p>Exploitation massive du charbon, des métaux, du pétrole. Les mines deviennent le symbole de la destruction. Les paysages industriels (Manchester) transforment les villes.</p></div>
+  <div class="info-card"><div class="info-card-icon">🌳</div><h3>Premières réponses</h3><p>Politiques hygiénistes (Baron Haussmann à Paris). Création d'espaces verts urbains (Bois de Vincennes, de Boulogne, ceinture verte de Londres).</p></div>
+</div>
+
+<div class="highlight warn">
+  <h4>⚠️ Vocabulaire important : Industrialisation vs Révolution industrielle</h4>
+  <p>On ne peut pas parler d'UNE seule révolution industrielle. Il s'agit d'une <strong>série d'industrialisations</strong> qui se diffuse par vagues et de manière incomplète. Le bon terme : <strong>Âge industriel</strong> ou "industrialisations".</p>
+</div>
+
+<div class="timeline">
+  <div class="timeline-item"><div class="timeline-date">XVIIIe s</div><div class="timeline-body"><strong>Naissance de la machine à vapeur</strong><p>James Watt. Charbon comme énergie principale.</p></div></div>
+  <div class="timeline-item"><div class="timeline-date">XIXe s</div><div class="timeline-body"><strong>Diffusion mondiale + destruction des milieux</strong><p>Exploitation minière, déforestation, expansion du chemin de fer. Exode rural massif.</p></div></div>
+  <div class="timeline-item"><div class="timeline-date">Années 60</div><div class="timeline-body"><strong>Première prise de conscience</strong><p>Rejet du modèle de société de consommation. Silent Spring de Carson (1962). Début du mouvement environnementaliste.</p></div></div>
+  <div class="timeline-item"><div class="timeline-date">Après 1945</div><div class="timeline-body"><strong>XXe s = siècle du pétrole</strong><p>La voiture individuelle devient le symbole des contradictions de l'industrialisation (liberté + pollution).</p></div></div>
+</div>
+
+<div class="highlight info">
+  <h4>🔗 Lien avec l'Anthropocène</h4>
+  <p>La révolution industrielle est souvent prise comme <strong>point de départ de l'Anthropocène</strong>. Mais certains scientifiques préfèrent <strong>1950</strong> comme date de départ, car c'est à cette époque que les impacts humains s'accélèrent véritablement (boom automobile, nucléaire, plastiques).</p>
+</div>
+`;
+
+const hggsp_axe2a = `
+<div class="section-hero">
+  <div class="section-hero-tag">Axe 2 · Histoire du climat</div>
+  <h2>Des fluctuations du Moyen Âge à la crise climatique contemporaine</h2>
+  <p>Comprendre le changement climatique actuel nécessite de le replacer dans une histoire longue. L'historien <strong>Philippe Valette</strong> le souligne : il faut « replacer notre période de réchauffement contemporain dans un contexte temporel plus vaste ».</p>
+</div>
+
+<div class="section-label">Comment étudie-t-on le passé climatique ?</div>
+
+<div class="cards-row">
+  <div class="info-card"><div class="info-card-icon">📅</div><h3>Sources historiques</h3><p>Dates des vendanges, floraison des arbres fruitiers (moines), niveau des lacs et fleuves. Peintures flamandes du XVIIe s (fleuves gelés → Petit Âge Glaciaire).</p></div>
+  <div class="info-card"><div class="info-card-icon">🧊</div><h3>Sciences environnementales</h3><p>Carottes glaciaires (millions d'années), sédiments, pollens. Dendrochronologie : les cernes du bois donnent des données précises sur les variations locales de température.</p></div>
+  <div class="info-card"><div class="info-card-icon">💻</div><h3>Nouvelles techniques</h3><p>Reconstructions climatiques par isotopes, modélisation informatique, analyse des archives atmosphériques. La paléoclimatologie a fait d'énormes progrès.</p></div>
+</div>
+
+<div class="highlight note">
+  <h4>👤 Le premier historien du climat : Emmanuel Le Roy Ladurie</h4>
+  <p>En 1967, il publie <em>Histoire du climat depuis l'An Mil</em>. Il multiplie les sources pour analyser les variations climatiques en Europe sur le temps long. C'est aussi l'année où l'Américain Roderick Nash publie <em>Wilderness and the American Mind</em> — année fondatrice pour l'histoire environnementale.</p>
+</div>
+
+<div class="section-label">Les grandes périodes climatiques</div>
+
+<div class="cards-row">
+  <div class="info-card"><div class="info-card-icon">🌤️</div><h3>Petit Optimum Médiéval (950–1250)</h3>
+    <ul>
+      <li>Réchauffement → allongement de la saison de culture</li>
+      <li>Population européenne : 20M → 70M personnes</li>
+      <li>Expansion viking (Groenland ! Eric le Rouge, 982)</li>
+      <li>Généralisation de la vigne en Angleterre</li>
+      <li>Limite : pas un phénomène global — principalement Europe et Amérique du Nord</li>
+    </ul>
+  </div>
+  <div class="info-card"><div class="info-card-icon">❄️</div><h3>Petit Âge Glaciaire (XVe–XIXe s)</h3>
+    <ul>
+      <li>Étés plus frais/humides, hivers froids et neigeux</li>
+      <li>Crises de subsistance : mauvaises récoltes → famines → épidémies</li>
+      <li>1 300 000 morts (Leroy Ladurie) dont 600 000 après l'hiver 1709</li>
+      <li>Chasses aux sorcières (États germaniques) pour "modifier la météo"</li>
+      <li>Fin au XIXe s avec l'industrialisation</li>
+    </ul>
+  </div>
+</div>
+
+<div class="highlight warn">
+  <h4>🎯 Anecdote parfaite pour le devoir : Les sorcières et la météo</h4>
+  <p>Pendant le Petit Âge Glaciaire, des dizaines de milliers de femmes ont été brûlées dans les États germaniques, accusées de <strong>modifier la météo et provoquer les mauvaises récoltes</strong>. Illustre parfaitement comment les sociétés réagissaient aux crises climatiques avant la science moderne.</p>
+</div>
+
+<div class="timeline">
+  <div class="timeline-item"><div class="timeline-date">950–1250</div><div class="timeline-body"><strong>Petit Optimum Médiéval</strong><p>Réchauffement → expansion agraire, essor démographique, colonisation viking du Groenland.</p></div></div>
+  <div class="timeline-item"><div class="timeline-date">1250</div><div class="timeline-body"><strong>Début du refroidissement</strong><p>Fin de l'Optimum médiéval. Transition vers le Petit Âge Glaciaire.</p></div></div>
+  <div class="timeline-item"><div class="timeline-date">1692–1693</div><div class="timeline-body"><strong>Crises de subsistance majeures</strong><p>Pluies excessives → mauvaises récoltes → famines et épidémies. 1 300 000 morts en Europe.</p></div></div>
+  <div class="timeline-item"><div class="timeline-date">1709</div><div class="timeline-body"><strong>"Grand Hiver" de 1709</strong><p>Dernière grande famine de France. 600 000 morts entre 1709 et 1710.</p></div></div>
+  <div class="timeline-item"><div class="timeline-date">XIXe s</div><div class="timeline-body"><strong>Fin du Petit Âge Glaciaire</strong><p>Le réchauffement attribué à l'industrialisation met fin aux cycles froids.</p></div></div>
+</div>
+`;
+
+const hggsp_axe2b = `
+<div class="section-hero">
+  <div class="section-hero-tag">Axe 2 · Géopolitique du changement climatique</div>
+  <h2>La gouvernance mondiale du climat : espoirs et limites</h2>
+  <p>« Notre maison brûle et nous regardons ailleurs » — Jacques Chirac, Sommet de Johannesburg, 2002. Depuis, la communauté internationale tente de construire une gouvernance mondiale face au changement climatique, avec des résultats mitigés.</p>
+</div>
+
+<div class="section-label">Les acteurs clés</div>
+<div class="actors-list">
+  <div class="actor"><div class="actor-name">🌡️ GIEC</div><div class="actor-role">Créé en 1988 dans le cadre du PNUE. Évalue les risques liés au changement climatique. Prix Nobel de la Paix 2007 (avec Al Gore). Rapports de référence pour la communauté internationale.</div></div>
+  <div class="actor"><div class="actor-name">🌿 ONG</div><div class="actor-role">Greenpeace, Sierra Club, 350.org : sensibilisation, éducation, actions en justice. Pression croissante sur les États. Condamnation des Pays-Bas en 2018, de la France en 2022.</div></div>
+  <div class="actor"><div class="actor-name">👧 Greta Thunberg</div><div class="actor-role">Activiste suédoise invitée à l'Assemblée générale de l'ONU en 2019. Incarne la mobilisation de la jeunesse mondiale. Mouvement Fridays for Future.</div></div>
+  <div class="actor"><div class="actor-name">🏙️ Villes</div><div class="actor-role">Convention mondiale des maires : 7400 villes de 121 pays pour réduire les GES. Acteurs locaux essentiels quand les États font défaut.</div></div>
+</div>
+
+<div class="section-label">Les COP : de Stockholm à Paris</div>
+<div class="timeline">
+  <div class="timeline-item"><div class="timeline-date">1972</div><div class="timeline-body"><strong>Stockholm — 1ère conférence ONU sur l'environnement</strong><p>Création du PNUE (Programme des Nations Unies pour l'Environnement).</p></div></div>
+  <div class="timeline-item"><div class="timeline-date">1979</div><div class="timeline-body"><strong>1ère conférence mondiale sur le climat</strong></div></div>
+  <div class="timeline-item"><div class="timeline-date">1988</div><div class="timeline-body"><strong>Création du GIEC</strong><p>Dans le cadre du PNUE. Commence à dresser l'état des connaissances scientifiques.</p></div></div>
+  <div class="timeline-item"><div class="timeline-date">1992</div><div class="timeline-body"><strong>Sommet de Rio — 1er traité climatique</strong><p>CCNUCC (Convention Cadre des Nations Unies sur les Changements Climatiques). Naissance des COP.</p></div></div>
+  <div class="timeline-item"><div class="timeline-date">1997</div><div class="timeline-body"><strong>COP 3 — Protocole de Kyoto</strong><p>Premiers objectifs chiffrés de réduction des GES. Les États-Unis signeront mais ne ratifieront pas.</p></div></div>
+  <div class="timeline-item"><div class="timeline-date">2015</div><div class="timeline-body"><strong>COP 21 — Accord de Paris</strong><p>195 pays signent. Objectif : limiter le réchauffement entre 1,5° et 2°. Chaque État fixe ses propres objectifs (NDC).</p></div></div>
+  <div class="timeline-item"><div class="timeline-date">2023–2024</div><div class="timeline-body"><strong>COP 28 (Dubaï) & COP 29 (Azerbaïdjan)</strong><p>Organisées dans des pays producteurs d'hydrocarbures — illustration des contradictions de la gouvernance climatique.</p></div></div>
+</div>
+
+<div class="highlight info">
+  <h4>📊 Rapport GIEC 2022 — ce qu'il faut retenir</h4>
+  <ul>
+    <li>Multiplication par 4 des événements climatiques extrêmes d'ici 2100</li>
+    <li>800M à 3 milliards de personnes en pénurie d'eau chronique (+2°C)</li>
+    <li>1 milliard de personnes en zone côtière à risque d'inondation en 2050</li>
+    <li>215 millions de réfugiés climatiques potentiels</li>
+  </ul>
+</div>
+
+<div class="cards-row">
+  <div class="info-card"><div class="info-card-icon">🌍</div><h3>Pays du Nord</h3><p>Anciens industrialisés, responsables historiques. Promettent 100 milliards/an aux pays du Sud → seulement 79 milliards versés en 2019. "Dette climatique" réclamée par les pays en développement.</p></div>
+  <div class="info-card"><div class="info-card-icon">🇨🇳</div><h3>Pays émergents</h3><p>Chine : plus gros émetteur mondial, mais s'engage à la neutralité carbone pour 2060. Inde et Brésil : entre développement et transition. Situation complexe.</p></div>
+  <div class="info-card"><div class="info-card-icon">🌴</div><h3>Pays les moins avancés</h3><p>Les plus touchés par le changement climatique, les moins responsables. Manque de moyens pour la transition. Enjeu de justice climatique.</p></div>
+</div>
+
+<div class="highlight danger">
+  <h4>🔴 Le recul depuis 2022</h4>
+  <p>Covid, guerre en Ukraine, embrasement du Moyen-Orient, réélection Trump (2024) → la question climatique reléguée au second plan. L'administration Trump depuis 2025 : références au changement climatique supprimées, censure scientifique, coupes budgétaires à l'EPA.</p>
+</div>
+`;
+
+const hggsp_otc = `
+<div class="section-hero">
+  <div class="section-hero-tag">OTC · Objet de travail conclusif</div>
+  <h2>Les États-Unis et la question environnementale : tensions et contrastes</h2>
+  <p>Quand Trump annonce en 2017 le retrait des États-Unis de l'Accord de Paris, le monde découvre les contradictions profondes d'un pays qui fut <em>longtemps pionnier</em> de la protection environnementale. Ce pays immense s'est construit sur la <strong>conquête et l'exploitation</strong> de la nature tout en développant une conscience écologique précoce.</p>
+</div>
+
+<div class="section-label">I. Un territoire à conquérir et exploiter</div>
+
+<div class="terms-grid">
+  <div class="term"><div class="term-word">Frontier</div><div class="term-def">Région aux confins du monde civilisé. Notion centrale dans la construction de l'identité américaine.</div></div>
+  <div class="term"><div class="term-word">Destinée Manifeste</div><div class="term-def">Mission divine des États-Unis : apporter le progrès et la démocratie au monde entier. XIXe s. Références protestantes + sentiment de supériorité culturelle.</div></div>
+  <div class="term"><div class="term-word">Wilderness</div><div class="term-def">Nature sauvage. Concept ambigu : obstacle à civiliser OU espace idéalisé. Popularisé par Thoreau et John Muir.</div></div>
+  <div class="term"><div class="term-word">Homestead Act</div><div class="term-def">1862 : tout citoyen américain peut obtenir gratuitement une parcelle à condition de l'exploiter. Encourage la colonisation de l'Ouest.</div></div>
+  <div class="term"><div class="term-word">Dust Bowl</div><div class="term-def">Années 1930. Tempêtes de poussière dans les Grandes Plaines (Kansas, Oklahoma, Texas, Colorado) suite aux pratiques agricoles intensives.</div></div>
+  <div class="term"><div class="term-word">Climatoscepticisme</div><div class="term-def">Rejet des théories scientifiques sur le changement climatique. Soutenu par les lobbys pétroliers et une partie de la droite religieuse.</div></div>
+</div>
+
+<div class="highlight warn">
+  <h4>🦬 L'extermination du bison — anecdote clé</h4>
+  <p>En un siècle, les troupeaux de bisons passent de <strong>30 à 60 millions de têtes à moins de 1 000 individus</strong> au début du XXe s. Motifs : viande, peau, mais aussi <strong>stratégie militaire</strong> pour priver les Amérindiens des Grandes Plaines de leur principale ressource.</p>
+</div>
+
+<div class="section-label">II. Une politique de protection pionnière</div>
+
+<div class="timeline">
+  <div class="timeline-item"><div class="timeline-date">1848</div><div class="timeline-body"><strong>Ruée vers l'or en Californie</strong><p>Transforme profondément la Californie. Renforce le mythe du territoire aux ressources infinies.</p></div></div>
+  <div class="timeline-item"><div class="timeline-date">1862</div><div class="timeline-body"><strong>Homestead Act</strong><p>Accélère la colonisation de l'Ouest. Figures mythiques : Daniel Boone, Davy Crockett.</p></div></div>
+  <div class="timeline-item"><div class="timeline-date">1864</div><div class="timeline-body"><strong>Parc naturel de Yosemite (Californie)</strong><p>Premier parc naturel américain, à l'initiative de John Muir et le Sierra Club.</p></div></div>
+  <div class="timeline-item"><div class="timeline-date">1872</div><div class="timeline-body"><strong>Parc national de Yellowstone</strong><p>Premier parc national du MONDE, créé par le Congrès américain. Les États-Unis inventent le modèle du parc national.</p></div></div>
+  <div class="timeline-item"><div class="timeline-date">1901–1909</div><div class="timeline-body"><strong>Theodore Roosevelt : le président-écologiste</strong><p>Crée 5 parcs nationaux, 51 réserves ornithologiques. Crée le National Forest Service (1905). Influencé par John Muir et Gifford Pinchot.</p></div></div>
+  <div class="timeline-item"><div class="timeline-date">1916</div><div class="timeline-body"><strong>National Park Service (NPS)</strong><p>Gère les parcs nationaux. Mission : préserver ET accueillir le public. Le "tourisme des parcs" se développe.</p></div></div>
+  <div class="timeline-item"><div class="timeline-date">1930s</div><div class="timeline-body"><strong>Dust Bowl → New Deal</strong><p>1ère grande catastrophe environnementale. Roosevelt lance des politiques d'aménagement hydraulique (barrages hydroélectriques).</p></div></div>
+  <div class="timeline-item"><div class="timeline-date">1962</div><div class="timeline-body"><strong>Silent Spring — Rachel Carson</strong><p>Déclenche la conscience environnementale américaine contre les pesticides.</p></div></div>
+  <div class="timeline-item"><div class="timeline-date">1969</div><div class="timeline-body"><strong>La rivière de Cleveland en feu</strong><p>La Cuyahoga River, totalement polluée par les rejets industriels, s'enflamme. Choc médiatique.</p></div></div>
+  <div class="timeline-item"><div class="timeline-date">1970</div><div class="timeline-body"><strong>Earth Day + EPA</strong><p>22 avril : 20 millions d'Américains manifestent. Nixon crée l'EPA. Clean Air Act (1970).</p></div></div>
+  <div class="timeline-item"><div class="timeline-date">1980s</div><div class="timeline-body"><strong>Reagan : 1er recul environnemental</strong><p>Le climatoscepticisme s'organise autour des grandes compagnies pétrolières. Recul des politiques environnementales.</p></div></div>
+  <div class="timeline-item"><div class="timeline-date">2017</div><div class="timeline-body"><strong>Trump 1 : retrait de l'Accord de Paris</strong><p>Suppression de 100+ mesures environnementales. Mais 400+ maires signent "We Are Still In".</p></div></div>
+  <div class="timeline-item"><div class="timeline-date">2021</div><div class="timeline-body"><strong>Biden : retour dans les Accords de Paris</strong><p>Inflation Reduction Act (2022) : 369 milliards $ pour la transition énergétique.</p></div></div>
+  <div class="timeline-item"><div class="timeline-date">2024–2025</div><div class="timeline-body"><strong>Trump 2 : offensive sans précédent</strong><p>Coupes à l'EPA (avec Elon Musk). Références au changement climatique supprimées. Censure scientifique.</p></div></div>
+</div>
+
+<div class="section-label">III. Les acteurs de la politique environnementale américaine</div>
+<div class="actors-list">
+  <div class="actor"><div class="actor-name">🏛️ Gouvernement fédéral</div><div class="actor-role">L'EPA fixe les normes. Mais ses prérogatives varient radicalement selon les administrations (Trump vs Biden). Rôle central mais instable.</div></div>
+  <div class="actor"><div class="actor-name">🗺️ États fédérés</div><div class="actor-role">Grande autonomie. Californie = pionnière (normes strictes, taxation carbone). Texas = réglementation souple, soutien aux fossiles. Hétérogénéité majeure.</div></div>
+  <div class="actor"><div class="actor-name">🏙️ Villes</div><div class="actor-role">New York, Seattle, LA : plans de résilience climatique. Après 2017 : 400+ maires signent "We Are Still In" pour maintenir les objectifs de Paris.</div></div>
+  <div class="actor"><div class="actor-name">🏭 Multinationales</div><div class="actor-role">Tesla, Google, Apple investissent dans le vert. Mais risque de greenwashing (Tesla : SUV électriques à empreinte catastrophique). Lobbys pétroliers (American Petroleum Institute) très influents.</div></div>
+  <div class="actor"><div class="actor-name">🌿 ONG & citoyens</div><div class="actor-role">Sierra Club, Greenpeace USA, 350.org. Sunrise Movement (jeunes). Pression croissante mais moyens limités face aux lobbys.</div></div>
+</div>
+
+<div class="highlight danger">
+  <h4>🔴 Chiffres clés sur l'impact américain</h4>
+  <ul>
+    <li>Les États-Unis émettent <strong>15 % des gaz à effet de serre</strong> mondiaux</li>
+    <li>Ils consomment <strong>20 % de l'énergie mondiale</strong></li>
+    <li>Leur budget de l'EPA est en baisse continue depuis les années 1980</li>
+  </ul>
+</div>
+
+<div class="highlight info">
+  <h4>✅ Idée de conclusion</h4>
+  <p>Les États-Unis incarnent la contradiction fondamentale du monde contemporain : pionniers de la protection environnementale (parcs nationaux, EPA, Earth Day) <em>et</em> champions de la surexploitation et du climatoscepticisme. La réélection de Trump en 2024 accentue cette fracture entre une administration fédérale climato-sceptique et des acteurs locaux qui poursuivent la transition.</p>
+</div>
+`;
+
+const hggsp_quiz = `
+<div class="section-hero">
+  <div class="section-hero-tag">Quiz · Auto-évaluation</div>
+  <h2>Teste tes connaissances</h2>
+  <p>Clique sur chaque réponse pour la révéler. Essaie de répondre avant !</p>
+</div>
+
+<div class="quiz-box">
+  <div class="quiz-q">1. Quelle est la définition de l'environnement selon Yvette Veyret ?</div>
+  <div class="quiz-answer" onclick="this.classList.toggle('revealed')">
+    <div class="ans">« Les relations d'interdépendance complexes existant entre l'homme, les sociétés et les composantes physiques, chimiques, biotiques d'une nature anthropisée. » C'est une RELATION, pas juste la nature.</div>
+  </div>
+</div>
+
+<div class="quiz-box">
+  <div class="quiz-q">2. Qu'est-ce que la "Destinée Manifeste" ?</div>
+  <div class="quiz-answer" onclick="this.classList.toggle('revealed')">
+    <div class="ans">Théorie du XIXe s selon laquelle les États-Unis auraient une mission divine : apporter le progrès et la démocratie au monde entier. Repose sur les références protestantes et la croyance en une supériorité culturelle et technologique des colons.</div>
+  </div>
+</div>
+
+<div class="quiz-box">
+  <div class="quiz-q">3. Pourquoi Colbert protège-t-il les forêts en 1669 ?</div>
+  <div class="quiz-answer" onclick="this.classList.toggle('revealed')">
+    <div class="ans">Pas pour les préserver en elles-mêmes ! Il veut protéger pour EXPLOITER : assurer une réserve stratégique de bois pour construire les navires de la marine marchande et militaire de Louis XIV.</div>
+  </div>
+</div>
+
+<div class="quiz-box">
+  <div class="quiz-q">4. Qu'est-ce que le Dust Bowl ? Où et quand ?</div>
+  <div class="quiz-answer" onclick="this.classList.toggle('revealed')">
+    <div class="ans">Tempêtes de poussière dans les années 1930, dans les Grandes Plaines (Kansas, Oklahoma, Texas, Colorado). Causées par des pratiques agricoles intensives qui ont détruit les prairies et rendu les sols friables. Première grande catastrophe environnementale américaine → exode vers la Californie.</div>
+  </div>
+</div>
+
+<div class="quiz-box">
+  <div class="quiz-q">5. Qui crée le premier parc national du monde et quand ?</div>
+  <div class="quiz-answer" onclick="this.classList.toggle('revealed')">
+    <div class="ans">Le Congrès américain crée Yellowstone en 1872. C'est le premier parc national du MONDE. Avant cela, Yosemite (1864) était un parc naturel d'État.</div>
+  </div>
+</div>
+
+<div class="quiz-box">
+  <div class="quiz-q">6. Qu'est-ce que le Petit Optimum Médiéval et quelles en sont les conséquences ?</div>
+  <div class="quiz-answer" onclick="this.classList.toggle('revealed')">
+    <div class="ans">Période de réchauffement entre 950 et 1250, principalement en Europe du Nord. Conséquences : allongement de la saison de culture, hausse des récoltes, boom démographique (20M → 70M Européens), expansion viking (Groenland découvert par Eric le Rouge en 982), vigne en Angleterre.</div>
+  </div>
+</div>
+
+<div class="quiz-box">
+  <div class="quiz-q">7. Qu'est-ce que les COP ? Citez les plus importantes.</div>
+  <div class="quiz-answer" onclick="this.classList.toggle('revealed')">
+    <div class="ans">Conferences Of the Parties : réunions des pays signataires de la CCNUCC (Rio 1992). Les plus importantes : COP 3 (Kyoto, 1997 – premiers objectifs chiffrés), COP 21 (Paris, 2015 – limite 1,5°/2°C), COP 28 (Dubaï, 2023), COP 29 (Azerbaïdjan, 2024).</div>
+  </div>
+</div>
+
+<div class="quiz-box">
+  <div class="quiz-q">8. Qu'est-ce que l'Anthropocène et qui a développé ce concept ?</div>
+  <div class="quiz-answer" onclick="this.classList.toggle('revealed')">
+    <div class="ans">Époque géologique actuelle où l'être humain est le principal moteur des transformations de la planète. Concept développé par le chimiste Paul Crutzen. Débute au XIXe s (industrialisation) ou en 1950 selon les auteurs. Controversé par les climato-sceptiques.</div>
+  </div>
+</div>
+
+<div class="quiz-box">
+  <div class="quiz-q">9. Qu'est-ce que la "Guerre des Demoiselles" (1829) ?</div>
+  <div class="quiz-answer" onclick="this.classList.toggle('revealed')">
+    <div class="ans">Conflit dans les forêts de l'Ariège : des paysans déguisés en femmes s'opposent aux gardes forestiers et grands propriétaires qui cherchent à limiter leur accès à la forêt suite au Code forestier de 1827. Illustre les conflits d'usage entre l'État et les populations locales.</div>
+  </div>
+</div>
+
+<div class="quiz-box">
+  <div class="quiz-q">10. Que prévoit l'Inflation Reduction Act (2022) ?</div>
+  <div class="quiz-answer" onclick="this.classList.toggle('revealed')">
+    <div class="ans">Lancé par Biden, cet acte prévoit 369 milliards de dollars pour la transition énergétique aux États-Unis. C'est le plus grand investissement climatique de l'histoire américaine.</div>
+  </div>
+</div>
+`;
+
+// ── EMC CONTENT ───────────────────────────────────────────────────────
+
+const emc_laicite1 = `
+<div class="section-hero">
+  <div class="section-hero-tag">EMC · Laïcité — Origines et principes</div>
+  <h2>La laïcité : liberté, neutralité, égalité</h2>
+  <p>La laïcité, c'est la liberté reconnue par la loi de <strong>croire ou ne pas croire</strong> au dieu de son choix. Elle repose sur la neutralité de l'État vis-à-vis des religions : en ne favorisant aucune, elle garantit à chacun d'exercer librement sa croyance.</p>
+</div>
+
+<div class="section-label">Les trois piliers de la laïcité</div>
+<div class="cards-row">
+  <div class="info-card"><div class="info-card-icon">🧠</div><h3>Liberté de conscience</h3><p>Personne ne peut être puni pour ce qu'il pense ou croit. Chacun peut croire, ne pas croire, changer de religion. C'est une liberté <em>individuelle</em> fondamentale.</p></div>
+  <div class="info-card"><div class="info-card-icon">⚖️</div><h3>Neutralité de l'État</h3><p>L'État ne favorise, ne subventionne, ne salarie aucune religion. Il ne prend pas parti dans les débats religieux. Cela permet à toutes les croyances de coexister.</p></div>
+  <div class="info-card"><div class="info-card-icon">🏠</div><h3>Religion = sphère privée</h3><p>Les convictions religieuses appartiennent à la vie privée. Dans l'espace public (et notamment à l'école), la neutralité s'impose pour permettre à tous de se retrouver.</p></div>
+</div>
+
+<div class="highlight info">
+  <h4>🎯 Définition synthétique à retenir</h4>
+  <p>La laïcité ce n'est <strong>pas</strong> l'interdiction de croire. C'est la <strong>garantie</strong> que chacun peut croire librement, parce que l'État ne favorise personne et que les religions restent dans la sphère privée. C'est une liberté <em>protégée</em> par l'État, pas combattue par lui.</p>
+</div>
+
+<div class="section-label">Un héritage révolutionnaire</div>
+<div class="highlight note">
+  <h4>📜 Déclaration des droits de l'Homme (1789)</h4>
+  <p>Article 10 : « Nul ne doit être inquiété pour ses opinions, même religieuses, pourvu que leur manifestation ne trouble pas l'ordre public établi par la loi. » C'est la première protection des opinions religieuses en France. La liberté de conscience précède la laïcité institutionnelle.</p>
+</div>
+
+<div class="terms-grid">
+  <div class="term"><div class="term-word">Laïcité</div><div class="term-def">Principe de neutralité de l'État vis-à-vis des religions, garantissant la liberté de conscience de chacun.</div></div>
+  <div class="term"><div class="term-word">Liberté de conscience</div><div class="term-def">Droit de croire, ne pas croire, changer de croyance sans être puni pour cela.</div></div>
+  <div class="term"><div class="term-word">Neutralité</div><div class="term-def">L'État ne prend pas parti entre les religions et ne les favorise pas.</div></div>
+  <div class="term"><div class="term-word">Sphère privée</div><div class="term-def">Espace personnel où chacun peut exprimer librement ses convictions, par opposition à l'espace public.</div></div>
+  <div class="term"><div class="term-word">Ordre public</div><div class="term-def">Limite de toutes les libertés : on peut tout exprimer, sauf si cela trouble l'ordre public ou prône la violence.</div></div>
+</div>
+`;
+
+const emc_laicite2 = `
+<div class="section-hero">
+  <div class="section-hero-tag">EMC · Laïcité — Histoire & lois</div>
+  <h2>La construction juridique de la laïcité</h2>
+  <p>La laïcité ne s'est pas imposée d'un coup. Elle s'est construite progressivement, par des lois successives, depuis la Révolution jusqu'à aujourd'hui. Chaque loi répond à une tension sociale particulière.</p>
+</div>
+
+<div class="section-label">La chronologie législative</div>
+<div class="timeline">
+  <div class="timeline-item"><div class="timeline-date">1789</div><div class="timeline-body"><strong>DDHC — Article 10</strong><p>1ère protection des opinions religieuses. Fondement révolutionnaire de la liberté de conscience.</p></div></div>
+  <div class="timeline-item"><div class="timeline-date">1881–1882</div><div class="timeline-body"><strong>Lois Jules Ferry — École laïque et obligatoire</strong><p>Instruction publique laïque, gratuite et obligatoire. L'Église perd le contrôle de l'école publique. Les crucifix sont retirés des classes. Les instituteurs remplacent les religieux.</p></div></div>
+  <div class="timeline-item"><div class="timeline-date">1905</div><div class="timeline-body"><strong>Loi de séparation des Églises et de l'État</strong><p>LE texte fondateur de la laïcité française. L'État "ne reconnaît, ne salarie ni ne subventionne aucun culte". Garantit le libre exercice du culte. Fin du Concordat de 1801 (Napoléon).</p></div></div>
+  <div class="timeline-item"><div class="timeline-date">1946</div><div class="timeline-body"><strong>Constitution de la IVe République</strong><p>La laïcité entre dans la Constitution : "La France est une République indivisible, laïque, démocratique et sociale."</p></div></div>
+  <div class="timeline-item"><div class="timeline-date">1958</div><div class="timeline-body"><strong>Constitution de la Ve République</strong><p>Article 1er : même formule. La laïcité est constitutionnellement protégée. Base juridique actuelle.</p></div></div>
+  <div class="timeline-item"><div class="timeline-date">2004</div><div class="timeline-body"><strong>Loi sur les signes religieux à l'école</strong><p>Interdit le port "de signes ou de tenues par lesquels les élèves manifestent ostensiblement une appartenance religieuse". Vise voile, kippa, grande croix. Très débattue.</p></div></div>
+  <div class="timeline-item"><div class="timeline-date">2013</div><div class="timeline-body"><strong>Charte de la laïcité à l'école</strong><p>Adoptée dans toutes les écoles de la République. Rappelle les principes fondateurs (DDHC + Constitution 1958). Sensibilise les élèves. Journée de la laïcité le 9 décembre.</p></div></div>
+</div>
+
+<div class="highlight warn">
+  <h4>🎯 1905 : la loi la plus importante</h4>
+  <ul>
+    <li>L'État ne reconnaît, ne salarie ni ne subventionne aucun culte</li>
+    <li>Le libre exercice du culte est garanti dans les lieux de culte et la sphère privée</li>
+    <li>Fin du Concordat de 1801 (sauf Alsace-Moselle, qui est alors allemande)</li>
+    <li>La France devient officiellement une République laïque</li>
+  </ul>
+</div>
+
+<div class="highlight note">
+  <h4>📌 L'exception alsacienne</h4>
+  <p>L'Alsace et la Moselle ne sont <strong>pas soumises à la loi de 1905</strong> car elles étaient allemandes en 1905 (annexées en 1871, rendues à la France en 1918). Le Concordat de 1801 y est toujours en vigueur. Le droit local alsacien-mosellan reconnaît 4 cultes (catholique, protestant luthérien, protestant réformé, juif).</p>
+  </div>
+`;
+
+const emc_laicite3 = `
+<div class="section-hero">
+  <div class="section-hero-tag">EMC · Laïcité — L'école laïque</div>
+  <h2>L'école, espace privilégié de la laïcité</h2>
+  <p>L'école est le lieu où la laïcité s'applique de la façon la plus visible et la plus exigeante. C'est là que tous les enfants, quelles que soient leurs origines et leurs croyances, reçoivent un enseignement commun, dans un cadre neutre.</p>
+</div>
+
+<div class="cards-row">
+  <div class="info-card"><div class="info-card-icon">📚</div><h3>Jules Ferry (1881–1882)</h3><p>École gratuite, obligatoire et laïque. Retrait des symboles religieux des écoles. Les enseignants laïcs remplacent les religieux. Naissance de l'"instituteur" comme figure républicaine.</p></div>
+  <div class="info-card"><div class="info-card-icon">🏫</div><h3>Principe d'égalité</h3><p>Grâce à la laïcité, tous les élèves sont accueillis gratuitement et de manière neutre, sans distinction de croyance, d'origine ou de mode de vie. Un seul enseignement pour tous.</p></div>
+  <div class="info-card"><div class="info-card-icon">📋</div><h3>Charte 2013</h3><p>Affichée dans toutes les écoles. Rappelle : séparation État/religions, liberté de conscience, égalité des citoyens, rejet des discriminations. Journée de la laïcité le 9 décembre.</p></div>
+</div>
+
+<div class="section-label">Les règles à l'école</div>
+<div class="actors-list">
+  <div class="actor"><div class="actor-name">👕 Loi 2004</div><div class="actor-role">Interdit les signes religieux ostensibles (qui se voient de façon visible et délibérée) pour les ÉLÈVES dans les écoles, collèges et lycées publics. Ne s'applique pas aux enseignants (réglementé différemment) ni aux parents d'élèves.</div></div>
+  <div class="actor"><div class="actor-name">🧑‍🏫 Agents de l'État</div><div class="actor-role">Les fonctionnaires et agents du service public sont soumis à une obligation de neutralité stricte : ils ne peuvent pas porter de signe religieux dans l'exercice de leurs fonctions.</div></div>
+  <div class="actor"><div class="actor-name">👶 Élèves</div><div class="actor-role">Soumis à la loi 2004 : pas de signe ostensible. Mais ils conservent leur liberté de conscience et peuvent pratiquer leur religion dans la sphère privée.</div></div>
+  <div class="actor"><div class="actor-name">👨‍👩‍👧 Parents</div><div class="actor-role">Ni fonctionnaires, ni élèves : peuvent porter des signes religieux lors des activités scolaires, SAUF lors d'accompagnements scolaires (débat en cours).</div></div>
+</div>
+
+<div class="highlight info">
+  <h4>💡 Pourquoi la laïcité à l'école est-elle si importante ?</h4>
+  <p>L'école est le lieu où se forme le citoyen. En garantissant la neutralité, l'école permet à des enfants d'origines très différentes de se retrouver dans un espace commun, égaux devant le savoir. C'est le fondement de la cohésion républicaine.</p>
+</div>
+`;
+
+const emc_laicite4 = `
+<div class="section-hero">
+  <div class="section-hero-tag">EMC · Laïcité — Débats et enjeux contemporains</div>
+  <h2>La laïcité aujourd'hui : un principe toujours en débat</h2>
+  <p>Si le principe est clair, son application quotidienne génère des tensions permanentes. Les lois se multiplient parce que la laïcité doit s'adapter à des situations nouvelles que ses fondateurs n'avaient pas envisagées.</p>
+</div>
+
+<div class="section-label">Les grands débats actuels</div>
+<div class="cards-row">
+  <div class="info-card"><div class="info-card-icon">🧕</div><h3>Le voile islamique</h3><p>Le débat le plus médiatisé. Interdit à l'école depuis 2004. Mais autorisé dans l'espace public (droit européen). Discussions sur les accompagnatrices scolaires, les salariées en entreprise (CJUE : les entreprises peuvent l'interdire pour certains motifs).</p></div>
+  <div class="info-card"><div class="info-card-icon">🍽️</div><h3>Menus à la cantine</h3><p>Menus de substitution (sans porc) : laïcité ou accommodement raisonnable ? Les collectivités ne sont pas obligées de proposer des menus halal ou casher, mais certaines le font.</p></div>
+  <div class="info-card"><div class="info-card-icon">🏟️</div><h3>Sport & religion</h3><p>Ramadan et entraînements sportifs. Port du hijab dans les fédérations sportives. Conseil d'État et fédérations : débats récents sur l'application de la neutralité dans le sport.</p></div>
+</div>
+
+<div class="highlight danger">
+  <h4>🔴 Les attentats et la laïcité</h4>
+  <p>Les attentats terroristes commis au nom de l'islam radical (Charlie Hebdo 2015, Bataclan 2015, Samuel Paty 2020) ont relancé le débat sur la laïcité comme <strong>outil de cohésion nationale</strong>. La laïcité permet à chacun de vivre sa foi librement, sans que les institutions publiques ne favorisent une religion. L'assassinat de Samuel Paty, professeur d'histoire-géographie, a entraîné un renforcement des mesures de protection de la laïcité à l'école.</p>
+</div>
+
+<div class="section-label">La laïcité, valeur universelle ou française ?</div>
+<div class="cards-row">
+  <div class="info-card"><div class="info-card-icon">🇫🇷</div><h3>Le modèle français</h3><p>La laïcité "à la française" est souvent perçue comme l'un des plus stricts au monde. Elle va plus loin que la simple "séparation Église-État" : elle exige la neutralité de l'espace public.</p></div>
+  <div class="info-card"><div class="info-card-icon">🌍</div><h3>Autres modèles</h3><p>États-Unis : séparation stricte mais les élus jurent sur la Bible. Royaume-Uni : l'Église anglicane est religion d'État. Allemagne : l'État collecte un "impôt d'Église". Beaucoup de démocraties sans laïcité stricte.</p></div>
+  <div class="info-card"><div class="info-card-icon">⚠️</div><h3>Les critiques</h3><p>Certains estiment que la laïcité est utilisée pour viser spécifiquement l'islam. D'autres la défendent comme valeur universelle de tolérance. Tension entre liberté individuelle et neutralité collective.</p></div>
+</div>
+
+<div class="highlight note">
+  <h4>📌 La Charte de la laïcité 2013 — à connaître</h4>
+  <ul>
+    <li>Adoptée dans <strong>toutes les écoles de la République</strong></li>
+    <li>Rappelle : caractère indivisible de la République</li>
+    <li>Séparation religions/État (neutralité)</li>
+    <li>Liberté de conscience</li>
+    <li>Égalité des citoyens devant la loi</li>
+    <li>Rejet des violences et discriminations</li>
+    <li>Journée de la laïcité : <strong>9 décembre</strong> (anniversaire de la loi 1905)</li>
+  </ul>
+</div>
+
+<div class="highlight info">
+  <h4>💡 Idée de conclusion</h4>
+  <p>La laïcité n'est pas un principe figé : c'est une <strong>conquête permanente</strong>. Née de la Révolution, institutionnalisée en 1905, elle doit sans cesse se réinventer face aux nouvelles tensions de la société. Son application génère des débats parce qu'elle touche à l'identité, aux croyances et à la conception du vivre-ensemble. C'est précisément pourquoi elle reste au cœur des débats démocratiques.</p>
+</div>
+`;
+
+const emc_quiz = `
+<div class="section-hero">
+  <div class="section-hero-tag">Quiz EMC · Auto-évaluation</div>
+  <h2>Teste tes connaissances sur la laïcité</h2>
+  <p>Clique sur chaque réponse pour la révéler.</p>
+</div>
+
+<div class="quiz-box">
+  <div class="quiz-q">1. En une phrase, qu'est-ce que la laïcité ?</div>
+  <div class="quiz-answer" onclick="this.classList.toggle('revealed')">
+    <div class="ans">La laïcité est la liberté reconnue par la loi de croire ou ne pas croire au dieu de son choix, garantie par la neutralité de l'État vis-à-vis de toutes les religions.</div>
+  </div>
+</div>
+
+<div class="quiz-box">
+  <div class="quiz-q">2. Quelle loi est considérée comme le texte fondateur de la laïcité française ? Que prévoit-elle ?</div>
+  <div class="quiz-answer" onclick="this.classList.toggle('revealed')">
+    <div class="ans">La loi du 9 décembre 1905 de séparation des Églises et de l'État. L'État ne reconnaît, ne salarie ni ne subventionne aucun culte. Le libre exercice du culte est garanti dans la sphère privée.</div>
+  </div>
+</div>
+
+<div class="quiz-box">
+  <div class="quiz-q">3. Quel article de la DDHC (1789) pose les bases de la liberté religieuse ?</div>
+  <div class="quiz-answer" onclick="this.classList.toggle('revealed')">
+    <div class="ans">Article 10 : « Nul ne doit être inquiété pour ses opinions, même religieuses, pourvu que leur manifestation ne trouble pas l'ordre public établi par la loi. »</div>
+  </div>
+</div>
+
+<div class="quiz-box">
+  <div class="quiz-q">4. Qu'apportent les lois Jules Ferry de 1881–1882 ?</div>
+  <div class="quiz-answer" onclick="this.classList.toggle('revealed')">
+    <div class="ans">L'instruction publique devient obligatoire, gratuite et laïque. L'Église perd le contrôle des écoles publiques. Les enseignants religieux sont remplacés par des instituteurs laïcs. Les symboles religieux sont retirés des classes.</div>
+  </div>
+</div>
+
+<div class="quiz-box">
+  <div class="quiz-q">5. Que dit la loi de 2004 sur les signes religieux à l'école ?</div>
+  <div class="quiz-answer" onclick="this.classList.toggle('revealed')">
+    <div class="ans">Elle interdit aux élèves de porter des "signes ou de tenues par lesquels ils manifestent ostensiblement une appartenance religieuse" dans les écoles, collèges et lycées publics. Elle vise voile, kippa, grande croix visible. Ne s'applique pas aux parents ni aux enseignants.</div>
+  </div>
+</div>
+
+<div class="quiz-box">
+  <div class="quiz-q">6. Qu'est-ce que la Charte de la laïcité de 2013 ?</div>
+  <div class="quiz-answer" onclick="this.classList.toggle('revealed')">
+    <div class="ans">Un texte adopté dans toutes les écoles de la République pour sensibiliser les élèves aux principes laïques. Elle rappelle : indivisibilité de la République, neutralité, liberté de conscience, égalité, rejet des discriminations. Journée de la laïcité le 9 décembre.</div>
+  </div>
+</div>
+
+<div class="quiz-box">
+  <div class="quiz-q">7. Pourquoi l'Alsace-Moselle n'est-elle pas soumise à la loi de 1905 ?</div>
+  <div class="quiz-answer" onclick="this.classList.toggle('revealed')">
+    <div class="ans">Parce qu'elle était rattachée à l'Allemagne en 1905 (depuis 1871). Revenue française en 1918, elle a conservé le droit local (Concordat de 1801). Les 4 cultes reconnus y sont encore financés par l'État : catholique, protestant luthérien, protestant réformé, juif.</div>
+  </div>
+</div>
+
+<div class="quiz-box">
+  <div class="quiz-q">8. En quoi les attentats terroristes relancent-ils le débat sur la laïcité ?</div>
+  <div class="quiz-answer" onclick="this.classList.toggle('revealed')">
+    <div class="ans">Ils rappellent l'importance de la laïcité comme outil de cohésion nationale, permettant à chacun de pratiquer sa foi librement sans que les institutions publiques n'imposent une religion. L'assassinat de Samuel Paty (2020) a entraîné un renforcement des mesures à l'école.</div>
+  </div>
+</div>
+
+<div class="quiz-box">
+  <div class="quiz-q">9. Laïcité = interdiction de croire ? Vrai ou Faux ?</div>
+  <div class="quiz-answer" onclick="this.classList.toggle('revealed')">
+    <div class="ans">FAUX. La laïcité est exactement le contraire : c'est la GARANTIE de pouvoir croire librement, parce que l'État ne favorise aucune religion et que les croyances sont protégées dans la sphère privée. La laïcité protège la liberté de conscience.</div>
+  </div>
+</div>
+
+<div class="quiz-box">
+  <div class="quiz-q">10. Dans quel article de la Constitution la laïcité est-elle inscrite ?</div>
+  <div class="quiz-answer" onclick="this.classList.toggle('revealed')">
+    <div class="ans">Article 1er de la Constitution de 1958 : "La France est une République indivisible, laïque, démocratique et sociale." La laïcité est donc constitutionnellement protégée depuis 1946 (repris en 1958).</div>
+  </div>
+</div>
+`;
+
+// ── RENDER ────────────────────────────────────────────────────────────
+
+const SECTIONS_DATA = {
+  hggsp: {
+    intro: hggsp_intro,
+    axe1a: hggsp_axe1a,
+    axe1b: hggsp_axe1b,
+    axe2a: hggsp_axe2a,
+    axe2b: hggsp_axe2b,
+    otc: hggsp_otc,
+    quiz_hggsp: hggsp_quiz,
+  },
+  emc: {
+    laicite1: emc_laicite1,
+    laicite2: emc_laicite2,
+    laicite3: emc_laicite3,
+    laicite4: emc_laicite4,
+    quiz_emc: emc_quiz,
+  }
+};
+
+let currentMode = 'hggsp';
+let currentSection = null;
+
+function openModal(mode) {
+  currentMode = mode;
+  const modal = document.getElementById('modal');
+  const label = document.getElementById('modal-subject-label');
+  const title = document.getElementById('modal-title');
+  const nav = document.getElementById('modal-nav');
+  const content = document.getElementById('modal-content');
+
+  modal.className = 'active ' + mode + '-mode';
+
+  if (mode === 'hggsp') {
+    label.textContent = 'HGGSP';
+    label.className = 'modal-subject-label hggsp';
+    title.textContent = 'L\'environnement entre exploitation et protection';
+    renderNav(HGGSP_SECTIONS, mode);
+    showSection(HGGSP_SECTIONS[0].id);
+  } else {
+    label.textContent = 'EMC';
+    label.className = 'modal-subject-label emc';
+    title.textContent = 'S\'engager dans la démocratie : la laïcité';
+    renderNav(EMC_SECTIONS, mode);
+    showSection(EMC_SECTIONS[0].id);
+  }
+
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('modal').className = '';
+  document.body.style.overflow = '';
+}
+
+function renderNav(sections, mode) {
+  const nav = document.getElementById('modal-nav');
+  nav.innerHTML = sections.map(s =>
+    `<button class="nav-btn" id="nav-${s.id}" onclick="showSection('${s.id}')">${s.label}</button>`
+  ).join('');
+}
+
+function showSection(id) {
+  const content = document.getElementById('modal-content');
+  content.innerHTML = `<div class="section active">${SECTIONS_DATA[currentMode][id]}</div>`;
+  content.scrollTop = 0;
+  document.getElementById('modal').scrollTop = 0;
+
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active', 'hggsp', 'emc'));
+  const activeBtn = document.getElementById('nav-' + id);
+  if (activeBtn) {
+    activeBtn.classList.add('active', currentMode);
+    activeBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+  }
+  currentSection = id;
+}
+
+// ── FULLSCREEN on any click ──
+function requestFS() {
+  const el = document.documentElement;
+  const req = el.requestFullscreen || el.webkitRequestFullscreen || el.mozRequestFullScreen || el.msRequestFullscreen;
+  if (req) req.call(el).catch(() => {});
+}
+
+function isFullscreen() {
+  return !!(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement);
+}
+
+// Any click anywhere triggers fullscreen if not already in it
+document.addEventListener('click', () => {
+  if (!isFullscreen()) requestFS();
+}, true);
+
+// Close modal on Escape (browser exits fullscreen on Escape natively)
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+</script>
+</body>
+</html>
+`;
