@@ -1,0 +1,1853 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Révisions Terminale — Philo & Maths</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0c10;
+  --surface: #12151c;
+  --surface2: #191d28;
+  --border: #252a38;
+  --text: #e2e5ee;
+  --muted: #6b7290;
+  --philo: #c084fc;
+  --philo-dim: #c084fc18;
+  --philo-glow: #c084fc30;
+  --math: #34d399;
+  --math-dim: #34d39918;
+  --math-glow: #34d39930;
+  --gold: #fbbf24;
+  --red: #f87171;
+  --blue: #60a5fa;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ═══ HOME ═══ */
+#home {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+#home::before {
+  content: '';
+  position: absolute;
+  width: 700px; height: 700px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #c084fc0a 0%, transparent 65%);
+  top: -200px; right: -200px;
+  pointer-events: none;
+}
+#home::after {
+  content: '';
+  position: absolute;
+  width: 600px; height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #34d3990a 0%, transparent 65%);
+  bottom: -150px; left: -150px;
+  pointer-events: none;
+}
+
+.home-eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  padding: 0.4rem 1.2rem;
+  border-radius: 100px;
+  margin-bottom: 2.5rem;
+}
+
+.home-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(3rem, 8vw, 6.5rem);
+  font-weight: 700;
+  text-align: center;
+  line-height: 1;
+  margin-bottom: 1rem;
+  letter-spacing: -0.02em;
+}
+.home-title .philo-word { color: var(--philo); font-style: italic; }
+.home-title .math-word { color: var(--math); }
+
+.home-sub {
+  font-size: 1rem;
+  color: var(--muted);
+  text-align: center;
+  max-width: 480px;
+  line-height: 1.7;
+  margin-bottom: 3.5rem;
+}
+
+.home-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.2rem;
+  max-width: 860px;
+  width: 100%;
+  z-index: 1;
+}
+
+.home-card {
+  border-radius: 18px;
+  padding: 2.2rem;
+  cursor: pointer;
+  transition: transform 0.3s cubic-bezier(.34,1.56,.64,1), box-shadow 0.3s;
+  border: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+.home-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.3s;
+  border-radius: 18px;
+}
+.home-card:hover { transform: translateY(-6px); }
+.home-card:hover::before { opacity: 1; }
+
+.philo-card {
+  background: linear-gradient(145deg, #160d22 0%, #1a1028 100%);
+  border-color: #c084fc35;
+}
+.philo-card::before { background: radial-gradient(ellipse at top, #c084fc10, transparent 70%); }
+.philo-card:hover { box-shadow: 0 24px 60px #c084fc20; }
+
+.math-card {
+  background: linear-gradient(145deg, #0a1f18 0%, #0d2620 100%);
+  border-color: #34d39935;
+}
+.math-card::before { background: radial-gradient(ellipse at top, #34d39910, transparent 70%); }
+.math-card:hover { box-shadow: 0 24px 60px #34d39920; }
+
+.card-chip {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 0.28rem 0.7rem;
+  border-radius: 100px;
+  display: inline-block;
+  margin-bottom: 1.2rem;
+}
+.philo-card .card-chip { background: var(--philo-dim); color: var(--philo); }
+.math-card .card-chip { background: var(--math-dim); color: var(--math); }
+
+.card-heading {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.7rem;
+  font-weight: 700;
+  line-height: 1.15;
+  margin-bottom: 0.8rem;
+}
+.philo-card .card-heading { color: #e2b4ff; }
+.math-card .card-heading { color: #86efca; }
+
+.card-body { font-size: 0.85rem; color: var(--muted); line-height: 1.7; margin-bottom: 1.4rem; }
+
+.card-tags { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 1.5rem; }
+.tag {
+  font-size: 0.7rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 5px;
+  background: rgba(255,255,255,0.05);
+  color: var(--muted);
+}
+
+.card-cta {
+  width: 100%;
+  padding: 0.9rem;
+  border: none;
+  border-radius: 10px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.15s;
+  letter-spacing: 0.02em;
+}
+.card-cta:hover { opacity: 0.88; transform: scale(0.985); }
+.philo-card .card-cta { background: var(--philo); color: #0a0010; }
+.math-card .card-cta { background: var(--math); color: #001a10; }
+
+/* ═══ MODAL ═══ */
+#modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  z-index: 1000;
+  overflow-y: auto;
+  animation: slideUp 0.28s cubic-bezier(.22,1,.36,1);
+}
+#modal.open { display: block; }
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: none; }
+}
+
+.modal-bar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(10,12,16,0.92);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  padding: 0.9rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+.btn-close {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  width: 34px; height: 34px;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  transition: color 0.2s, border-color 0.2s;
+}
+.btn-close:hover { color: var(--text); border-color: #3a4050; }
+
+.modal-chip {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 0.22rem 0.65rem;
+  border-radius: 100px;
+}
+.modal-chip.philo { background: var(--philo-dim); color: var(--philo); }
+.modal-chip.math { background: var(--math-dim); color: var(--math); }
+
+.modal-bar-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.modal-tabs {
+  display: flex;
+  gap: 0.4rem;
+  padding: 0.8rem 1.5rem;
+  overflow-x: auto;
+  border-bottom: 1px solid var(--border);
+  scrollbar-width: none;
+  background: var(--bg);
+}
+.modal-tabs::-webkit-scrollbar { display: none; }
+
+.tab {
+  flex-shrink: 0;
+  padding: 0.45rem 1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.tab:hover { color: var(--text); background: var(--surface2); }
+.tab.active.philo { border-color: var(--philo); color: var(--philo); background: var(--philo-dim); }
+.tab.active.math { border-color: var(--math); color: var(--math); background: var(--math-dim); }
+
+.modal-body {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+.section-page { animation: fadeIn 0.2s ease; }
+@keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+
+/* ═══ CONTENT COMPONENTS ═══ */
+
+.hero-block {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+.hero-block::after {
+  content: '';
+  position: absolute;
+  top: 0; right: 0;
+  width: 200px; height: 200px;
+  border-radius: 50%;
+  pointer-events: none;
+}
+.philo-mode .hero-block::after { background: radial-gradient(circle, #c084fc0a, transparent 70%); }
+.math-mode .hero-block::after { background: radial-gradient(circle, #34d3990a, transparent 70%); }
+
+.hero-eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 0.7rem;
+}
+.hero-block h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  font-weight: 700;
+  line-height: 1.15;
+  margin-bottom: 0.8rem;
+}
+.philo-mode .hero-block h2 { color: #e2b4ff; }
+.math-mode .hero-block h2 { color: #86efca; }
+.hero-block p { font-size: 0.9rem; color: var(--muted); line-height: 1.75; }
+
+.section-divider {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.5rem;
+  margin: 2rem 0 1.2rem;
+}
+
+/* TERMS */
+.terms-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 0.8rem;
+  margin-bottom: 1.5rem;
+}
+.term-card {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1rem 1.1rem;
+}
+.term-word {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.72rem;
+  font-weight: 500;
+  margin-bottom: 0.4rem;
+}
+.philo-mode .term-word { color: var(--philo); }
+.math-mode .term-word { color: var(--math); }
+.term-def { font-size: 0.8rem; color: var(--muted); line-height: 1.6; }
+
+/* CARDS ROW */
+.cards-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+.info-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.3rem;
+}
+.info-card-icon { font-size: 1.4rem; margin-bottom: 0.7rem; }
+.info-card h3 { font-size: 0.9rem; font-weight: 600; margin-bottom: 0.5rem; }
+.info-card p, .info-card li { font-size: 0.82rem; color: var(--muted); line-height: 1.65; }
+.info-card ul { padding-left: 1.1rem; }
+.info-card li { margin-bottom: 0.3rem; }
+
+/* HIGHLIGHT */
+.hl {
+  border-radius: 12px;
+  padding: 1.3rem 1.4rem;
+  margin-bottom: 1.3rem;
+  border-left: 3px solid;
+}
+.hl.purple { background: #160d22; border-color: var(--philo); }
+.hl.green { background: #0a1f18; border-color: var(--math); }
+.hl.gold { background: #1a1500; border-color: var(--gold); }
+.hl.red { background: #1a0a0a; border-color: var(--red); }
+.hl.blue { background: #0a1020; border-color: var(--blue); }
+.hl h4 { font-size: 0.8rem; font-weight: 600; letter-spacing: 0.05em; margin-bottom: 0.5rem; }
+.hl.purple h4 { color: var(--philo); }
+.hl.green h4 { color: var(--math); }
+.hl.gold h4 { color: var(--gold); }
+.hl.red h4 { color: var(--red); }
+.hl.blue h4 { color: var(--blue); }
+.hl p, .hl li { font-size: 0.83rem; color: var(--muted); line-height: 1.7; }
+.hl ul { padding-left: 1.1rem; }
+.hl li { margin-bottom: 0.3rem; }
+.hl strong { color: var(--text); }
+
+/* PHILOSOPHERS */
+.philo-list { margin-bottom: 1.5rem; }
+.philo-entry {
+  display: grid;
+  grid-template-columns: 130px 1fr;
+  gap: 1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1rem 1.2rem;
+  margin-bottom: 0.6rem;
+  align-items: start;
+}
+.philo-name { font-weight: 600; font-size: 0.88rem; color: var(--philo); }
+.philo-dates { font-size: 0.72rem; color: var(--muted); display: block; margin-top: 0.1rem; }
+.philo-content { font-size: 0.82rem; color: var(--muted); line-height: 1.65; }
+.philo-content strong { color: var(--text); }
+
+/* FORMULA BOX */
+.formula-box {
+  background: var(--surface2);
+  border: 1px solid var(--math);
+  border-radius: 12px;
+  padding: 1.4rem;
+  margin-bottom: 1.3rem;
+  font-family: 'DM Mono', monospace;
+}
+.formula-box h4 { font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--math); margin-bottom: 1rem; }
+.formula { font-size: 0.9rem; color: var(--text); margin-bottom: 0.6rem; line-height: 1.7; }
+.formula span { color: var(--gold); }
+.formula em { color: var(--math); font-style: normal; }
+
+/* QUIZ */
+.quiz-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.4rem;
+  margin-bottom: 1rem;
+}
+.quiz-q { font-size: 0.9rem; font-weight: 600; margin-bottom: 1rem; line-height: 1.5; }
+.reveal-btn {
+  background: var(--surface2);
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  padding: 0.8rem 1rem;
+  color: var(--muted);
+  font-size: 0.78rem;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  font-family: 'DM Sans', sans-serif;
+  transition: border-color 0.2s;
+}
+.reveal-btn:hover { border-color: #3a4050; }
+.reveal-btn.shown { border-style: solid; cursor: default; }
+.philo-mode .reveal-btn.shown { border-color: var(--philo); }
+.math-mode .reveal-btn.shown { border-color: var(--math); }
+.reveal-btn .hint { font-size: 0.72rem; color: var(--muted); display: block; margin-bottom: 0.6rem; }
+.reveal-btn.shown .hint { display: none; }
+.reveal-btn .answer { display: none; font-size: 0.83rem; color: var(--text); line-height: 1.7; }
+.reveal-btn.shown .answer { display: block; }
+.reveal-btn .prompt { font-size: 0.75rem; }
+.reveal-btn.shown .prompt { display: none; }
+
+/* EXERCISE */
+.exercise {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+}
+.exercise-header {
+  padding: 1.2rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.exercise-num {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--math);
+  background: var(--math-dim);
+  padding: 0.25rem 0.65rem;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+.exercise-title { font-weight: 600; font-size: 0.95rem; flex: 1; }
+.exercise-pts {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--muted);
+  flex-shrink: 0;
+}
+.exercise-body { padding: 1.5rem; }
+.exercise-body p { font-size: 0.85rem; color: var(--muted); line-height: 1.75; margin-bottom: 0.8rem; }
+.exercise-body strong { color: var(--text); }
+
+.part-title {
+  font-weight: 600;
+  font-size: 0.88rem;
+  color: var(--math);
+  margin: 1.2rem 0 0.6rem;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.question {
+  background: var(--surface2);
+  border-radius: 8px;
+  padding: 0.9rem 1rem;
+  margin-bottom: 0.6rem;
+  font-size: 0.84rem;
+  color: var(--muted);
+  line-height: 1.7;
+}
+.question strong { color: var(--text); }
+
+.correction {
+  margin-top: 1.2rem;
+  border-top: 1px dashed var(--border);
+  padding-top: 1.2rem;
+}
+.correction-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  cursor: pointer;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--math);
+  background: none;
+  border: 1px solid var(--math);
+  border-radius: 8px;
+  padding: 0.6rem 1rem;
+  font-family: 'DM Sans', sans-serif;
+  transition: background 0.2s;
+  width: 100%;
+  text-align: left;
+}
+.correction-toggle:hover { background: var(--math-dim); }
+.correction-body {
+  display: none;
+  margin-top: 1rem;
+}
+.correction-body.open { display: block; animation: fadeIn 0.2s; }
+.correction-step {
+  background: var(--surface2);
+  border-radius: 10px;
+  padding: 1rem 1.2rem;
+  margin-bottom: 0.8rem;
+  border-left: 3px solid var(--math);
+}
+.step-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--math);
+  margin-bottom: 0.4rem;
+}
+.step-content { font-size: 0.83rem; color: var(--muted); line-height: 1.75; }
+.step-content strong { color: var(--text); }
+.tip-box {
+  background: #1a1500;
+  border: 1px solid var(--gold);
+  border-radius: 8px;
+  padding: 0.8rem 1rem;
+  margin-top: 0.6rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+  line-height: 1.65;
+}
+.tip-box::before { content: '💡 Astuce · '; color: var(--gold); font-weight: 600; font-size: 0.78rem; }
+
+/* TRIG TABLE */
+.trig-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1.5rem;
+  font-size: 0.82rem;
+}
+.trig-table th {
+  background: var(--surface2);
+  color: var(--math);
+  font-family: 'DM Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  padding: 0.7rem 1rem;
+  text-align: center;
+  border: 1px solid var(--border);
+}
+.trig-table td {
+  padding: 0.65rem 1rem;
+  text-align: center;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-family: 'DM Mono', monospace;
+}
+.trig-table tr:hover td { background: var(--surface2); color: var(--text); }
+
+/* RESPONSIVE */
+@media(max-width: 768px) {
+  .home-cards { grid-template-columns: 1fr; }
+  .terms-grid { grid-template-columns: 1fr 1fr; }
+  .cards-row { grid-template-columns: 1fr; }
+  .philo-entry { grid-template-columns: 1fr; gap: 0.3rem; }
+}
+@media(max-width: 480px) {
+  #home { padding: 1.2rem; }
+  .home-title { font-size: 2.5rem; }
+  .modal-bar { padding: 0.7rem 1rem; }
+  .modal-bar-title { font-size: 0.95rem; max-width: 160px; }
+  .modal-tabs { padding: 0.6rem 1rem; }
+  .modal-body { padding: 1rem 1rem 3rem; }
+  .hero-block { padding: 1.2rem; }
+  .terms-grid { grid-template-columns: 1fr; }
+  .exercise-body { padding: 1rem; }
+  .tab { font-size: 0.72rem; padding: 0.4rem 0.8rem; }
+  .trig-table th, .trig-table td { padding: 0.5rem 0.5rem; font-size: 0.72rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════ HOME ═══════════ -->
+<div id="home">
+  <div class="home-eyebrow">Terminale · Bac blanc · Révisions complètes</div>
+  <h1 class="home-title">
+    <span class="philo-word">Philosophie</span><br>
+    &amp; <span class="math-word">Mathématiques</span>
+  </h1>
+  <p class="home-sub">Tout le programme, des dizaines d'exemples, des exercices type bac corrigés. Clique n'importe où pour passer en plein écran.</p>
+
+  <div class="home-cards">
+    <div class="home-card philo-card" onclick="openModal('philo')">
+      <div class="card-chip">Philosophie · 12 notions</div>
+      <div class="card-heading">Condition humaine & Connaissance</div>
+      <p class="card-body">Tous les philosophes, toutes les citations, des dizaines d'exemples concrets. La conscience, l'inconscient, le temps, le langage, l'art, le travail, la technique, la religion, la raison, la science, la vérité, la nature.</p>
+      <div class="card-tags">
+        <span class="tag">Descartes</span><span class="tag">Freud</span><span class="tag">Sartre</span><span class="tag">Kant</span><span class="tag">Nietzsche</span><span class="tag">Hegel</span><span class="tag">Heidegger</span>
+      </div>
+      <button class="card-cta">📖 Ouvrir les fiches philo</button>
+    </div>
+
+    <div class="home-card math-card" onclick="openModal('math')">
+      <div class="card-chip">Mathématiques · Trigonométrie</div>
+      <div class="card-heading">Fonctions sin, cos & applications</div>
+      <p class="card-body">Cercle trigonométrique, formules d'addition, dérivées, intégration, équations. 5 exercices type bac corrigés avec astuces. Niveau calibré sur les exos de la prof.</p>
+      <div class="card-tags">
+        <span class="tag">sin / cos</span><span class="tag">Dérivées</span><span class="tag">Intégrales</span><span class="tag">Convexité</span><span class="tag">Aires</span><span class="tag">IPP</span>
+      </div>
+      <button class="card-cta">📐 Ouvrir les fiches maths</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ MODAL ═══════════ -->
+<div id="modal">
+  <div class="modal-bar">
+    <button class="btn-close" onclick="closeModal()">✕</button>
+    <div id="modal-chip" class="modal-chip"></div>
+    <div id="modal-bar-title" class="modal-bar-title"></div>
+  </div>
+  <div class="modal-tabs" id="modal-tabs"></div>
+  <div class="modal-body" id="modal-body"></div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+// PHILO CONTENT
+// ═══════════════════════════════════════════════════════
+
+const PHILO_TABS = [
+  { id:'conscience', label:'🧠 Conscience' },
+  { id:'inconscient', label:'🌒 Inconscient' },
+  { id:'temps', label:'⏳ Temps' },
+  { id:'langage', label:'💬 Langage' },
+  { id:'art', label:'🎨 Art' },
+  { id:'travail', label:'⚙️ Travail' },
+  { id:'technique', label:'🔧 Technique' },
+  { id:'religion', label:'✝ Religion' },
+  { id:'raison', label:'📐 Raison' },
+  { id:'science', label:'🔬 Science' },
+  { id:'verite', label:'💡 Vérité' },
+  { id:'nature', label:'🌿 Nature' },
+  { id:'quiz_philo', label:'🎯 Quiz philo' },
+];
+
+const PHILO = {
+
+conscience: `
+<div class="hero-block">
+  <div class="hero-eyebrow">Notion 1 · Condition humaine</div>
+  <h2>La Conscience</h2>
+  <p>Du latin <em>conscientia</em> : « avec savoir ». La conscience désigne le savoir que nous avons de nous-mêmes et du monde. Elle implique l'attention, la responsabilité morale, et peut être réflexive (conscience de soi). Sa définition comme trait distinctif de l'Homme est une idée du XVIIe siècle : Aristote définissait l'homme comme animal rationnel ou politique, pas conscient.</p>
+</div>
+
+<div class="section-divider">Les 3 formes de conscience</div>
+<div class="cards-row">
+  <div class="info-card"><div class="info-card-icon">🌅</div><h3>Conscience-lucidité</h3><p>Présence à ce qui se passe. Savoir sa condition — sa mort, sa finitude. C'est la grandeur de l'homme selon Pascal.</p></div>
+  <div class="info-card"><div class="info-card-icon">🪞</div><h3>Conscience réflexive</h3><p>Conscience de soi. Je pense donc je suis (Descartes). Le moi se saisit lui-même dans l'acte de penser.</p></div>
+  <div class="info-card"><div class="info-card-icon">🌐</div><h3>Conscience intentionnelle</h3><p>Husserl : « Toute conscience est conscience de quelque chose ». Elle est toujours dirigée vers le monde, jamais isolée.</p></div>
+</div>
+
+<div class="section-divider">Les philosophes clés</div>
+<div class="philo-list">
+  <div class="philo-entry">
+    <div><div class="philo-name">Pascal</div><span class="philo-dates">1623–1662</span></div>
+    <div class="philo-content">L'homme est un « roseau pensant ». Sa grandeur = savoir qu'il meurt. L'univers peut l'anéantir mais ne sait pas qu'il le fait. <strong>La conscience = lucidité sur notre condition mortelle.</strong> Paradoxe : la conscience est à la fois notre grandeur et notre misère.</div>
+  </div>
+  <div class="philo-entry">
+    <div><div class="philo-name">Descartes</div><span class="philo-dates">1596–1650</span></div>
+    <div class="philo-content"><strong>« Je pense donc je suis »</strong> — certitude première irréfutable. Doute méthodique, radical, hyperbolique. La conscience de soi est la première vérité. Limite : il passe à côté de la dimension relationnelle de la pensée (Hegel lui reprochera).</div>
+  </div>
+  <div class="philo-entry">
+    <div><div class="philo-name">Kant</div><span class="philo-dates">1724–1804</span></div>
+    <div class="philo-content">L'homme se distingue des animaux par la faculté de penser « je pense ». Pouvoir dire « je » élève l'homme infiniment au-dessus des autres êtres. <strong>La conscience de soi = condition d'existence d'un sujet.</strong></div>
+  </div>
+  <div class="philo-entry">
+    <div><div class="philo-name">Husserl</div><span class="philo-dates">1859–1938</span></div>
+    <div class="philo-content"><strong>« Toute conscience est conscience de quelque chose »</strong> — l'intentionnalité. La conscience n'est pas une chose enfermée en elle-même, elle est toujours reliée au monde.</div>
+  </div>
+  <div class="philo-entry">
+    <div><div class="philo-name">Sartre</div><span class="philo-dates">1905–1980</span></div>
+    <div class="philo-content">Reprend Husserl : la conscience est « comme un grand vent ». Elle n'est pas une chose, mais un mouvement. <strong>Elle n'a pas de « dedans »</strong>, elle est fuite absolue hors d'elle-même. Remet en question l'idée d'un « moi » solide.</div>
+  </div>
+  <div class="philo-entry">
+    <div><div class="philo-name">Hegel</div><span class="philo-dates">1770–1831</span></div>
+    <div class="philo-content">Une conscience de soi est toujours en même temps une conscience <em>pour autrui</em>. La conscience a besoin de l'autre pour se reconnaître. Exemple clinique : Françoise Dolto réduit la mortalité infantile en faisant simplement parler aux enfants 5 minutes/jour.</div>
+  </div>
+</div>
+
+<div class="hl purple">
+  <h4>🎯 Anecdote clé — Le Bouddha</h4>
+  <p>Le père du Bouddha, craignant la prophétie, lui construit un palais où il ne rencontre jamais de maladie, de vieillesse ni de mort. Un jour il s'échappe et rencontre successivement un malade, un vieillard, un mort. <strong>Cette prise de conscience déclenche son chemin spirituel.</strong> Dans cette tradition, la conscience n'est pas une malédiction mais un outil pour affronter l'existence.</p>
+</div>
+
+<div class="hl gold">
+  <h4>📌 Conclusion : 3 conceptions à retenir</h4>
+  <ul>
+    <li><strong>Conscience-lucidité</strong> : présence à ce qui se passe (Pascal, Bouddhisme)</li>
+    <li><strong>Conscience réflexive</strong> : conscience de soi — le « je pense » (Descartes, Kant)</li>
+    <li><strong>Conscience intentionnelle</strong> : toujours dirigée vers le monde (Husserl, Sartre)</li>
+  </ul>
+</div>`,
+
+inconscient: `
+<div class="hero-block">
+  <div class="hero-eyebrow">Notion 2 · Condition humaine</div>
+  <h2>L'Inconscient</h2>
+  <p>Freud, psychiatre viennois, bouleverse au début du XXe siècle l'idée que pensée = conscience. Pour Descartes, « tout ce qui se passe dans notre esprit de telle manière que nous l'apercevons » — cette définition vole en éclat avec Freud. <strong>Image de l'iceberg</strong> : la conscience = la partie émergée. <strong>Image de la scène obscure</strong> : seule la partie éclairée par le projecteur = conscience.</p>
+</div>
+
+<div class="section-divider">Les 3 preuves de l'inconscient selon Freud</div>
+<div class="cards-row">
+  <div class="info-card"><div class="info-card-icon">🤦</div><h3>Les actes manqués</h3><p>Dire un autre mot que prévu, perdre un objet. Exemple : un patient brouillé avec sa femme perd le livre qu'elle lui offre — il le retrouve quand elle fait preuve de dévouement. <strong>La perte symbolise la rupture.</strong></p></div>
+  <div class="info-card"><div class="info-card-icon">🌙</div><h3>Les rêves</h3><p>« La voie royale d'accès à l'inconscient ». Rêves de compensation (désir non satisfait). Même le cauchemar = retour du refoulé. Exemple : patiente qui rêve de vêtements noirs (deuil + séduction condensés).</p></div>
+  <div class="info-card"><div class="info-card-icon">🤒</div><h3>Les symptômes</h3><p>Manifestations pathologiques (hystérie, phobies) dont le sens est inconscient. La psychanalyse permet d'en trouver l'origine cachée.</p></div>
+</div>
+
+<div class="section-divider">Freud vs Jung</div>
+<div class="philo-list">
+  <div class="philo-entry">
+    <div><div class="philo-name">Freud</div><span class="philo-dates">1856–1939</span></div>
+    <div class="philo-content"><strong>Le rêve = toujours expression d'un désir</strong> (y compris le cauchemar = retour du refoulé). Structure : Ça / Moi / Surmoi. Le Surmoi = intériorisation des interdits sociaux. Lacan (son disciple) : <strong>« Ne cède pas sur ton désir »</strong> = identifier ce qui est important pour soi, pas faire n'importe quoi.</div>
+  </div>
+  <div class="philo-entry">
+    <div><div class="philo-name">Jung</div><span class="philo-dates">1875–1961</span></div>
+    <div class="philo-content"><strong>Le rêve peut aussi être une conscience élargie</strong> — percevoir des éléments du réel non encore perçus consciemment. Exemple : en 1933, un patron rêve de Goebbels qui lui demande un salut hitlérien qu'il n'arrive pas à faire. Son inconscient perçoit le danger nazi avant sa conscience.</div>
+  </div>
+</div>
+
+<div class="hl purple">
+  <h4>🎯 Anecdote parfaite — La petite fille et le lit</h4>
+  <p>Une petite fille dort dans un lit trop grand chez sa tante et rêve qu'elle est dans un lit trop petit. <br>→ <strong>Freud</strong> : désir d'être grande. <br>→ <strong>Bernard Lampert / Jung</strong> : son inconscient perçoit qu'elle ne trouve pas sa place chez cette tante. <br>Cette anecdote montre que l'interprétation est toujours multiple — la psychanalyse n'est jamais qu'une <em>discipline d'interprétation</em>.</p>
+</div>
+
+<div class="hl red">
+  <h4>⚠️ Conséquence philosophique majeure</h4>
+  <p>Si l'inconscient existe, la définition de l'homme comme être principalement <strong>conscient et maître de lui-même</strong> s'effondre. On découvre en soi des forces ignorées. Cela remet en question la liberté : si des forces inconscientes nous guident, sommes-nous vraiment libres ?</p>
+</div>
+
+<div class="hl gold">
+  <h4>💡 Charlotte Beradt — rêves sous le nazisme</h4>
+  <p>Psychanalyste qui collecte les rêves de ses patients pendant la montée du nazisme (1933). Les rêves semblent anticiper l'horreur à venir. Preuve que l'inconscient peut percevoir des signaux que la conscience filtre encore.</p>
+</div>`,
+
+temps: `
+<div class="hero-block">
+  <div class="hero-eyebrow">Notion 3 · Condition humaine</div>
+  <h2>Le Temps</h2>
+  <p>Pascal observe que nos pensées nous portent toujours vers le passé ou l'avenir — jamais vers le présent. C'est pourquoi, espérant toujours d'être heureux, nous ne le sommes jamais. Mais la pensée moderne remet en question cette vision du temps comme flux linéaire.</p>
+</div>
+
+<div class="philo-list">
+  <div class="philo-entry">
+    <div><div class="philo-name">Saint-Augustin</div><span class="philo-dates">354–430</span></div>
+    <div class="philo-content">Le passé n'est plus, le futur n'est pas encore. Mais j'ai <em>mémoire</em> du passé et <em>conscience</em> de mes projets futurs. <strong>« L'avenir va au passé en passant par le présent. »</strong> Le temps objectif = passé → présent → futur. Le temps de l'esprit = futur → présent → passé.</div>
+  </div>
+  <div class="philo-entry">
+    <div><div class="philo-name">Kant</div><span class="philo-dates">1724–1804</span></div>
+    <div class="philo-content"><strong>« Le temps est la forme a priori de notre sensibilité. »</strong> Avant toute expérience, le temps est la structure même dans laquelle toute expérience se réalise. On ne peut pas vivre « hors du temps ».</div>
+  </div>
+  <div class="philo-entry">
+    <div><div class="philo-name">Bergson</div><span class="philo-dates">1859–1941</span></div>
+    <div class="philo-content">Si le temps passe, il est aussi <strong>« création continue d'imprévisible nouveauté »</strong>. Ne voir que la fuite du temps c'est rater l'essentiel : chaque instant crée quelque chose de nouveau et d'inédit.</div>
+  </div>
+  <div class="philo-entry">
+    <div><div class="philo-name">Heidegger</div><span class="philo-dates">1889–1976</span></div>
+    <div class="philo-content">On dit « le temps passe » mais on peut aussi dire « le temps arrive ». <strong>Les moments du temps ne sont pas séparés</strong> — il parle de l'« unité des trois extases temporelles » : passé, présent, avenir. Le passé est toujours là, contemporain de nous.</div>
+  </div>
+  <div class="philo-entry">
+    <div><div class="philo-name">Proust</div><span class="philo-dates">1871–1922</span></div>
+    <div class="philo-content">La « mémoire involontaire » : une sensation (un parfum, un goût) ressuscite soudain le passé. Preuve que <strong>le passé est toujours présent</strong>. Un goût de madeleine peut restituer toute une enfance plus efficacement qu'un effort intellectuel.</div>
+  </div>
+</div>
+
+<div class="hl purple">
+  <h4>🎯 Citation à retenir — Faulkner</h4>
+  <p><strong>« Le passé n'est pas mort, il n'est même pas encore passé. »</strong> — William Faulkner. Illustre parfaitement l'idée heideggérienne que les moments du temps sont contemporains. Exemple concret : un parfum qui ressuscite soudain 20 ans de souvenirs.</p>
+</div>
+<div class="hl gold">
+  <h4>📌 Idée clé pour le devoir</h4>
+  <p>La thèse de Heidegger renverse notre rapport ordinaire au temps. Nous nous concentrons sur la fuite (le temps qui passe) en oubliant l'arrivée (le temps qui vient). Surtout, nous oublions que les moments du temps sont <strong>contemporains</strong> — le passé n'est pas mort, il nous habite.</p>
+</div>`,
+
+langage: `
+<div class="hero-block">
+  <div class="hero-eyebrow">Notion 4 · Culture</div>
+  <h2>Le Langage</h2>
+  <p>La culture se transmet par le langage. Le langage n'est pas inné — si nous n'avons pas appris à parler, nous ne parlons pas. L'entrée dans la culture commence par l'entrée dans un langage donné.</p>
+</div>
+
+<div class="section-divider">Exemples fondateurs</div>
+<div class="cards-row">
+  <div class="info-card"><div class="info-card-icon">🐦</div><h3>L'enfant sauvage de l'Aveyron</h3><p>Capturé en 1800, il n'a jamais été confronté à la vie humaine. Le Dr Itard prouve que l'absence de langage tient à un <strong>défaut d'éducation</strong>, pas à une déficience.</p></div>
+  <div class="info-card"><div class="info-card-icon">👐</div><h3>Hélène Keller</h3><p>Sourde, muette et aveugle dès 7 ans, totalement désocialisée. Une institutrice lui apprend la langue des signes. <strong>L'entrée dans le langage = entrée dans la société.</strong> La langue des signes l'arrache au statut de handicapée.</p></div>
+  <div class="info-card"><div class="info-card-icon">📚</div><h3>Klemperer — La langue nazie</h3><p>Analyse la LTI (Lingua Tertii Imperii) : le mot « fanatique » devient vertu, « expédition punitive » place les agresseurs en justiciers. <strong>La langue nazie agit comme de l'arsenic</strong> — un poison lent qui infecte sans qu'on s'en aperçoive.</p></div>
+</div>
+
+<div class="philo-list">
+  <div class="philo-entry">
+    <div><div class="philo-name">Hegel</div><span class="philo-dates">1770–1831</span></div>
+    <div class="philo-content"><strong>« Vouloir penser sans les mots, c'est une tentative insensée. »</strong> La pensée ne précède pas le langage — elle se forme en lui. Distinction : langage ordinaire (subjectif, instrument de pouvoir) vs langage spéculatif (où le sujet s'efface devant la vérité de la chose). Anecdote : un étudiant lui demande d'expliquer un passage de sa Logique. Hegel : <em>« Au moment où j'ai écrit ça, il n'y avait que Dieu et moi qui comprenions, et maintenant, il n'y a plus que lui. »</em></div>
+  </div>
+  <div class="philo-entry">
+    <div><div class="philo-name">Wittgenstein</div><span class="philo-dates">1889–1951</span></div>
+    <div class="philo-content">Distinction entre <strong>ce qui se dit</strong> et <strong>ce qui se montre</strong>. Certaines vérités ne peuvent pas être dites — elles se montrent (en art, en musique, en poésie).</div>
+  </div>
+  <div class="philo-entry">
+    <div><div class="philo-name">Platon / Socrate</div><span class="philo-dates">–428/–348</span></div>
+    <div class="philo-content">Oppose la philosophie aux <strong>sophistes</strong> (Protagoras : « l'homme est la mesure de toute chose » → pas de vérité → le langage est instrument de pouvoir). Pour Socrate, le vrai dialogue = avancer ensemble vers la vérité, pas imposer son point de vue. Condition : accepter qu'on puisse avoir tort.</div>
+  </div>
+  <div class="philo-entry">
+    <div><div class="philo-name">Heidegger</div><span class="philo-dates">1889–1976</span></div>
+    <div class="philo-content"><strong>« Parler, c'est en même temps écouter. »</strong> La vraie parole est d'abord écoute. La parole authentique se met à l'écoute de ce dont elle veut nous parler — la poésie en est capable au même titre que la philosophie.</div>
+  </div>
+</div>
+
+<div class="hl purple">
+  <h4>🎯 Anecdote — Rilke et l'inspiration</h4>
+  <p>Avant la 1ère Guerre Mondiale, Rilke écrit les premières « Élégies de Duino » puis la guerre éclate. Il est incapable d'en écrire la suite pendant des années. À la fin de la guerre, les dernières Élégies lui sont « données dans un souffle ». <strong>L'inspiration n'est pas décidée</strong> — dans la parole la plus haute, il y a toujours quelque chose qui échappe à son locuteur.</p>
+</div>
+<div class="hl red">
+  <h4>⚠️ Orwell — 1984 et la Novlangue</h4>
+  <p>Dans <em>1984</em>, Orwell invente une langue construite pour rendre impossible certaines pensées. Si le mot « liberté » disparaît, peut-on encore concevoir la liberté ? <strong>Manipuler la langue = manipuler la pensée.</strong> Klemperer l'a prouvé avec le nazisme.</p>
+</div>`,
+
+art: `
+<div class="hero-block">
+  <div class="hero-eyebrow">Notion 5 · Culture</div>
+  <h2>L'Art</h2>
+  <p>Le mot « theatron » signifie « ce qui se montre ». L'art est peut-être tout entier ce langage particulier qui montre ce qu'on ne peut pas mettre en mots. Toute l'histoire de l'art occidental est traversée par la question de l'imitation : doit-on imiter la nature ? Est-ce une copie servile ou une révélation ?</p>
+</div>
+
+<div class="section-divider">Imitation : pour ou contre ?</div>
+<div class="philo-list">
+  <div class="philo-entry">
+    <div><div class="philo-name">Platon</div><span class="philo-dates">–428/–348</span></div>
+    <div class="philo-content">L'artiste imite le monde sensible, qui est lui-même imparfait (copie du monde des Idées). L'imitation est donc <strong>copie de copie</strong>. Les poètes n'ont pas leur place dans la cité idéale — ils nous maintiennent dans les apparences et empêchent d'accéder à la vérité.</div>
+  </div>
+  <div class="philo-entry">
+    <div><div class="philo-name">Bergson</div><span class="philo-dates">1859–1941</span></div>
+    <div class="philo-content"><strong>« Un peintre est un homme qui voit mieux que les autres. »</strong> L'imitation n'est jamais servile — elle fait apparaître ce que nous n'aurions pas vu sans elle. <strong>L'artiste rend visible l'invisible.</strong></div>
+  </div>
+  <div class="philo-entry">
+    <div><div class="philo-name">Hegel</div><span class="philo-dates">1770–1831</span></div>
+    <div class="philo-content">Condamne définitivement le principe d'imitation : <strong>« L'art restera toujours en dessous de la nature, comme un ver faisant des efforts pour égaler un éléphant. »</strong> L'art est une production de l'esprit, pas une reproduction de la nature. Kandinsky lui aurait convenu.</div>
+  </div>
+  <div class="philo-entry">
+    <div><div class="philo-name">Kant</div><span class="philo-dates">1724–1804</span></div>
+    <div class="philo-content"><strong>« Le beau est ce qui plaît universellement et sans concept. »</strong> Je dis « C'EST beau » — pas « ça me plaît à moi ». Je tends vers l'universel sans jamais l'atteindre. <strong>« C'est le génie qui donne sa règle à l'art. »</strong> Les régimes totalitaires craignent les artistes : le jugement esthétique ne peut pas être contraint.</div>
+  </div>
+</div>
+
+<div class="hl purple">
+  <h4>🎯 Magritte — La condition humaine</h4>
+  <p>Un tableau représente une caverne avec un chevalet. Sur la toile : une représentation si parfaite du paysage derrière qu'on ne peut pas distinguer l'image de la réalité. Double pessimisme : <br>1. Les images nous cachent le réel<br>2. La réalité elle-même n'est peut-être qu'une image<br>Mais « La Clairvoyance » : un peintre dessine un œuf, mais sur la toile figure déjà un oiseau aux ailes déployées → <strong>l'artiste voit l'oiseau quand nous ne voyons que l'œuf.</strong></p>
+</div>
+
+<div class="cards-row">
+  <div class="info-card"><div class="info-card-icon">🗿</div><h3>La Pietà — Michel-Ange</h3><p>Le sculpteur ne représente pas deux corps, mais la douleur d'une mère, la détresse, la tendresse. <strong>L'imitation fait apparaître l'invisible</strong> — l'artiste rend visible la douleur.</p></div>
+  <div class="info-card"><div class="info-card-icon">🎭</div><h3>Molière & Shakespeare</h3><p>Forcent le trait jusqu'à la caricature (L'Avare, Le Misanthrope) pour révéler un caractère humain. L'exagération n'est pas un défaut — elle est révélation.</p></div>
+  <div class="info-card"><div class="info-card-icon">🌅</div><h3>Monet — Impressionnisme</h3><p>Rupture avec l'imitation : l'ambition n'est plus de reproduire mais de faire apparaître <strong>comment la nature aborde notre sensibilité</strong>. Jeu de lumière, pas copie. La photographie libère ensuite le peintre.</p></div>
+</div>
+
+<div class="hl gold">
+  <h4>💡 Georges Braque (ami de Picasso)</h4>
+  <p><em>« Il ne faut pas compter sur moi pour faire du Braque sur mesure. »</em> Dès que son style avait du succès, il en changeait. L'artiste ne peut pas s'installer dans une routine : la répétition mécanique tue l'originalité.</p>
+</div>`,
+
+travail: `
+<div class="hero-block">
+  <div class="hero-eyebrow">Notion 6 · Culture</div>
+  <h2>Le Travail</h2>
+  <p>Étymologie discutée : longtemps on a cru que « travail » venait de <em>tripalium</em> (instrument de torture). Le produit du travail = <em>opera</em> (l'œuvre). Le travail est écartelé entre deux visions : <strong>aliénation</strong> (souffrance, servitude) et <strong>accomplissement</strong> (épanouissement, réalisation de soi).</p>
+</div>
+
+<div class="section-divider">Artiste vs Artisan — Alain</div>
+<div class="cards-row">
+  <div class="info-card"><div class="info-card-icon">🖌️</div><h3>L'Artisan</h3><p>Maîtrise totale : il reproduit des techniques connues selon un plan précis. Le résultat est prévu à l'avance. Production mécanique et répétitive.</p></div>
+  <div class="info-card"><div class="info-card-icon">✨</div><h3>L'Artiste</h3><p>Alain : « artisan d'abord » — mais il <strong>découvre l'œuvre à mesure qu'il la fait</strong>. Il se surprend lui-même. Juan Miró ne donnait jamais de titres avant d'avoir fini. Simon Hantaï peignait des pliages sans savoir le résultat.</p></div>
+</div>
+
+<div class="philo-list">
+  <div class="philo-entry">
+    <div><div class="philo-name">Marx</div><span class="philo-dates">1818–1883</span></div>
+    <div class="philo-content"><strong>« La différence entre l'abeille la plus habile et l'architecte le plus maladroit : l'architecte porte la maison dans sa tête avant de la construire. »</strong> Le travail = expression de l'intelligence humaine. Danger de la mécanisation : segmentation des tâches → aliénation → ouvrier qui ne se reconnaît plus dans son œuvre. Proudhon : « La propriété c'est le vol. » Hannah Arendt : <em>« Société de travailleurs sans travail — privés de la seule activité qui leur reste. »</em></div>
+  </div>
+  <div class="philo-entry">
+    <div><div class="philo-name">Bergson</div><span class="philo-dates">1859–1941</span></div>
+    <div class="philo-content"><strong>La liberté = l'acte dans lequel je me reconnais tout entier.</strong> Un travail est « vrai » si je m'y reconnais. Lorsqu'un journaliste lui demande ce que sera l'art de demain : « Si je le savais, je le ferais. » L'artiste ne peut pas prévoir l'inédit qu'il va créer.</div>
+  </div>
+</div>
+
+<div class="hl purple">
+  <h4>🎯 Praxis vs Poièsis</h4>
+  <p><strong>Praxis</strong> : activité faite pour elle-même (noble, libre). <strong>Poièsis</strong> : activité faite dans un but extérieur (commerciale, contrainte). Le passage de l'un à l'autre fait perdre sa liberté à l'artiste. Daniel Barenboim : « Moi, je ne travaille pas » — pas parce qu'il fait peu, mais parce que ce temps ne lui pèse pas.</p>
+</div>
+
+<div class="hl gold">
+  <h4>💡 Stendhal & Rodin</h4>
+  <p>Stendhal : <em>« C'est un grand privilège d'avoir sa passion pour métier. »</em> Mais la passion n'annule pas la souffrance. Rodin : être artiste = faire son travail avec plaisir. Contre-exemple : Georges Simenon écrit un roman en 5 jours et perd beaucoup de poids.</p>
+</div>`,
+
+technique: `
+<div class="hero-block">
+  <div class="hero-eyebrow">Notion 7 · Culture</div>
+  <h2>La Technique</h2>
+  <p>Du grec <em>tekhnê</em> (art, artisanat). À l'origine, la technique est proche de l'art. Koyré : <strong>« Nous sommes passés d'une technique d'artiste à une technique d'ingénieur. »</strong> Cette transformation a nécessité une révolution philosophique autant que scientifique.</p>
+</div>
+
+<div class="philo-list">
+  <div class="philo-entry">
+    <div><div class="philo-name">Mythe de Prométhée</div><span class="philo-dates">Platon, Protagoras</span></div>
+    <div class="philo-content">Épiméthée distribue des qualités aux espèces animales mais <strong>oublie l'homme</strong>. Prométhée vole le feu de la connaissance (la science) pour compenser. Mais il oublie de donner la science politique. Leçon : <strong>les hommes ont la puissance sans la sagesse.</strong> Bergson : « La science a fait de nous des dieux avant que nous méritions d'être des hommes. »</div>
+  </div>
+  <div class="philo-entry">
+    <div><div class="philo-name">Descartes</div><span class="philo-dates">1596–1650</span></div>
+    <div class="philo-content">Dans le <em>Discours de la méthode</em> (6e partie) : <strong>nous rendre « comme maîtres et possesseurs de la nature ».</strong> Heidegger commentera : avec Descartes, l'homme passe du statut d'enfant de Dieu à celui de <em>sujet</em> (= fondement de toute chose). Programme de la modernité technique.</div>
+  </div>
+  <div class="philo-entry">
+    <div><div class="philo-name">Heidegger</div><span class="philo-dates">1889–1976</span></div>
+    <div class="philo-content"><strong>« La technique moderne est une provocation par laquelle la nature est mise en demeure de libérer une énergie qui peut être extraite. »</strong> Comparaison : le paysan d'autrefois s'en remet aux forces de la terre. L'agriculteur moderne somme la terre de rendre un maximum. « L'agriculture est aujourd'hui une entreprise motorisée. » La centrale électrique ne se construit pas dans le Rhin — c'est le Rhin qui est muré dans la centrale. <strong>Même l'homme devient matériel humain au service du dispositif.</strong> Le garde forestier qui mesure le bois croit faire le même métier que son grand-père — il est en réalité « commis par l'industrie du bois ».</div>
+  </div>
+  <div class="philo-entry">
+    <div><div class="philo-name">Hans Jonas</div><span class="philo-dates">1903–1993</span></div>
+    <div class="philo-content"><strong>Éthique de responsabilité</strong> : pour la première fois dans l'histoire, notre puissance technique a des conséquences potentiellement mortelles pour l'humanité entière. Les morales traditionnelles sont insuffisantes — elles ne pensaient pas les générations futures. <strong>Heuristique de la peur</strong> : face au doute, agir comme si la catastrophe était possible.</div>
+  </div>
+</div>
+
+<div class="hl purple">
+  <h4>🎯 Anecdote — Centrales nucléaires et pyramides</h4>
+  <p>Hubert Reeves : imaginez qu'on ait construit des centrales nucléaires à la place des pyramides d'Égypte — laissées à l'abandon pendant des siècles. <strong>Les dispositifs techniques modernes sont souvent irréversibles.</strong> Contrairement aux pyramides, on ne peut pas simplement les abandonner.</p>
+</div>`,
+
+religion: `
+<div class="hero-block">
+  <div class="hero-eyebrow">Notion 8 · Culture</div>
+  <h2>La Religion</h2>
+  <p>La montée en puissance de la technique correspond à une vision du monde où l'homme est au fondement des choses. Heidegger : « L'homme est passé d'enfant de Dieu à sujet. » L'esprit dominant la modernité peut entrer en concurrence avec l'esprit religieux dont le trait distinctif est <strong>l'humilité</strong>.</p>
+</div>
+
+<div class="philo-list">
+  <div class="philo-entry">
+    <div><div class="philo-name">Nietzsche</div><span class="philo-dates">1844–1900</span></div>
+    <div class="philo-content"><strong>« Dieu est mort et c'est nous qui l'avons tué. »</strong> (<em>L'Insensé</em>) Ce n'est pas une prise de position personnelle athée — c'est un <strong>diagnostic angoissé</strong> sur le vide spirituel de notre époque. La fin du texte : la mort de Dieu est un événement terrible, les hommes ne sont pas prêts. « Que sont donc encore les églises sinon les tombeaux et monuments funèbres de Dieu. »</div>
+  </div>
+  <div class="philo-entry">
+    <div><div class="philo-name">Pascal</div><span class="philo-dates">1623–1662</span></div>
+    <div class="philo-content"><strong>« C'est le cœur qui sent Dieu, non la raison. »</strong> L'origine de la foi n'est pas la démonstration mais une expérience intérieure. Le cœur — au sens de l'intuition profonde — peut atteindre ce que la raison ne peut démontrer.</div>
+  </div>
+  <div class="philo-entry">
+    <div><div class="philo-name">Kierkegaard</div><span class="philo-dates">1813–1855</span></div>
+    <div class="philo-content"><strong>« La preuve est l'ennemie de la foi. »</strong> La foi est un <em>saut</em> — un acte de confiance qui exclut tout calcul. <strong>« La subjectivité est la vérité. »</strong> Le geste de foi (Abraham prêt à sacrifier Isaac) est incompréhensible de l'extérieur — il ne se comprend qu'à partir du dialogue intime entre Dieu et l'homme. Différence foi/fanatisme : du côté de la foi règne l'humilité, du côté du fanatisme la manipulation.</div>
+  </div>
+  <div class="philo-entry">
+    <div><div class="philo-name">Dostoïevski</div><span class="philo-dates">1821–1881</span></div>
+    <div class="philo-content"><em>La Légende du Grand Inquisiteur</em> (dans <em>Les Frères Karamazov</em>) : l'Inquisiteur incarne le pouvoir au nom du Christ. Le Christ authentique résiste à toute volonté de puissance. <strong>Le sens véritable de la religion = libération, pas aliénation.</strong> Molière avait déjà mis en scène l'hypocrisie religieuse avec Tartuffe.</div>
+  </div>
+</div>
+
+<div class="hl purple">
+  <h4>🎯 Spiritualités non-théistes</h4>
+  <p><strong>Tradition amérindienne</strong> (chef Seattle, 1854) : « La Terre n'appartient pas à l'Homme, c'est l'Homme qui appartient à la Terre. » Rapport au divin non par croyance mais par émerveillement et gratitude. Pas anthropocentré — tout est relié.<br><br><strong>Bouddhisme</strong> : « Bouddha » = l'éveillé. Le problème = l'ego. La souffrance (dukkha) est inévitable — le chemin bouddhiste est un apprivoisement de la souffrance, pas la prétention à un monde parfait.</p>
+</div>`,
+
+raison: `
+<div class="hero-block">
+  <div class="hero-eyebrow">Notion 9 · Connaissance</div>
+  <h2>La Raison</h2>
+  <p>Descartes dans le <em>Discours de la méthode</em> : la raison est « la faculté de distinguer le vrai du faux ». Aristote définit l'homme comme <em>animal rationnel</em>. La raison intervient dans deux champs : la connaissance et le domaine moral.</p>
+</div>
+
+<div class="hl blue">
+  <h4>📐 Syllogisme — exemple à connaître</h4>
+  <p>Tous les hommes sont mortels / Socrate est un homme / <strong>Donc Socrate est mortel</strong>. → Formellement vrai ET matériellement vrai. Mais : « Tous les hommes sont blonds / Socrate est un homme / Donc Socrate est blond » → formellement valide, matériellement FAUX. Un discours peut être <strong>cohérent sans être vrai</strong>.</p>
+</div>
+
+<div class="philo-list">
+  <div class="philo-entry">
+    <div><div class="philo-name">Kant</div><span class="philo-dates">1724–1804</span></div>
+    <div class="philo-content"><em>Critique de la raison pure</em> : la raison seule ne suffit pas. <strong>« La raison délire dès qu'elle est privée de la pierre de touche de l'expérience. »</strong> La connaissance = combinaison de raison, imagination, entendement et sensibilité. <strong>« Des pensées sans matière sont vides, des intuitions sans concepts sont aveugles. »</strong></div>
+  </div>
+  <div class="philo-entry">
+    <div><div class="philo-name">Malebranche / Pascal</div><span class="philo-dates">XVIIe</span></div>
+    <div class="philo-content">Se méfient de l'imagination : Malebranche = « la folle du logis ». Pascal = « maîtresse d'erreur et de fausseté ». <strong>Kant réhabilite l'imagination</strong> comme faculté possible de connaissance : elle rend sensible un phénomène qui resterait abstrait sans elle.</div>
+  </div>
+</div>
+
+<div class="hl gold">
+  <h4>💡 Rationalisme vs Empirisme</h4>
+  <ul>
+    <li><strong>Rationalistes</strong> (Descartes, Platon) : la raison seule construit la connaissance vraie. Les sens trompent.</li>
+    <li><strong>Empiristes</strong> (Hume, Locke) : sans expérience, aucune connaissance n'est possible (sauf en maths).</li>
+    <li><strong>Kant</strong> : synthèse — Hume l'a « réveillé de son sommeil dogmatique ». La connaissance = dialogue constant entre raison et expérience.</li>
+  </ul>
+</div>`,
+
+science: `
+<div class="hero-block">
+  <div class="hero-eyebrow">Notion 10 · Connaissance</div>
+  <h2>La Science</h2>
+  <p>Platon : « la science ne comporte rien de sensible ». Cette position rationaliste pure dominera jusqu'au XVIIIe siècle. Mais la science avance par un <strong>dialogue constant entre théories et expérience</strong> — aucune vérité n'est définitivement acquise.</p>
+</div>
+
+<div class="philo-list">
+  <div class="philo-entry">
+    <div><div class="philo-name">Descartes — le morceau de cire</div><span class="philo-dates">XVIIe s.</span></div>
+    <div class="philo-content">La cire froide a des qualités sensibles (dure, froide, odorante). Approchée d'une flamme, tout change. On sait que c'est la même cire <strong>sans le voir</strong>. Conclusion : la connaissance est « inspection de l'esprit », pas des sens. → Position rationaliste pure.</div>
+  </div>
+  <div class="philo-entry">
+    <div><div class="philo-name">Newton vs Huygens — la lumière</div><span class="philo-dates">XVIIe–XVIIIe</span></div>
+    <div class="philo-content">Newton : la lumière = corpuscules. Si c'est vrai, 2 faisceaux lumineux croisés → plus de lumière. Expérience : l'intersection est une <strong>zone d'ombre</strong>. Newton réfuté. Huygens : la lumière = ondes qui se repoussent. → La science avance par réfutation.</div>
+  </div>
+  <div class="philo-entry">
+    <div><div class="philo-name">Le Verrier — Neptune</div><span class="philo-dates">XIXe s.</span></div>
+    <div class="philo-content">Calcule la trajectoire d'Uranus selon Newton. Écart entre trajectoire calculée et réelle. Question : Newton a-t-il tort, ou existe-t-il un corps céleste inconnu ? → Deuxième hypothèse correcte → <strong>découverte de Neptune</strong>. L'expérience peut confirmer ou infirmer la théorie.</div>
+  </div>
+  <div class="philo-entry">
+    <div><div class="philo-name">Fleming — la pénicilline</div><span class="philo-dates">1928</span></div>
+    <div class="philo-content">Laisse une préparation exposée au soleil. Le lendemain : moisissure, mais la prolifération de germes a régressé. <strong>Découverte accidentelle</strong>. L'évolution de la science peut être due à des expériences involontaires. La science n'est pas un plan rectiligne.</div>
+  </div>
+  <div class="philo-entry">
+    <div><div class="philo-name">Karl Popper</div><span class="philo-dates">1902–1994</span></div>
+    <div class="philo-content"><strong>Critère de falsifiabilité</strong> : une théorie est scientifique si elle peut être réfutée par l'expérience. <em>« Les théories scientifiques sont des filets rationnels créés par nous — elles ne doivent pas être confondues avec une représentation de tous les aspects du monde réel. »</em> Image du filet de pêche : le scientifique ne rend compte du réel que de façon partielle et provisoire.</div>
+  </div>
+</div>`,
+
+verite: `
+<div class="hero-block">
+  <div class="hero-eyebrow">Notion 11 · Connaissance</div>
+  <h2>La Vérité</h2>
+  <p>La définition dominante de la vérité = <strong>conformité d'un énoncé avec la réalité</strong>. La science incarne cette définition (exactitude, vérification). Mais est-ce la seule définition possible ? En art, en religion, la vérité se dit autrement.</p>
+</div>
+
+<div class="philo-list">
+  <div class="philo-entry">
+    <div><div class="philo-name">Kant — 3 modes de croire</div><span class="philo-dates">1724–1804</span></div>
+    <div class="philo-content">1. <strong>Savoir</strong> (sciences) → appuyé sur l'expérience et la raison. 2. <strong>Croyance religieuse</strong> (foi) → acte de confiance, abandon. 3. <strong>Opinion</strong> → spontanée ou éclairée. Ces trois modes sont légitimes mais correspondent à des régimes différents.</div>
+  </div>
+  <div class="philo-entry">
+    <div><div class="philo-name">Kierkegaard</div><span class="philo-dates">1813–1855</span></div>
+    <div class="philo-content"><strong>« La subjectivité est la vérité. »</strong> La vérité de la foi est intérieure, non démontrable de l'extérieur. Ce n'est pas une faiblesse — c'est un régime différent de rapport à la vérité.</div>
+  </div>
+</div>
+
+<div class="hl blue">
+  <h4>📐 Deux définitions de la vérité</h4>
+  <ul>
+    <li><strong>Vérité-exactitude</strong> : conformité d'un jugement à la chose jugée. Science, justice. On peut prouver, réfuter, vérifier.</li>
+    <li><strong>Vérité-Aletheia</strong> (grec : absence de voile) : dévoilement. L'artiste lève le voile sur quelque chose d'essentiel. Bergson : « L'artiste est un être humain qui voit mieux que les autres. » On n'est plus dans la conformité mais dans la révélation.</li>
+  </ul>
+</div>
+
+<div class="hl gold">
+  <h4>💡 Platon — « Nul n'entre ici s'il n'est géomètre »</h4>
+  <p>Inscription à l'entrée de l'Académie de Platon. La philosophie a toujours entretenu une relation privilégiée avec les mathématiques, considérées comme le modèle de la connaissance certaine. Mais Auguste Comte, avec le positivisme, pousse trop loin : il croit que la science va tout expliquer et que la religion deviendra inutile — erreur.</p>
+</div>`,
+
+nature: `
+<div class="hero-block">
+  <div class="hero-eyebrow">Notion 12 · Connaissance</div>
+  <h2>La Nature</h2>
+  <p>Du latin <em>natura</em>, du grec <em>fusis</em> : ce qui éclot de soi-même, sans artifice. La nature désigne ce qui est inné (par opposition à l'acquis = la culture). Kant définit la nature comme « l'ensemble des phénomènes qui existent sans lois » — ce que l'esprit n'a pas créé.</p>
+</div>
+
+<div class="hl blue">
+  <h4>📐 Nature et philosophie — domaines d'application</h4>
+  <ul>
+    <li><strong>Art</strong> : imitation de la nature (fusis = ce qui éclot par soi-même)</li>
+    <li><strong>Technique</strong> : maîtrise et possession de la nature (Descartes)</li>
+    <li><strong>Travail</strong> : transformation de la nature</li>
+    <li><strong>Connaissance</strong> : découvrir les lois de la nature</li>
+    <li><strong>Morale</strong> : avons-nous des devoirs envers la nature ?</li>
+  </ul>
+</div>
+
+<div class="philo-list">
+  <div class="philo-entry">
+    <div><div class="philo-name">Kant</div><span class="philo-dates">1724–1804</span></div>
+    <div class="philo-content">Le devoir moral porte essentiellement sur <strong>l'être humain</strong>. L'autonomie morale nous rend dignes de respect. Mais au vu des destructions actuelles du vivant : devons-nous étendre ce devoir à la nature entière ?</div>
+  </div>
+  <div class="philo-entry">
+    <div><div class="philo-name">Hans Jonas</div><span class="philo-dates">1903–1993</span></div>
+    <div class="philo-content"><strong>Étendre le sens du respect à tout ce sur quoi on a un pouvoir.</strong> Nous avons aujourd'hui un pouvoir sans précédent sur la nature → notre responsabilité morale s'étend à tout le vivant, aux générations futures. C'est une rupture avec la morale traditionnelle, centrée sur les contemporains.</div>
+  </div>
+</div>
+
+<div class="hl purple">
+  <h4>🎯 Chef Seattle (1854) — la Terre amérindienne</h4>
+  <p>Le président des États-Unis propose de racheter les terres indiennes. Le chef répond : <strong>« La Terre n'appartient pas à l'Homme, c'est l'Homme qui appartient à la Terre. »</strong> « L'Homme n'a pas tissé la toile de la vie, il n'en est qu'un fil. Tout ce qu'il fait à la toile, il le fait à lui-même. » Vision non-anthropocentrée, radicalement différente de la modernité cartésienne.</p>
+</div>
+
+<div class="hl gold">
+  <h4>💡 Conclusion</h4>
+  <p>L'élargissement du sens du devoir à la nature <strong>bénéficie à l'Homme lui-même</strong>. Détruire la nature c'est se détruire. Il faut remettre en question la place hiérarchique de l'homme et reconnaître que nous sommes <em>dans</em> la nature, pas au-dessus d'elle.</p>
+</div>`,
+
+quiz_philo: `
+<div class="hero-block">
+  <div class="hero-eyebrow">Auto-évaluation · Philosophie</div>
+  <h2>Quiz — toutes les notions</h2>
+  <p>Formule ta réponse mentalement, puis clique pour voir le corrigé.</p>
+</div>
+
+${[
+  ['Qu\'est-ce que le « cogito » de Descartes et pourquoi est-ce une certitude irréfutable ?', 'Le cogito = « Je pense donc je suis ». C\'est une certitude irréfutable car même si je doute de tout, l\'acte même de douter prouve que je pense, et donc que j\'existe. Je ne peux pas penser « je ne suis pas » sans que cette pensée prouve mon existence au moment même où je la formule. C\'est la première vérité de Descartes, résistant au doute le plus radical.'],
+  ['Expliquez l\'image de l\'iceberg utilisée par Freud.', 'La partie émergée = la conscience (ce dont on est conscient). La partie immergée, bien plus grande = l\'inconscient. Freud veut montrer que la conscience n\'est que la partie visible de notre vie psychique — la majeure partie de nos désirs, peurs et motivations nous est cachée. L\'image de la scène obscure : seule la partie éclairée par le projecteur = conscience.'],
+  ['Qu\'est-ce que la « voie royale d\'accès à l\'inconscient » selon Freud ? Donnez un exemple.', 'Le rêve. Pour Freud, le rêve est systématiquement l\'expression d\'un désir (y compris le cauchemar = retour du refoulé). Exemple : une patiente rêve d\'acheter des vêtements noirs. Elle est mariée à un homme vieux/malade et secrètement amoureuse d\'un autre. Le rêve condense deux désirs : deuil du mari + séduction de l\'amant.'],
+  ['Que veut dire Hegel quand il dit « vouloir penser sans les mots, c\'est une tentative insensée » ?', 'Hegel affirme que la pensée ne précède pas le langage — elle se forme en lui. On ne peut pas avoir une pensée claire sans la formuler dans des mots. La pensée obscure est la pensée en train de se former, avant d\'être mise en mots. Conséquence : manipuler la langue, c\'est manipuler la pensée (nazisme, novlangue d\'Orwell).'],
+  ['Distinguez vérité-exactitude et vérité-Aletheia.', 'Vérité-exactitude = conformité d\'un énoncé à la réalité (science, justice). On peut vérifier, prouver, réfuter. Vérité-Aletheia (grec : absence de voile) = dévoilement. L\'artiste révèle quelque chose d\'essentiel du réel sans nécessairement le copier. Bergson : « Un peintre est un homme qui voit mieux que les autres. » On n\'est plus dans la conformité mais dans la révélation.'],
+  ['Qu\'est-ce que le critère de falsifiabilité de Popper ?', 'Une théorie est scientifique si et seulement si elle peut être réfutée par l\'expérience. Si aucune expérience ne peut infirmer une théorie, elle n\'est pas scientifique (ex : astrologie). La science avance en testant ses théories et en les corrigeant quand l\'expérience les contredit. Aucune vérité n\'est définitivement acquise — tout est provisoire.'],
+  ['Qu\'est-ce que la technique selon Heidegger — et pourquoi va-t-elle plus loin que les machines ?', 'Pour Heidegger, la technique moderne n\'est pas seulement une collection de machines — c\'est une façon d\'être au monde : tout est converti en stock à disposition. La nature, l\'eau, les forêts, mais aussi l\'homme lui-même (« matériel humain »). Le Rhin n\'est pas dans la centrale — c\'est le Rhin qui est muré dans la centrale. Même le garde forestier qui croit faire le même métier que son grand-père est en réalité au service de l\'industrie du bois.'],
+  ['Que veut dire Nietzsche par « Dieu est mort » ?', 'Ce n\'est PAS une prise de position athée personnelle. C\'est un diagnostic angoissé sur l\'époque : la modernité (technique, science) a vidé le ciel de toute présence divine. L\'homme a tué Dieu en se plaçant lui-même au centre de tout (Heidegger : passage d\'enfant de Dieu à sujet). Nietzsche précise que les hommes ne sont pas prêts pour un tel événement — c\'est vertigineux, pas réjouissant. Les églises = tombeaux de Dieu.'],
+].map(([q,a]) => `
+<div class="quiz-item">
+  <div class="quiz-q">${q}</div>
+  <div class="reveal-btn" onclick="this.classList.toggle('shown')">
+    <span class="hint">👁 Clique pour voir la réponse</span>
+    <div class="answer">${a}</div>
+  </div>
+</div>`).join('')}
+`
+};
+
+// ═══════════════════════════════════════════════════════
+// MATH CONTENT
+// ═══════════════════════════════════════════════════════
+
+const MATH_TABS = [
+  { id:'cercle', label:'⭕ Cercle trigo' },
+  { id:'formules', label:'📐 Formules' },
+  { id:'derivees', label:"f' Dérivées" },
+  { id:'equations', label:'= Équations' },
+  { id:'integrale', label:'∫ Intégrales' },
+  { id:'ex1', label:'📝 Exo 1 — Dérivée & croissance' },
+  { id:'ex2', label:'📝 Exo 2 — Équations trigo' },
+  { id:'ex3', label:'📝 Exo 3 — Intégration par parties' },
+  { id:'ex4', label:'📝 Exo 4 — Convexité & tangente' },
+  { id:'ex5', label:'📝 Exo 5 — eˣsin(x) type bac' },
+];
+
+const MATH = {
+
+cercle: `
+<div class="hero-block">
+  <div class="hero-eyebrow">Rappels fondamentaux</div>
+  <h2>Le cercle trigonométrique</h2>
+  <p>Cercle de centre O et de rayon 1 dans un repère orthonormé. Un point M sur ce cercle correspond à un angle x. <strong>cos(x) = abscisse de M</strong> et <strong>sin(x) = ordonnée de M</strong>. Par enroulement de la droite réelle sur le cercle, tout réel x correspond à un unique point M.</p>
+</div>
+
+<div class="section-divider">Valeurs à connaître absolument</div>
+<table class="trig-table">
+  <tr><th>x</th><th>0</th><th>π/6</th><th>π/4</th><th>π/3</th><th>π/2</th><th>π</th><th>3π/2</th><th>2π</th></tr>
+  <tr><td>cos(x)</td><td>1</td><td>√3/2</td><td>√2/2</td><td>1/2</td><td>0</td><td>-1</td><td>0</td><td>1</td></tr>
+  <tr><td>sin(x)</td><td>0</td><td>1/2</td><td>√2/2</td><td>√3/2</td><td>1</td><td>0</td><td>-1</td><td>0</td></tr>
+</table>
+
+<div class="section-divider">Propriétés fondamentales</div>
+<div class="formula-box">
+  <h4>Propriétés de base</h4>
+  <div class="formula">Pour tout réel x : <span>−1 ≤ cos(x) ≤ 1</span> et <span>−1 ≤ sin(x) ≤ 1</span></div>
+  <div class="formula">Relation fondamentale : <em>cos²(x) + sin²(x) = 1</em></div>
+  <div class="formula">Périodicité : <em>cos(x + 2π) = cos(x)</em> et <em>sin(x + 2π) = sin(x)</em> — période <span>2π</span></div>
+  <div class="formula">Parité : <em>cos(−x) = cos(x)</em> (fonction <span>paire</span>, symétrie axe des ordonnées)</div>
+  <div class="formula">Imparité : <em>sin(−x) = −sin(x)</em> (fonction <span>impaire</span>, symétrie par rapport à l'origine)</div>
+</div>
+
+<div class="section-divider">Symétries sur le cercle</div>
+<div class="cards-row">
+  <div class="info-card"><div class="info-card-icon">↔️</div><h3>Symétrie par rapport à l'axe x (π − x)</h3>
+    <p>cos(π − x) = −cos(x)<br>sin(π − x) = sin(x)</p>
+  </div>
+  <div class="info-card"><div class="info-card-icon">↕️</div><h3>Symétrie par rapport à (π + x)</h3>
+    <p>cos(π + x) = −cos(x)<br>sin(π + x) = −sin(x)</p>
+  </div>
+  <div class="info-card"><div class="info-card-icon">🔄</div><h3>Quart de tour (π/2 − x)</h3>
+    <p>cos(π/2 − x) = sin(x)<br>sin(π/2 − x) = cos(x)</p>
+  </div>
+  <div class="info-card"><div class="info-card-icon">↗️</div><h3>Quart de tour (π/2 + x)</h3>
+    <p>cos(π/2 + x) = −sin(x)<br>sin(π/2 + x) = cos(x)</p>
+  </div>
+</div>
+
+<div class="hl green">
+  <h4>✅ Astuce mnémotechnique</h4>
+  <p>Pour les symétries : <strong>π change le signe de la "même" fonction</strong>, <strong>π/2 échange sin et cos</strong>. Pour l'imparité : sin change de signe avec −x, cos reste le même. Visualiser toujours sur le cercle !</p>
+</div>`,
+
+formules: `
+<div class="hero-block">
+  <div class="hero-eyebrow">Formules · À connaître par cœur</div>
+  <h2>Formules d'addition et de duplication</h2>
+  <p>Ces formules sont au cœur de TOUT exercice de terminale en trig. La prof les utilise pour construire des questions en cascade. Si tu les rates, tu rates la suite.</p>
+</div>
+
+<div class="formula-box">
+  <h4>Formules d'addition</h4>
+  <div class="formula"><em>cos(a + b)</em> = <span>cos(a)cos(b) − sin(a)sin(b)</span></div>
+  <div class="formula"><em>cos(a − b)</em> = <span>cos(a)cos(b) + sin(a)sin(b)</span></div>
+  <div class="formula"><em>sin(a + b)</em> = <span>sin(a)cos(b) + sin(b)cos(a)</span></div>
+  <div class="formula"><em>sin(a − b)</em> = <span>sin(a)cos(b) − sin(b)cos(a)</span></div>
+</div>
+
+<div class="formula-box">
+  <h4>Formules de duplication (cas a = b)</h4>
+  <div class="formula"><em>cos(2x)</em> = <span>cos²(x) − sin²(x)</span> = <span>1 − 2sin²(x)</span> = <span>2cos²(x) − 1</span></div>
+  <div class="formula"><em>sin(2x)</em> = <span>2cos(x)sin(x)</span></div>
+</div>
+
+<div class="formula-box">
+  <h4>Formules de linéarisation (très utiles pour les intégrales)</h4>
+  <div class="formula"><em>cos²(x)</em> = <span>(1 + cos(2x)) / 2</span></div>
+  <div class="formula"><em>sin²(x)</em> = <span>(1 − cos(2x)) / 2</span></div>
+  <div class="formula"><em>cos(a)cos(b)</em> = <span>[cos(a−b) + cos(a+b)] / 2</span></div>
+  <div class="formula"><em>sin(a)sin(b)</em> = <span>[cos(a−b) − cos(a+b)] / 2</span></div>
+  <div class="formula"><em>sin(a)cos(b)</em> = <span>[sin(a+b) + sin(a−b)] / 2</span></div>
+</div>
+
+<div class="hl green">
+  <h4>✅ Astuce — retenir cos(a+b)</h4>
+  <p>« <strong>co-co mi-mi</strong> » : cos×cos moins sin×sin. Puis pour sin(a+b) = « si-co + si-co » (sin du premier × cos du second + sin du second × cos du premier). Pour cos(a−b) : le signe change devant le deuxième terme.</p>
+</div>
+
+<div class="hl gold">
+  <h4>💡 Quand utiliser les formules de duplication ?</h4>
+  <ul>
+    <li>Quand on vous donne cos(2x) et qu'on veut une expression avec sin(x) → <strong>cos(2x) = 1 − 2sin²(x)</strong></li>
+    <li>Quand on intègre cos²(x) ou sin²(x) → linéariser d'abord</li>
+    <li>Pour étudier le signe de f'(x) quand f'(x) contient sin(2x)</li>
+  </ul>
+</div>`,
+
+derivees: `
+<div class="hero-block">
+  <div class="hero-eyebrow">Dérivées · Fonctions trigonométriques</div>
+  <h2>Dériver sin et cos</h2>
+  <p>Les dérivées de sin et cos sont les fondements de tous les calculs. La démonstration de sin'(x) = cos(x) utilise les limites fondamentales — c'est une démonstration à connaître.</p>
+</div>
+
+<div class="formula-box">
+  <h4>Dérivées fondamentales</h4>
+  <div class="formula">Si f(x) = <em>sin(x)</em> alors f'(x) = <span>cos(x)</span></div>
+  <div class="formula">Si f(x) = <em>cos(x)</em> alors f'(x) = <span>−sin(x)</span></div>
+  <div class="formula">Limites fondamentales : <span>lim(x→0) sin(x)/x = 1</span> et <span>lim(x→0) (cos(x)−1)/x = 0</span></div>
+</div>
+
+<div class="formula-box">
+  <h4>Dérivées composées — sin(u) et cos(u)</h4>
+  <div class="formula">Si f(x) = <em>sin(u(x))</em> alors f'(x) = <span>u'(x) × cos(u(x))</span></div>
+  <div class="formula">Si f(x) = <em>cos(u(x))</em> alors f'(x) = <span>−u'(x) × sin(u(x))</span></div>
+</div>
+
+<div class="section-divider">Exemples d'application</div>
+<div class="cards-row">
+  <div class="info-card"><div class="info-card-icon">1️⃣</div><h3>f(x) = sin(5x − π/3)</h3><p>u(x) = 5x − π/3, u'(x) = 5<br><strong>f'(x) = 5·cos(5x − π/3)</strong></p></div>
+  <div class="info-card"><div class="info-card-icon">2️⃣</div><h3>f(x) = cos(3x²)</h3><p>u(x) = 3x², u'(x) = 6x<br><strong>f'(x) = −6x·sin(3x²)</strong></p></div>
+  <div class="info-card"><div class="info-card-icon">3️⃣</div><h3>f(x) = eˣsin(x)</h3><p>Règle du produit : u=eˣ, v=sin(x)<br><strong>f'(x) = eˣsin(x) + eˣcos(x) = eˣ(sin(x)+cos(x))</strong></p></div>
+  <div class="info-card"><div class="info-card-icon">4️⃣</div><h3>f(x) = sin(x)/(1+cos(x))</h3><p>u=sin(x), v=1+cos(x)<br>f'(x) = (cos(x)(1+cos(x)) + sin²(x))/(1+cos(x))²<br><strong>= (1+cos(x))/(1+cos(x))² = 1/(1+cos(x))</strong></p></div>
+</div>
+
+<div class="section-divider">Variations de sin et cos sur [0; π]</div>
+<div class="cards-row">
+  <div class="info-card"><div class="info-card-icon">📉</div><h3>cos — décroissante sur [0;π]</h3><p>cos'(x) = −sin(x) ≤ 0 sur [0;π] car sin(x) ≥ 0 sur cet intervalle. cos(0)=1, cos(π/2)=0, cos(π)=−1.</p></div>
+  <div class="info-card"><div class="info-card-icon">📈📉</div><h3>sin — croissante puis décroissante</h3><p>sin'(x) = cos(x). Positif sur [0;π/2], négatif sur [π/2;π]. sin(0)=0, sin(π/2)=1, sin(π)=0. Maximum en π/2.</p></div>
+</div>`,
+
+equations: `
+<div class="hero-block">
+  <div class="hero-eyebrow">Équations trigonométriques</div>
+  <h2>Résoudre cos(x)=a et sin(x)=a</h2>
+  <p>Méthode systématique : identifier l'angle de référence, puis écrire toutes les solutions en utilisant la périodicité 2π. Visualiser toujours sur le cercle !</p>
+</div>
+
+<div class="formula-box">
+  <h4>Équations fondamentales</h4>
+  <div class="formula"><em>cos(x) = cos(a)</em> ⟺ <span>x = a + 2kπ</span> ou <span>x = −a + 2kπ</span>, k ∈ ℤ</div>
+  <div class="formula"><em>sin(x) = sin(a)</em> ⟺ <span>x = a + 2kπ</span> ou <span>x = π − a + 2kπ</span>, k ∈ ℤ</div>
+</div>
+
+<div class="section-divider">Exemples progressifs</div>
+
+<div class="hl green">
+  <h4>Exemple 1 — Niveau moyen : cos(3x) = −1/2</h4>
+  <p>cos(3x) = cos(2π/3) car cos(2π/3) = −1/2<br>
+  → 3x = 2π/3 + 2kπ &nbsp;&nbsp;ou&nbsp;&nbsp; 3x = −2π/3 + 2kπ<br>
+  → <strong>x = 2π/9 + 2kπ/3 &nbsp;&nbsp;ou&nbsp;&nbsp; x = −2π/9 + 2kπ/3</strong>, k ∈ ℤ</p>
+  <div class="tip-box">Identifier d'abord l'angle de référence dont le cosinus vaut −1/2. C'est 2π/3 (pas π/3 !) car cos est négatif dans le 2e quadrant.</div>
+</div>
+
+<div class="hl green">
+  <h4>Exemple 2 — Niveau difficile : sin(2x + π/4) = √3/2</h4>
+  <p>sin(2x + π/4) = sin(π/3) car sin(π/3) = √3/2<br>
+  → 2x + π/4 = π/3 + 2kπ &nbsp;&nbsp;ou&nbsp;&nbsp; 2x + π/4 = π − π/3 + 2kπ<br>
+  → 2x = π/3 − π/4 + 2kπ = π/12 + 2kπ &nbsp;&nbsp;ou&nbsp;&nbsp; 2x = 2π/3 − π/4 + 2kπ = 5π/12 + 2kπ<br>
+  → <strong>x = π/24 + kπ &nbsp;&nbsp;ou&nbsp;&nbsp; x = 5π/24 + kπ</strong>, k ∈ ℤ</p>
+  <div class="tip-box">Mettre π/3 − π/4 au même dénominateur (12) : 4π/12 − 3π/12 = π/12. Toujours réduire au dénominateur commun avant de diviser par 2.</div>
+</div>
+
+<div class="hl gold">
+  <h4>💡 Pièges classiques</h4>
+  <ul>
+    <li>Ne pas oublier les <strong>deux familles de solutions</strong> (+ et −a pour cos, a et π−a pour sin)</li>
+    <li>Bien <strong>diviser par le coefficient</strong> devant x à la fin</li>
+    <li>Si restriction à un intervalle donné : lister les k entiers qui conviennent</li>
+    <li>sin(π/2) = 1, cos(0) = 1, sin(0) = 0, cos(π) = −1 → <strong>savoir les placer immédiatement</strong></li>
+  </ul>
+</div>`,
+
+integrale: `
+<div class="hero-block">
+  <div class="hero-eyebrow">Intégration · Méthodes</div>
+  <h2>Intégrales de sin et cos + Intégration par parties</h2>
+  <p>L'intégration par parties (IPP) est LA méthode vedette du bac pour les fonctions comme eˣsin(x), eˣcos(x), x·sin(x). La prof l'utilise systématiquement. Il faut maîtriser le choix de u et v'.</p>
+</div>
+
+<div class="formula-box">
+  <h4>Primitives fondamentales</h4>
+  <div class="formula">∫ <em>sin(x)</em> dx = <span>−cos(x) + C</span></div>
+  <div class="formula">∫ <em>cos(x)</em> dx = <span>sin(x) + C</span></div>
+  <div class="formula">∫ <em>sin(ax+b)</em> dx = <span>−(1/a)cos(ax+b) + C</span></div>
+  <div class="formula">∫ <em>cos(ax+b)</em> dx = <span>(1/a)sin(ax+b) + C</span></div>
+</div>
+
+<div class="formula-box">
+  <h4>Intégration par parties (IPP)</h4>
+  <div class="formula">∫ <em>u(x)·v'(x)</em> dx = <span>[u(x)·v(x)] − ∫ u'(x)·v(x) dx</span></div>
+</div>
+
+<div class="section-divider">Choisir u et v' — règle LIATE</div>
+<div class="cards-row">
+  <div class="info-card"><div class="info-card-icon">📋</div><h3>Règle LIATE</h3><p>Pour choisir u, prendre dans l'ordre :<br>L = Logarithme<br>I = Inverse trig<br>A = Algébrique (polynôme)<br>T = Trigonométrique<br>E = Exponentielle<br><strong>u = ce qui est en haut dans la liste</strong></p></div>
+  <div class="info-card"><div class="info-card-icon">🔄</div><h3>∫ eˣsin(x)dx — piège classique</h3><p>Faire IPP deux fois → on retrouve l'intégrale de départ. Regrouper des deux côtés et résoudre ! C'est un type d'exercice favori de la prof (cf. exercice donné).</p></div>
+  <div class="info-card"><div class="info-card-icon">📐</div><h3>∫ x·sin(x)dx</h3><p>u = x → u' = 1<br>v' = sin(x) → v = −cos(x)<br>= [x·(−cos(x))] − ∫(−cos(x))dx<br>= −x·cos(x) + sin(x) + C</p></div>
+</div>
+
+<div class="hl green">
+  <h4>Méthode complète — ∫ eˣcos(x)dx</h4>
+  <p><strong>1ère IPP</strong> : u = eˣ, v' = cos(x) → u' = eˣ, v = sin(x)<br>
+  = [eˣ·sin(x)] − ∫ eˣ·sin(x)dx<br><br>
+  <strong>2ème IPP sur ∫eˣsin(x)dx</strong> : u = eˣ, v' = sin(x) → u' = eˣ, v = −cos(x)<br>
+  ∫eˣsin(x)dx = [−eˣcos(x)] + ∫eˣcos(x)dx<br><br>
+  <strong>Substitution</strong> : On note I = ∫eˣcos(x)dx<br>
+  I = eˣsin(x) − (−eˣcos(x) + I)<br>
+  2I = eˣsin(x) + eˣcos(x)<br>
+  <strong>I = eˣ(sin(x) + cos(x))/2 + C</strong></p>
+  <div class="tip-box">Quand l'intégrale réapparaît après deux IPP, ne pas paniquer — c'est normal et voulu ! Regrouper et diviser.</div>
+</div>`,
+
+ex1: `
+<div class="hero-block">
+  <div class="hero-eyebrow">Exercice 1 · 40 minutes</div>
+  <h2>Étude complète d'une fonction trigonométrique</h2>
+  <p>Thèmes : dérivée, signe, variations, tableau, tangente. Niveau correct — bon pour reprendre les bases solides.</p>
+</div>
+
+<div class="exercise">
+  <div class="exercise-header">
+    <span class="exercise-num">Exercice 1</span>
+    <span class="exercise-title">Étude de f(x) = sin(x) + cos(x) sur [0 ; 2π]</span>
+    <span class="exercise-pts">20 points</span>
+  </div>
+  <div class="exercise-body">
+    <div class="part-title">Partie A — Dérivée et variations</div>
+    <div class="question"><strong>1a.</strong> Calculer f'(x) pour tout x ∈ [0 ; 2π]. Simplifier si possible.</div>
+    <div class="question"><strong>1b.</strong> Montrer que f'(x) peut s'écrire f'(x) = √2·cos(x + π/4).</div>
+    <div class="question"><strong>1c.</strong> En déduire le signe de f'(x) sur [0 ; 2π]. Dresser le tableau de variations complet de f.</div>
+
+    <div class="part-title">Partie B — Valeurs remarquables & tangente</div>
+    <div class="question"><strong>2a.</strong> Calculer f(0), f(π/4), f(π), f(3π/2), f(2π). En déduire le maximum et le minimum de f.</div>
+    <div class="question"><strong>2b.</strong> Déterminer l'équation de la tangente à la courbe de f au point d'abscisse π/4.</div>
+
+    <div class="part-title">Partie C — Équation</div>
+    <div class="question"><strong>3.</strong> Résoudre sur [0 ; 2π] l'équation f(x) = 0. Interpréter graphiquement.</div>
+
+    <div class="correction">
+      <button class="correction-toggle" onclick="toggleCorr(this)">📋 Voir le corrigé complet + astuces</button>
+      <div class="correction-body">
+        <div class="correction-step">
+          <div class="step-label">1a — Dérivée</div>
+          <div class="step-content">f(x) = sin(x) + cos(x) → <strong>f'(x) = cos(x) − sin(x)</strong></div>
+        </div>
+        <div class="correction-step">
+          <div class="step-label">1b — Écriture avec formule d'addition</div>
+          <div class="step-content">On veut montrer que cos(x) − sin(x) = √2·cos(x + π/4).<br>
+          Développer : √2·cos(x + π/4) = √2·[cos(x)cos(π/4) − sin(x)sin(π/4)]<br>
+          = √2·[cos(x)·(√2/2) − sin(x)·(√2/2)]<br>
+          = √2·(√2/2)·cos(x) − √2·(√2/2)·sin(x)<br>
+          <strong>= cos(x) − sin(x) = f'(x) ✓</strong></div>
+          <div class="tip-box">Astuce : quand on veut écrire a·cos(x) + b·sin(x) sous forme R·cos(x + φ), on utilise R = √(a²+b²). Ici a=1, b=−1, R=√2. Le φ se trouve avec les formules d'addition.</div>
+        </div>
+        <div class="correction-step">
+          <div class="step-label">1c — Signe de f'(x) = √2·cos(x + π/4)</div>
+          <div class="step-content">cos(x + π/4) > 0 quand x + π/4 ∈ ]−π/2 ; π/2[ [2π]<br>
+          Sur [0;2π] : x + π/4 ∈ [π/4 ; 2π + π/4]<br>
+          cos(x+π/4) > 0 sur [0 ; π/4] (x+π/4 < π/2) et sur [7π/4 ; 2π] (x+π/4 > 3π/2)<br>
+          cos(x+π/4) < 0 sur [π/4 ; 7π/4]<br>
+          <strong>f croissante sur [0;π/4] et [7π/4;2π], décroissante sur [π/4;7π/4]</strong></div>
+        </div>
+        <div class="correction-step">
+          <div class="step-label">2a — Valeurs et extrema</div>
+          <div class="step-content">f(0) = 0 + 1 = 1 | f(π/4) = √2/2 + √2/2 = <strong>√2 (maximum)</strong> | f(π) = 0 + (−1) = −1 | f(3π/2) = −1 + 0 = <strong>−1 (minimum partagé avec f(π))</strong> | f(2π) = 0 + 1 = 1</div>
+        </div>
+        <div class="correction-step">
+          <div class="step-label">2b — Tangente en π/4</div>
+          <div class="step-content">Tangente : y = f'(π/4)·(x − π/4) + f(π/4)<br>
+          f(π/4) = √2, f'(π/4) = cos(π/4) − sin(π/4) = √2/2 − √2/2 = <strong>0</strong><br>
+          <strong>Tangente horizontale : y = √2</strong></div>
+          <div class="tip-box">Logique ! En π/4, f est à son maximum → f'(π/4) = 0 → tangente horizontale. Toujours vérifier la cohérence avec le tableau de variations.</div>
+        </div>
+        <div class="correction-step">
+          <div class="step-label">3 — f(x) = 0</div>
+          <div class="step-content">sin(x) + cos(x) = 0 → sin(x) = −cos(x) → tan(x) = −1<br>
+          Sur [0;2π] : x = 3π/4 ou x = 7π/4<br>
+          <strong>S = {3π/4 ; 7π/4}</strong><br>
+          Graphiquement : intersections de la courbe avec l'axe des abscisses.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>`,
+
+ex2: `
+<div class="hero-block">
+  <div class="hero-eyebrow">Exercice 2 · 40 minutes</div>
+  <h2>Équations et inéquations trigonométriques</h2>
+  <p>Thèmes : résolution d'équations, intersections de courbes, utilisation du cercle. Exercice de méthode — à maîtriser avant tout.</p>
+</div>
+
+<div class="exercise">
+  <div class="exercise-header">
+    <span class="exercise-num">Exercice 2</span>
+    <span class="exercise-title">Équations, intersections, applications</span>
+    <span class="exercise-pts">20 points</span>
+  </div>
+  <div class="exercise-body">
+    <div class="part-title">Partie A — Équations sur ℝ</div>
+    <div class="question"><strong>1.</strong> Résoudre sur ℝ : cos(2x) = cos(x)</div>
+    <div class="question"><strong>2.</strong> Résoudre sur ℝ : 2sin²(x) − sin(x) − 1 = 0 &nbsp;<em>(Indication : poser X = sin(x))</em></div>
+
+    <div class="part-title">Partie B — Résolution sur [0 ; 2π]</div>
+    <div class="question"><strong>3.</strong> Résoudre sur [0 ; 2π] : sin(2x) = sin(x).<br>Combien de solutions ? Les interpréter sur le cercle.</div>
+    <div class="question"><strong>4.</strong> Résoudre l'inéquation sur [0 ; 2π] : cos(x) ≥ 1/2.</div>
+
+    <div class="part-title">Partie C — Problème</div>
+    <div class="question"><strong>5.</strong> On considère f(x) = 2cos²(x) − 1 et g(x) = cos(x).<br>a) Montrer que f(x) = 2g(x)² − 1.<br>b) En utilisant une formule de duplication, montrer que f(x) = g(2x).<br>c) Résoudre f(x) = g(x) sur [0 ; 2π].</div>
+
+    <div class="correction">
+      <button class="correction-toggle" onclick="toggleCorr(this)">📋 Voir le corrigé complet</button>
+      <div class="correction-body">
+        <div class="correction-step">
+          <div class="step-label">1 — cos(2x) = cos(x)</div>
+          <div class="step-content">2x = x + 2kπ &nbsp;ou&nbsp; 2x = −x + 2kπ<br>
+          x = 2kπ &nbsp;&nbsp;ou&nbsp;&nbsp; 3x = 2kπ → x = 2kπ/3<br>
+          <strong>S = {2kπ, k∈ℤ} ∪ {2kπ/3, k∈ℤ}</strong></div>
+          <div class="tip-box">Vérifier que les deux familles ne se confondent pas. Ici 2kπ est un cas particulier de 2kπ/3 (k multiple de 3), donc on peut écrire S = {2kπ/3, k∈ℤ}.</div>
+        </div>
+        <div class="correction-step">
+          <div class="step-label">2 — Équation du 2nd degré en sin(x)</div>
+          <div class="step-content">Posons X = sin(x). L'équation devient : 2X² − X − 1 = 0<br>
+          Δ = 1 + 8 = 9 → X = (1+3)/4 = 1 ou X = (1−3)/4 = −1/2<br>
+          sin(x) = 1 → x = π/2 + 2kπ<br>
+          sin(x) = −1/2 → x = −π/6 + 2kπ ou x = π + π/6 + 2kπ = 7π/6 + 2kπ<br>
+          <strong>S = {π/2+2kπ} ∪ {−π/6+2kπ} ∪ {7π/6+2kπ}, k∈ℤ</strong></div>
+        </div>
+        <div class="correction-step">
+          <div class="step-label">3 — sin(2x) = sin(x)</div>
+          <div class="step-content">2x = x + 2kπ → x = 2kπ<br>
+          2x = π − x + 2kπ → 3x = π + 2kπ → x = π/3 + 2kπ/3<br>
+          Sur [0;2π] : x=0, x=2π | x=π/3, x=π, x=5π/3<br>
+          <strong>5 solutions : 0, π/3, π, 5π/3, 2π</strong></div>
+        </div>
+        <div class="correction-step">
+          <div class="step-label">4 — Inéquation cos(x) ≥ 1/2</div>
+          <div class="step-content">cos(x) = 1/2 pour x = π/3 et x = 5π/3 sur [0;2π]<br>
+          cos est ≥ 1/2 entre −π/3 et π/3 (valeurs proches de 0)<br>
+          Sur [0;2π] : <strong>x ∈ [0 ; π/3] ∪ [5π/3 ; 2π]</strong></div>
+          <div class="tip-box">Visualiser sur le cercle : cos(x) ≥ 1/2 = la partie du cercle où l'abscisse est ≥ 1/2, c'est-à-dire l'arc proche de l'angle 0.</div>
+        </div>
+        <div class="correction-step">
+          <div class="step-label">5 — f(x) = g(2x)</div>
+          <div class="step-content">a) f(x) = 2cos²(x) − 1 = 2[g(x)]² − 1 = 2g(x)² − 1 ✓<br>
+          b) Formule de duplication : cos(2x) = 2cos²(x) − 1 = f(x). Or g(2x) = cos(2x). Donc f(x) = g(2x) ✓<br>
+          c) g(2x) = g(x) → cos(2x) = cos(x) → mêmes solutions qu'en question 1 : <strong>x = 2kπ/3, k∈ℤ</strong><br>
+          Sur [0;2π] : x = 0, 2π/3, 4π/3, 2π</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>`,
+
+ex3: `
+<div class="hero-block">
+  <div class="hero-eyebrow">Exercice 3 · 40 minutes</div>
+  <h2>Intégration par parties — eˣsin(x)</h2>
+  <p>Thèmes : IPP double, calcul d'intégrale avec système, aire. Exactement le type d'exercice favori de la prof (voir l'exo fourni). Maîtriser cet exercice = maîtriser les IPP.</p>
+</div>
+
+<div class="exercise">
+  <div class="exercise-header">
+    <span class="exercise-num">Exercice 3</span>
+    <span class="exercise-title">Calcul de I = ∫₀^(π/2) eˣsin(x)dx</span>
+    <span class="exercise-pts">20 points</span>
+  </div>
+  <div class="exercise-body">
+    <p>On note I = ∫₀^(π/2) eˣsin(x)dx et J = ∫₀^(π/2) eˣcos(x)dx</p>
+
+    <div class="part-title">Partie A — Calcul par IPP double</div>
+    <div class="question"><strong>1a.</strong> Calculer I en intégrant par parties (poser u = eˣ et v' = sin(x)).<br>Montrer que l'on obtient : I = [−eˣcos(x)]₀^(π/2) + J</div>
+    <div class="question"><strong>1b.</strong> De même, calculer J en intégrant par parties.<br>Montrer que J = [eˣsin(x)]₀^(π/2) − I</div>
+    <div class="question"><strong>1c.</strong> En déduire : I = 1 + J et I = e^(π/2) − J.</div>
+    <div class="question"><strong>1d.</strong> Résoudre le système en I et J. En déduire les valeurs exactes de I et J.</div>
+
+    <div class="part-title">Partie B — Application géométrique</div>
+    <div class="question"><strong>2.</strong> On note g la fonction définie sur ℝ par g(x) = x. Calculer la valeur exacte de l'aire du domaine délimité par les courbes de f(x) = eˣsin(x) et g(x) = x, et les droites x = 0 et x = π/2.</div>
+
+    <div class="correction">
+      <button class="correction-toggle" onclick="toggleCorr(this)">📋 Voir le corrigé complet + astuces</button>
+      <div class="correction-body">
+        <div class="correction-step">
+          <div class="step-label">1a — Calcul de I par IPP</div>
+          <div class="step-content">u = eˣ → u' = eˣ &nbsp;&nbsp; v' = sin(x) → v = −cos(x)<br>
+          I = [eˣ·(−cos(x))]₀^(π/2) − ∫₀^(π/2) eˣ·(−cos(x))dx<br>
+          I = [−eˣcos(x)]₀^(π/2) + ∫₀^(π/2) eˣcos(x)dx<br>
+          = (−e^(π/2)·cos(π/2) + e⁰·cos(0)) + J<br>
+          = (−e^(π/2)·0 + 1·1) + J<br>
+          <strong>I = 1 + J ✓</strong></div>
+          <div class="tip-box">cos(π/2) = 0 — si on oublie ça, tout le calcul déraille. Apprendre le tableau des valeurs du cercle par cœur.</div>
+        </div>
+        <div class="correction-step">
+          <div class="step-label">1b — Calcul de J par IPP</div>
+          <div class="step-content">u = eˣ → u' = eˣ &nbsp;&nbsp; v' = cos(x) → v = sin(x)<br>
+          J = [eˣsin(x)]₀^(π/2) − ∫₀^(π/2) eˣsin(x)dx<br>
+          = (e^(π/2)·sin(π/2) − e⁰·sin(0)) − I<br>
+          = (e^(π/2)·1 − 0) − I<br>
+          <strong>J = e^(π/2) − I ✓</strong></div>
+        </div>
+        <div class="correction-step">
+          <div class="step-label">1d — Système et résolution</div>
+          <div class="step-content">I = 1 + J ... (1)<br>
+          J = e^(π/2) − I ... (2)<br>
+          Substituer (2) dans (1) : I = 1 + e^(π/2) − I<br>
+          2I = 1 + e^(π/2)<br>
+          <strong>I = (1 + e^(π/2))/2</strong><br>
+          J = e^(π/2) − (1 + e^(π/2))/2 = (2e^(π/2) − 1 − e^(π/2))/2 = <strong>(e^(π/2) − 1)/2</strong></div>
+          <div class="tip-box">Ne pas essayer de calculer e^(π/2) numériquement — garder la valeur exacte ! Le correcteur veut voir la forme exacte.</div>
+        </div>
+        <div class="correction-step">
+          <div class="step-label">2 — Aire entre f et g</div>
+          <div class="step-content">Sur [0 ; π/2], f(x) = eˣsin(x) ≥ 0 et g(x) = x ≥ 0.<br>
+          Il faut comparer f et g : en 0, f(0)=0, g(0)=0. En π/2, f(π/2) = e^(π/2)·1 ≈ 4,8 > π/2 ≈ 1,57. Donc f ≥ g sur l'intervalle.<br>
+          Aire = ∫₀^(π/2) [f(x) − g(x)] dx = ∫₀^(π/2) eˣsin(x) dx − ∫₀^(π/2) x dx<br>
+          = I − [x²/2]₀^(π/2) = (1 + e^(π/2))/2 − π²/8<br>
+          <strong>Aire = (1 + e^(π/2))/2 − π²/8</strong></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>`,
+
+ex4: `
+<div class="hero-block">
+  <div class="hero-eyebrow">Exercice 4 · 40 minutes</div>
+  <h2>Convexité, tangente et inégalités</h2>
+  <p>Thèmes : dérivée seconde, convexité, tangente, inégalité déduite. La prof aime les enchaînements logiques — chaque question prépare la suivante.</p>
+</div>
+
+<div class="exercise">
+  <div class="exercise-header">
+    <span class="exercise-num">Exercice 4</span>
+    <span class="exercise-title">Étude de f(x) = cos(x) − 1 + x²/2 sur [−π ; π]</span>
+    <span class="exercise-pts">20 points</span>
+  </div>
+  <div class="exercise-body">
+    <div class="part-title">Partie A — Dérivées et variations</div>
+    <div class="question"><strong>1a.</strong> Calculer f'(x) et f''(x) sur [−π ; π].</div>
+    <div class="question"><strong>1b.</strong> Étudier le signe de f'(x). En déduire les variations de f.</div>
+    <div class="question"><strong>1c.</strong> Étudier la convexité de f sur [−π ; π] (signe de f''(x)).</div>
+
+    <div class="part-title">Partie B — Tangente et inégalité</div>
+    <div class="question"><strong>2a.</strong> Montrer que f(0) = f'(0) = 0. Écrire l'équation de la tangente T à la courbe au point d'abscisse 0.</div>
+    <div class="question"><strong>2b.</strong> La courbe est-elle au-dessus ou en dessous de T sur [−π ; π] ? Justifier avec la convexité.</div>
+    <div class="question"><strong>2c.</strong> En déduire que pour tout x ∈ [−π ; π] : cos(x) ≥ 1 − x²/2.</div>
+
+    <div class="correction">
+      <button class="correction-toggle" onclick="toggleCorr(this)">📋 Voir le corrigé complet</button>
+      <div class="correction-body">
+        <div class="correction-step">
+          <div class="step-label">1a — Dérivées</div>
+          <div class="step-content">f(x) = cos(x) − 1 + x²/2<br>
+          <strong>f'(x) = −sin(x) + x</strong><br>
+          <strong>f''(x) = −cos(x) + 1</strong></div>
+        </div>
+        <div class="correction-step">
+          <div class="step-label">1b — Signe de f'</div>
+          <div class="step-content">f'(x) = x − sin(x). On sait que sur [0;π], sin(x) ≤ x (classique). Donc f'(x) ≥ 0 sur [0;π]. Par imparité de f' (f'(−x) = −x − sin(−x) = −x + sin(x) = −f'(x)), f' est impaire.<br>
+          → f' ≤ 0 sur [−π;0] et f' ≥ 0 sur [0;π].<br>
+          <strong>f décroissante sur [−π;0], croissante sur [0;π]. Minimum en 0 : f(0) = 0.</strong></div>
+        </div>
+        <div class="correction-step">
+          <div class="step-label">1c — Convexité</div>
+          <div class="step-content">f''(x) = 1 − cos(x). Or −1 ≤ cos(x) ≤ 1, donc 1 − cos(x) ≥ 0.<br>
+          <strong>f''(x) ≥ 0 sur tout [−π;π] → f est convexe sur [−π;π].</strong></div>
+          <div class="tip-box">f convexe = courbe « souriante » = courbe au-dessus de toutes ses tangentes. C'est la clé de la question 2b !</div>
+        </div>
+        <div class="correction-step">
+          <div class="step-label">2a — Tangente en 0</div>
+          <div class="step-content">f(0) = cos(0) − 1 + 0 = 1 − 1 = 0 ✓<br>
+          f'(0) = −sin(0) + 0 = 0 ✓<br>
+          <strong>Tangente T : y = 0·(x−0) + 0 → y = 0</strong> (l'axe des abscisses)</div>
+        </div>
+        <div class="correction-step">
+          <div class="step-label">2b & 2c — Inégalité</div>
+          <div class="step-content">f est convexe → la courbe est au-dessus de toutes ses tangentes.<br>
+          En x=0, la tangente est y=0, donc pour tout x ∈ [−π;π] : f(x) ≥ 0.<br>
+          cos(x) − 1 + x²/2 ≥ 0<br>
+          <strong>cos(x) ≥ 1 − x²/2 ✓</strong></div>
+          <div class="tip-box">C'est un résultat classique du bac : l'inégalité de cos. La méthode clé = montrer que la fonction (cos(x) − machin) est ≥ 0 en passant par f(x) ≥ 0.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>`,
+
+ex5: `
+<div class="hero-block">
+  <div class="hero-eyebrow">Exercice 5 · 40 minutes · Niveau bac</div>
+  <h2>f(x) = eˣsin(x) — exercice type bac complet</h2>
+  <p>Cet exercice est directement calqué sur l'exo fourni par la prof (eˣsin(x) sur [0;π]). Il enchaîne dérivée, croissance, tangente, convexité, IPP et aire. <strong>Maîtriser cet exercice = être paré pour le bac.</strong></p>
+</div>
+
+<div class="exercise">
+  <div class="exercise-header">
+    <span class="exercise-num">Exercice 5</span>
+    <span class="exercise-title">Étude de f(x) = eˣsin(x) sur [0 ; π] — 12 points</span>
+    <span class="exercise-pts">40 min · Bac</span>
+  </div>
+  <div class="exercise-body">
+    <p>On désigne par f la fonction définie sur [0;π] par <strong>f(x) = eˣsin(x)</strong>. On note Cₓ la courbe représentative de f dans un repère orthogonal.</p>
+
+    <div class="part-title">Partie A — Étude de f</div>
+    <div class="question"><strong>1a.</strong> Déterminer f'(x) sur [0;π]. Factoriser.</div>
+    <div class="question"><strong>1b.</strong> Justifier que f est strictement croissante sur [0 ; π/2].</div>
+    <div class="question"><strong>2a.</strong> Déterminer l'équation de la tangente T à Cₓ au point d'abscisse 0.</div>
+    <div class="question"><strong>2b.</strong> Étudier la convexité de f sur [0 ; π/2].</div>
+    <div class="question"><strong>2c.</strong> En déduire que pour tout x ∈ [0 ; π/2] : eˣsin(x) ≥ x.</div>
+
+    <div class="part-title">Partie B — Calcul d'intégrales</div>
+    <div class="question">On note I = ∫₀^(π/2) eˣsin(x)dx et J = ∫₀^(π/2) eˣcos(x)dx.<br>
+    <strong>1.</strong> En intégrant I par parties de deux manières différentes, établir :<br>I = 1 + J &nbsp;et&nbsp; I = e^(π/2) − J<br>
+    <strong>2.</strong> En déduire I = (1 + e^(π/2))/2<br>
+    <strong>3.</strong> Calculer l'aire exacte entre Cₓ et la droite g(x)=x sur [0;π/2].</div>
+
+    <div class="correction">
+      <button class="correction-toggle" onclick="toggleCorr(this)">📋 Corrigé complet + tous les tips</button>
+      <div class="correction-body">
+        <div class="correction-step">
+          <div class="step-label">1a — Dérivée de f(x) = eˣsin(x)</div>
+          <div class="step-content">Règle du produit : u = eˣ, v = sin(x) → u' = eˣ, v' = cos(x)<br>
+          f'(x) = eˣsin(x) + eˣcos(x)<br>
+          <strong>f'(x) = eˣ(sin(x) + cos(x))</strong></div>
+          <div class="tip-box">Toujours factoriser par eˣ — eˣ > 0 pour tout x, donc le signe de f'(x) = signe de (sin(x)+cos(x)).</div>
+        </div>
+        <div class="correction-step">
+          <div class="step-label">1b — Croissance sur [0;π/2]</div>
+          <div class="step-content">Sur [0;π/2] : sin(x) ≥ 0 et cos(x) ≥ 0 → sin(x)+cos(x) ≥ 0<br>
+          eˣ > 0 toujours → f'(x) = eˣ(sin(x)+cos(x)) ≥ 0<br>
+          (f'(x)=0 seulement si sin(x)=−cos(x) → x=3π/4 ∉ [0;π/2])<br>
+          <strong>→ f strictement croissante sur [0;π/2] ✓</strong></div>
+        </div>
+        <div class="correction-step">
+          <div class="step-label">2a — Tangente en 0</div>
+          <div class="step-content">f(0) = e⁰·sin(0) = 1·0 = 0<br>
+          f'(0) = e⁰(sin(0)+cos(0)) = 1·(0+1) = 1<br>
+          <strong>Tangente T : y = x</strong></div>
+          <div class="tip-box">La tangente y=x est la droite g(x)=x utilisée dans la partie B ! C'est construit exprès par la prof — la question 2c prépare le calcul d'aire.</div>
+        </div>
+        <div class="correction-step">
+          <div class="step-label">2b — Convexité sur [0;π/2]</div>
+          <div class="step-content">f'(x) = eˣ(sin(x)+cos(x))<br>
+          f''(x) = eˣ(sin(x)+cos(x)) + eˣ(cos(x)−sin(x))<br>
+          f''(x) = eˣ·2cos(x)<br>
+          Sur [0;π/2] : cos(x) ≥ 0 et eˣ > 0 → <strong>f''(x) ≥ 0 → f convexe sur [0;π/2]</strong></div>
+        </div>
+        <div class="correction-step">
+          <div class="step-label">2c — Inégalité eˣsin(x) ≥ x</div>
+          <div class="step-content">f convexe sur [0;π/2] → la courbe est au-dessus de toutes ses tangentes.<br>
+          En 0, la tangente est y=x. Donc pour tout x ∈ [0;π/2] :<br>
+          f(x) ≥ x → <strong>eˣsin(x) ≥ x ✓</strong></div>
+          <div class="tip-box">Connexion logique : convexité (2b) → courbe au-dessus de la tangente en 0 (y=x) → inégalité. La prof construit TOUJOURS les questions dans cet ordre. Identifier la structure = gagner du temps.</div>
+        </div>
+        <div class="correction-step">
+          <div class="step-label">Partie B — IPP double (voir Exercice 3 pour le détail)</div>
+          <div class="step-content"><strong>IPP 1</strong> (u=eˣ, v'=sin(x)) : I = [−eˣcos(x)]₀^(π/2) + J = (−0+1) + J = <strong>1 + J</strong><br>
+          <strong>IPP 2</strong> (u=eˣ, v'=cos(x)) : J = [eˣsin(x)]₀^(π/2) − I = e^(π/2)·1 − I → I = <strong>e^(π/2) − J</strong><br>
+          <strong>Système</strong> : I = 1+J et I = e^(π/2)−J → 1+J = e^(π/2)−J → 2J = e^(π/2)−1 → ajouter les deux égalités : 2I = 1+e^(π/2)<br>
+          <strong>I = (1+e^(π/2))/2</strong></div>
+        </div>
+        <div class="correction-step">
+          <div class="step-label">Aire entre Cₓ et g(x)=x</div>
+          <div class="step-content">D'après 2c, f(x) ≥ g(x) sur [0;π/2].<br>
+          Aire = ∫₀^(π/2)(f(x)−g(x))dx = I − ∫₀^(π/2) x dx<br>
+          = (1+e^(π/2))/2 − [x²/2]₀^(π/2)<br>
+          = (1+e^(π/2))/2 − π²/8<br>
+          <strong>Aire = (1+e^(π/2))/2 − π²/8</strong></div>
+          <div class="tip-box">Unité d'aire = unité de longueur². Si le repère est orthogonal avec des unités différentes sur les axes, préciser. Ici pas d'indication → pas besoin.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="hl green">
+  <h4>✅ Récap — La méthode de la prof en 4 étapes</h4>
+  <ul>
+    <li><strong>Étape 1</strong> : Dérivée et factorisation (repérer le signe facilement)</li>
+    <li><strong>Étape 2</strong> : Croissance → tangente au point "propre" (f(0)=0 souvent)</li>
+    <li><strong>Étape 3</strong> : f'' → convexité → courbe au-dessus/dessous de la tangente → inégalité</li>
+    <li><strong>Étape 4</strong> : IPP (souvent double) → calcul d'intégrale → aire</li>
+  </ul>
+  <p style="margin-top:0.8rem">Ces 4 étapes se retrouvent dans presque tous les exercices. Identifier la structure = ne jamais être perdu.</p>
+</div>
+`
+};
+
+// ═══════════════════════════════════════════════════════
+// ENGINE
+// ═══════════════════════════════════════════════════════
+let currentMode = null;
+
+function openModal(mode) {
+  currentMode = mode;
+  const modal = document.getElementById('modal');
+  modal.className = 'open ' + mode + '-mode';
+
+  const chip = document.getElementById('modal-chip');
+  const barTitle = document.getElementById('modal-bar-title');
+  chip.className = 'modal-chip ' + mode;
+  chip.textContent = mode === 'philo' ? 'Philosophie' : 'Mathématiques';
+  barTitle.textContent = mode === 'philo' ? 'Condition humaine & Connaissance' : 'Fonctions trigonométriques';
+
+  const tabs = mode === 'philo' ? PHILO_TABS : MATH_TABS;
+  const content = mode === 'philo' ? PHILO : MATH;
+
+  const tabsEl = document.getElementById('modal-tabs');
+  tabsEl.innerHTML = tabs.map(t =>
+    `<button class="tab" id="tab-${t.id}" onclick="showSection('${t.id}')">${t.label}</button>`
+  ).join('');
+
+  document.body.style.overflow = 'hidden';
+  showSection(tabs[0].id);
+}
+
+function closeModal() {
+  document.getElementById('modal').className = '';
+  document.body.style.overflow = '';
+}
+
+function showSection(id) {
+  const content = currentMode === 'philo' ? PHILO : MATH;
+  const body = document.getElementById('modal-body');
+  body.innerHTML = `<div class="section-page">${content[id]}</div>`;
+  document.getElementById('modal').scrollTop = 0;
+
+  document.querySelectorAll('.tab').forEach(t => {
+    t.classList.remove('active', 'philo', 'math');
+  });
+  const activeTab = document.getElementById('tab-' + id);
+  if (activeTab) {
+    activeTab.classList.add('active', currentMode);
+    activeTab.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+  }
+}
+
+function toggleCorr(btn) {
+  const body = btn.nextElementSibling;
+  body.classList.toggle('open');
+  btn.textContent = body.classList.contains('open')
+    ? '🔼 Masquer le corrigé'
+    : '📋 Voir le corrigé complet + astuces';
+}
+
+// Fullscreen on any click
+function requestFS() {
+  const el = document.documentElement;
+  const fn = el.requestFullscreen || el.webkitRequestFullscreen || el.mozRequestFullScreen || el.msRequestFullscreen;
+  if (fn) fn.call(el).catch(()=>{});
+}
+function isFS() {
+  return !!(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement);
+}
+document.addEventListener('click', () => { if (!isFS()) requestFS(); }, true);
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+</script>
+</body>
+</html>
