@@ -1,0 +1,1679 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grand Dashboard Philosophie – Les 17 Notions</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;900&family=Inter:wght@300;400;500;600;700&display=swap');
+
+  :root {
+    --ink: #1a1a2e;
+    --accent: #c0392b;
+    --accent2: #2980b9;
+    --accent3: #27ae60;
+    --bg-main: #fcfbfa;
+    --bg-sidebar: #11111e;
+    --border: #e6dfd5;
+    --card-bg: #ffffff;
+    --soft-red: #fdf0ee;
+    --soft-blue: #eef6fd;
+    --soft-green: #edfaf3;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg-main);
+    color: var(--ink);
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  /* ── SIDEBAR DE NAVIGATION ── */
+  .sidebar {
+    width: 280px;
+    background: var(--bg-sidebar);
+    color: #fff;
+    display: flex;
+    flex-content: column;
+    flex-direction: column;
+    border-right: 1px solid rgba(255,255,255,0.1);
+    z-index: 10;
+  }
+
+  .sidebar-header {
+    padding: 24px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .sidebar-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 900;
+    letter-spacing: 0.5px;
+    color: #f7f3ee;
+  }
+
+  .sidebar-header p {
+    font-size: 11px;
+    color: #888;
+    margin-top: 4px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .nav-list {
+    list-style: none;
+    overflow-y: auto;
+    flex: 1;
+    padding: 12px;
+  }
+
+  .nav-item {
+    padding: 10px 14px;
+    margin-bottom: 4px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    color: #b0b0bc;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .nav-item:hover {
+    background: rgba(255,255,255,0.05);
+    color: #fff;
+  }
+
+  .nav-item.active {
+    background: var(--accent);
+    color: #fff;
+    font-weight: 600;
+  }
+
+  .nav-item .badge {
+    font-size: 10px;
+    background: rgba(255,255,255,0.15);
+    padding: 2px 6px;
+    border-radius: 10px;
+    color: #fff;
+  }
+
+  /* ── ZONE DE CONTENU PRINCIPAL ── */
+  .main-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 40px;
+    position: relative;
+  }
+
+  .notion-panel {
+    display: none;
+    max-width: 1000px;
+    margin: 0 auto;
+    animation: fadeIn 0.3s ease-in-out;
+  }
+
+  .notion-panel.active {
+    display: block;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── STRUCTURE DES FICHES ── */
+  .header-block {
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 16px;
+    margin-bottom: 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+
+  .header-title h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
+    font-weight: 900;
+    color: var(--ink);
+    line-height: 1.1;
+  }
+
+  .header-meta {
+    font-size: 12px;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: var(--accent);
+  }
+
+  .grid-container {
+    display: grid;
+    grid-template-columns: repeat(12, 1-fraction);
+    grid-template-columns: repeat(12, 1fr);
+    gap: 20px;
+    margin-bottom: 24px;
+  }
+
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+  }
+
+  .col-4 { grid-column: span 4; }
+  .col-6 { grid-column: span 6; }
+  .col-8 { grid-column: span 8; }
+  .col-12 { grid-column: span 12; }
+
+  .card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 6px;
+  }
+
+  .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    margin-right: 8px;
+    display: inline-block;
+  }
+
+  /* listes et textes */
+  .definition-item { margin-bottom: 12px; }
+  .definition-item strong { color: var(--accent); font-weight: 600; }
+  
+  .problematique-text {
+    font-style: italic;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #333;
+    padding-left: 12px;
+    border-left: 3px solid var(--accent);
+  }
+
+  .author-block {
+    margin-bottom: 14px;
+    padding-bottom: 12px;
+    border-bottom: 1px dashed var(--border);
+  }
+  .author-block:last-child { border: none; margin: 0; padding: 0; }
+  .author-name { font-weight: 700; color: var(--ink); font-size: 13px; }
+  .author-concept { font-style: italic; color: #555; margin-bottom: 4px; font-size: 12px; }
+  .author-detail { font-size: 12px; color: #444; line-height: 1.4; }
+
+  .ex-item { margin-bottom: 10px; font-size: 12px; line-height: 1.4; }
+  .ex-item strong { color: #111; }
+
+  .arg-item {
+    background: #faf8f5;
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    border-left: 3px solid #555;
+    font-size: 12px;
+    line-height: 1.4;
+  }
+
+  /* ── CITATION BLOCK ── */
+  .citation-block {
+    background: var(--soft-red);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    padding: 20px;
+    border-radius: 8px;
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    line-height: 1.5;
+    font-style: italic;
+    margin-top: 10px;
+    position: relative;
+  }
+
+  .cit-author {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-top: 8px;
+    color: #555;
+    font-style: normal;
+    text-align: right;
+  }
+
+  /* ── HISTOIRE FIL-ROUGE ── */
+  .story-intro {
+    font-size: 14px;
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 24px;
+    font-style: italic;
+  }
+
+  .story-chapter {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 22px 26px;
+    margin-bottom: 18px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+  }
+
+  .story-chapter-head {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .story-chapter-num {
+    font-family: 'Playfair Display', serif;
+    font-weight: 900;
+    font-size: 22px;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .story-chapter-title {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--ink);
+  }
+
+  .story-chapter p {
+    font-size: 14.5px;
+    line-height: 1.75;
+    color: #333;
+    margin-bottom: 10px;
+  }
+
+  .story-chapter p:last-child { margin-bottom: 0; }
+
+  .story-concept {
+    background: var(--soft-blue);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent2);
+    border-radius: 0 6px 6px 0;
+    padding: 4px 10px;
+    font-weight: 600;
+    font-size: 13px;
+    white-space: nowrap;
+  }
+
+  .story-notion-tag {
+    display: inline-block;
+    background: var(--ink);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 3px 9px;
+    border-radius: 20px;
+    margin-left: auto;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+
+  .story-notion-tag:hover { background: var(--accent); }
+
+  /* Responsive simple */
+  @media(max-width: 1024px) {
+    .grid-container { grid-template-columns: 1fr; }
+    .col-4, .col-6, .col-8, .col-12 { grid-column: span 12; }
+    body { flex-direction: column; }
+    .sidebar { width: 100%; height: auto; max-height: 200px; }
+    .nav-list { display: flex; flex-wrap: wrap; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <h1>Bac Philosophie</h1>
+      <p>Dashboard des 17 Notions</p>
+    </div>
+    <ul class="nav-list">
+      <li class="nav-item active" onclick="showNotion('notion-1')"><span>01. La Conscience</span><span class="badge">01</span></li>
+      <li class="nav-item" onclick="showNotion('notion-2')"><span>02. L'Inconscient</span><span class="badge">02</span></li>
+      <li class="nav-item" onclick="showNotion('notion-3')"><span>03. Le Temps</span><span class="badge">03</span></li>
+      <li class="nav-item" onclick="showNotion('notion-4')"><span>04. Le Langage</span><span class="badge">04</span></li>
+      <li class="nav-item" onclick="showNotion('notion-5')"><span>05. L'Art</span><span class="badge">05</span></li>
+      <li class="nav-item" onclick="showNotion('notion-6')"><span>06. Le Travail</span><span class="badge">06</span></li>
+      <li class="nav-item" onclick="showNotion('notion-7')"><span>07. La Technique</span><span class="badge">07</span></li>
+      <li class="nav-item" onclick="showNotion('notion-8')"><span>08. La Religion</span><span class="badge">08</span></li>
+      <li class="nav-item" onclick="showNotion('notion-9')"><span>09. La Raison</span><span class="badge">09</span></li>
+      <li class="nav-item" onclick="showNotion('notion-10')"><span>10. La Science</span><span class="badge">10</span></li>
+      <li class="nav-item" onclick="showNotion('notion-11')"><span>11. La Vérité</span><span class="badge">11</span></li>
+      <li class="nav-item" onclick="showNotion('notion-12')"><span>12. La Nature</span><span class="badge">12</span></li>
+      <li class="nav-item" onclick="showNotion('notion-13')"><span>13. Le Devoir</span><span class="badge">13</span></li>
+      <li class="nav-item" onclick="showNotion('notion-14')"><span>14. La Justice</span><span class="badge">14</span></li>
+      <li class="nav-item" onclick="showNotion('notion-15')"><span>15. La Liberté</span><span class="badge">15</span></li>
+      <li class="nav-item" onclick="showNotion('notion-16')"><span>16. Le Bonheur</span><span class="badge">16</span></li>
+      <li class="nav-item" onclick="showNotion('notion-17')"><span>17. L'État</span><span class="badge">17</span></li>
+      <li class="nav-item" onclick="showNotion('notion-18')" style="margin-top:10px; border-top: 1px solid rgba(255,255,255,0.1); padding-top:14px;"><span>📖 Une journée pas comme les autres</span><span class="badge">★</span></li>
+    </ul>
+  </div>
+
+  <div class="main-content">
+
+    <div id="notion-1" class="notion-panel active">
+      <div class="header-block">
+        <div class="header-title"><h2>La Conscience</h2></div>
+        <div class="header-meta">Fiche 01 / 17</div>
+      </div>
+      <div class="grid-container">
+        <div class="card col-4" style="background: var(--soft-red);">
+          <div class="card-title"><span class="dot" style="background: var(--accent);"></span>Définitions clés</div>
+          <div class="definition-item"><strong>Étymologie :</strong> <em>Cum-scientia</em> (accompagné de savoir).</div>
+          <div class="definition-item"><strong>Spontanée :</strong> perception immédiate de soi et du monde.</div>
+          <div class="definition-item"><strong>Réfléchie :</strong> capacité de faire retour sur ses propres pensées.</div>
+          <div class="definition-item"><strong>Morale :</strong> capacité de juger le bien et le mal.</div>
+        </div>
+        <div class="card col-8">
+          <div class="card-title"><span class="dot" style="background: var(--accent);"></span>Problématique générale</div>
+          <div class="problematique-text">La conscience fait-elle de l'homme un être à part, souverain de lui-même, ou n'est-elle qu'une illusion masquant des mécanismes plus profonds qui le dépassent ?</div>
+        </div>
+        <div class="card col-8">
+          <div class="card-title"><span class="dot" style="background: var(--accent2);"></span>Repères philosophiques (Auteurs)</div>
+          <div class="author-block">
+            <div class="author-name">Descartes</div>
+            <div class="author-concept">Le fondement absolu</div>
+            <div class="author-detail">Par le doute radical, il découvre que la seule chose dont il ne peut douter est qu'il doute. Le "Cogito ergo sum" fait de la conscience le socle de toute vérité.</div>
+          </div>
+          <div class="author-block">
+            <div class="author-name">Kant</div>
+            <div class="author-concept">Le « Je » comme unité</div>
+            <div class="author-detail">Le fait que l'homme puisse dire "Je" l'élève infiniment au-dessus de tous les autres êtres vivants. C'est ce qui en fait une personne morale et responsable.</div>
+          </div>
+          <div class="author-block">
+            <div class="author-name">Sartre</div>
+            <div class="author-concept">La conscience comme vide</div>
+            <div class="author-detail">La conscience n'est pas une chose fixe, elle est projet ("l'existence précède l'essence"). Elle nous condamne à être libres car elle nous sépare de ce que nous sommes.</div>
+          </div>
+        </div>
+        <div class="card col-4" style="background: var(--soft-blue);">
+          <div class="card-title"><span class="dot" style="background: var(--accent2);"></span>Exemples pour disserter</div>
+          <div class="ex-item"><strong>Le joueur de tennis en plein match :</strong> il agit par réflexes (conscience spontanée). S'il commence à analyser son geste technique pendant la frappe (conscience réfléchie), il rate son coup.</div>
+          <div class="ex-item"><strong>L'enfant et le miroir :</strong> vers 18 mois (test du miroir), l'enfant comprend que le reflet est le sien. Il accède à la conscience de soi objective, modifiant son rapport au monde.</div>
+        </div>
+        <div class="card col-12">
+          <div class="card-title"><span class="dot" style="background: #555;"></span>Arguments pour la copie</div>
+          <div class="arg-list">
+            <div class="arg-item"><strong>Pour la grandeur de la conscience :</strong> Pascal — même si l'univers écrase l'homme physiquement, l'homme est supérieur car il <em>sait</em> qu'il meurt, l'univers non. La dignité est dans la lucidité.</div>
+            <div class="arg-item"><strong>Contre un « moi » solide :</strong> Sartre montre que la conscience n'a pas de « dedans » fixe — elle est instable, toujours en mouvement vers autre chose. L'identité rigide est une illusion.</div>
+            <div class="arg-item"><strong>Pour la dimension relationnelle :</strong> Hegel + Dolto — on ne se connaît soi-même qu'en étant connu par autrui. « Savoir c'est s'avoir » : comprendre le monde commence par se comprendre soi-même.</div>
+          </div>
+        </div>
+        <div class="card col-12" style="background: var(--soft-green);">
+          <div class="card-title"><span class="dot" style="background: var(--accent2);"></span>Bonus vidéo — à intégrer</div>
+          <div class="arg-list">
+            <div class="arg-item"><strong>Les trois niveaux de conscience :</strong> la conscience spontanée (être en éveil, comme l'animal qui perçoit son environnement), la conscience réflexive (se voir soi-même « comme dans un miroir », propre à l'homme) et la conscience morale (juger le bien et le mal). Chaque niveau suppose le précédent — excellent pour un plan en trois parties.</div>
+            <div class="arg-item"><strong>Rousseau, <em>Émile</em> :</strong> la conscience est décrite comme une « voix intérieure », un instinct divin qui serait à la fois la voix de Dieu et celle de la nature — un arbitre infaillible du bien et du mal. Référence qui sert aussi pour le devoir.</div>
+            <div class="arg-item"><strong>Actualité — la déclaration de Cambridge sur la conscience (2012) :</strong> des neuroscientifiques du monde entier ont affirmé que beaucoup d'animaux possèdent une forme de conscience, ce qui interroge l'idée que la conscience serait le propre de l'homme.</div>
+            <div class="arg-item"><strong>Descartes, doute méthodique :</strong> même si le monde entier était une illusion (un rêve, une « matrice »), la seule chose dont je ne peux douter, c'est que je suis en train de penser cette illusion — d'où « je pense donc je suis », seule certitude absolue.</div>
+          </div>
+        </div>
+      </div>
+      <div class="citation-block">
+        « Je suppose que toutes les choses que je vois sont fausses… mais il y a un je ne sais quoi trompeur qui emploie toute son industrie à me tromper toujours. Il n'y a donc point de doute que je suis, s'il me trompe. »
+        <span class="cit-author">— René Descartes, Méditations métaphysiques, II<sup>e</sup> méditation (1641)</span>
+      </div>
+    </div>
+
+    <div id="notion-2" class="notion-panel">
+      <div class="header-block">
+        <div class="header-title"><h2>L'Inconscient</h2></div>
+        <div class="header-meta">Fiche 02 / 17</div>
+      </div>
+      <div class="grid-container">
+        <div class="card col-4" style="background: var(--soft-red);">
+          <div class="card-title"><span class="dot" style="background: var(--accent);"></span>Définitions clés</div>
+          <div class="definition-item"><strong>Sens large :</strong> ce qui n'est pas actuellement présent à la conscience (souvenirs latents).</div>
+          <div class="definition-item"><strong>Sens psychanalytique :</strong> structure dynamique contenant des désirs et pulsions refoulés qui échappent activement au contrôle conscient.</div>
+        </div>
+        <div class="card col-8">
+          <div class="card-title"><span class="dot" style="background: var(--accent);"></span>Problématique générale</div>
+          <div class="problematique-text">L'hypothèse d'un inconscient psychique ruine-t-elle la liberté et la responsabilité humaine, ou est-elle la condition d'une connaissance plus authentique de soi-même ?</div>
+        </div>
+        <div class="card col-8">
+          <div class="card-title"><span class="dot" style="background: var(--accent2);"></span>Repères philosophiques (Auteurs)</div>
+          <div class="author-block">
+            <div class="author-name">Freud</div>
+            <div class="author-concept">La première et deuxième topique</div>
+            <div class="author-detail">Le psychisme est divisé : le Ça (pulsions), le Surmoi (interdits intériorisés) et le Moi (arbitre fragile). L'inconscient n'est pas une simple absence de conscience, mais une force active.</div>
+          </div>
+          <div class="author-block">
+            <div class="author-name">Alain</div>
+            <div class="author-concept">Le refus moral de l'inconscient</div>
+            <div class="author-detail">L'inconscient est un « fantôme ». Invoquer un inconscient est une excuse lâche pour fuir notre responsabilité morale : « Savoir c'est vouloir ».</div>
+          </div>
+          <div class="author-block">
+            <div class="author-name">Sartre</div>
+            <div class="author-concept">La mauvaise foi</div>
+            <div class="author-detail">Pour refouler une pensée, il faut d'abord la reconnaître pour la rejeter. La psychanalyse repose sur une illusion. L'homme choisit de se masquer sa propre liberté : c'est de la mauvaise foi.</div>
+          </div>
+        </div>
+        <div class="card col-4" style="background: var(--soft-blue);">
+          <div class="card-title"><span class="dot" style="background: var(--accent2);"></span>Exemples pour disserter</div>
+          <div class="ex-item"><strong>L'acte manqué historique :</strong> un président de parlement ouvrant une séance en disant : « Messieurs, je constate la présence de tant de députés et en conséquence je déclare la séance close ! » Il révèle son désir secret de ne pas travailler.</div>
+          <div class="ex-item"><strong>Le rêve récurrent :</strong> une personne rêve constamment de rater un train. Ce n'est pas une prédiction, mais l'expression métaphorique d'une peur de rater une opportunité professionnelle ou affective.</div>
+        </div>
+        <div class="card col-12">
+          <div class="card-title"><span class="dot" style="background: #555;"></span>Arguments pour la copie</div>
+          <div class="arg-list">
+            <div class="arg-item"><strong>Pour l'inconscient :</strong> si tout était conscient, pourquoi ferait-on des actes qu'on ne voulait pas faire ? L'acte manqué prouve qu'une partie de nous agit à notre insu.</div>
+            <div class="arg-item"><strong>Limite de la psychanalyse :</strong> contrairement aux sciences exactes, elle ne donne qu'une <em>interprétation parmi d'autres</em> — c'est à la fois sa richesse et sa faiblesse.</div>
+            <div class="arg-item"><strong>Sur la liberté :</strong> Freud fragilise l'idée d'un homme maître de lui-même. Mais Lacan répond : prendre conscience de ses désirs profonds, c'est précisément reconquérir une forme de liberté.</div>
+            <div class="arg-item"><strong>Spinoza → Freud :</strong> Spinoza avait posé que le désir est l'essence de l'homme et qu'il cherche toujours à se manifester. Freud ne fait que démontrer scientifiquement ce que Spinoza avait pressenti philosophiquement.</div>
+          </div>
+        </div>
+        <div class="card col-12" style="background: var(--soft-green);">
+          <div class="card-title"><span class="dot" style="background: var(--accent2);"></span>Bonus vidéo — à intégrer</div>
+          <div class="arg-list">
+            <div class="arg-item"><strong>Freud, <em>Le Moi et le Ça</em> :</strong> l'inconscient n'est pas un simple « non-conscient » (comme la digestion), c'est un réservoir de désirs (le Ça) aveugles, indifférents au bien, au mal ou au possible. Le Surmoi censure et refoule ces désirs, qui ressurgissent dans les rêves, lapsus ou symptômes.</div>
+            <div class="arg-item"><strong>Cas clinique d'Emma (Freud) :</strong> une jeune femme souffre d'une phobie des magasins sans en connaître la cause. L'analyse révèle un attouchement subi enfant, dans un magasin, traumatisme refoulé par le Surmoi pour la « protéger » — mais qui ressurgit sous forme de symptôme. Illustre que le refoulement, en voulant protéger, rend malade (névrose).</div>
+            <div class="arg-item"><strong>Exemple scientifique — la « vision aveugle » :</strong> des personnes aveugles, incapables de « voir » consciemment une tache lumineuse, parviennent pourtant à en désigner correctement l'emplacement quand on les force à deviner. Preuve d'une perception inconsciente : on peut « savoir » sans en avoir conscience.</div>
+            <div class="arg-item"><strong>Conséquence pour la liberté :</strong> d'un côté, l'inconscient nous détermine (notre enfance pèse sur nous) ; de l'autre, la parole (la thérapie analytique) permet justement de se libérer en partie de ce déterminisme — la conscience de nos désirs cachés est un premier pas vers la liberté.</div>
+          </div>
+        </div>
+      </div>
+      <div class="citation-block">
+        Nous nous croyons libres parce que nous ignorons les causes qui nous font agir.
+        <span class="cit-author">— Spinoza, Éthique</span>
+      </div>
+    </div>
+
+    <div id="notion-3" class="notion-panel">
+      <div class="header-block">
+        <div class="header-title"><h2>Le Temps</h2></div>
+        <div class="header-meta">Fiche 03 / 17</div>
+      </div>
+      <div class="grid-container">
+        <div class="card col-4" style="background: var(--soft-red);">
+          <div class="card-title"><span class="dot" style="background: var(--accent);"></span>Définitions clés</div>
+          <div class="definition-item"><strong>Objectif :</strong> dimension mesurable du changement (les aiguilles de l'horloge).</div>
+          <div class="definition-item"><strong>Subjectif :</strong> expérience vécue de la durée (le temps passe vite quand on s'amuse, stagne quand on s'ennuie).</div>
+        </div>
+        <div class="card col-8">
+          <div class="card-title"><span class="dot" style="background: var(--accent);"></span>Problématique générale</div>
+          <div class="problematique-text">Le temps est-il une prison linéaire qui nous condamne à la perte de tout ce qui est, ou est-ce l'espace même de notre liberté et de notre accomplissement ?</div>
+        </div>
+        <div class="card col-8">
+          <div class="card-title"><span class="dot" style="background: var(--accent2);"></span>Repères philosophiques (Auteurs)</div>
+          <div class="author-block">
+            <div class="author-name">Aristote</div>
+            <div class="author-concept">Le nombre du mouvement</div>
+            <div class="author-detail">Le temps n'existe pas sans le changement physique. Il est la mesure du mouvement selon un avant et un après.</div>
+          </div>
+          <div class="author-block">
+            <div class="author-name">Saint Augustin</div>
+            <div class="author-concept">Le triple présent</div>
+            <div class="author-detail">Le passé n'est plus, l'avenir n'est pas encore. Seul le présent existe, mais dans notre esprit : le présent du passé (mémoire), le présent du présent (attention), le présent du futur (attente).</div>
+          </div>
+          <div class="author-block">
+            <div class="author-name">Bergson</div>
+            <div class="author-concept">La durée pure</div>
+            <div class="author-detail">Il faut distinguer le temps spatialisé de la science (les secondes identiques) et la durée vécue (états de conscience psychologiques qui se chevauchent et coulent de façon continue).</div>
+          </div>
+        </div>
+        <div class="card col-4" style="background: var(--soft-blue);">
+          <div class="card-title"><span class="dot" style="background: var(--accent2);"></span>Exemples pour disserter</div>
+          <div class="ex-item"><strong>La montre connectée :</strong> elle découpe la journée en tranches d'activité millimétrées (temps scientifique). Pourtant, l'heure passée à attendre un résultat médical semble durer un siècle (durée bergsonienne).</div>
+          <div class="ex-item"><strong>La nostalgie d'un album photo :</strong> regarder une vieille photo d'enfance montre que le passé n'est pas anéanti ; il survit sous forme de mémoire active et colore notre perception du présent.</div>
+        </div>
+        <div class="card col-12">
+          <div class="card-title"><span class="dot" style="background: #555;"></span>Arguments pour la copie</div>
+          <div class="arg-list">
+            <div class="arg-item"><strong>Sur la fuite du temps (Pascal) :</strong> l'homme fuit le présent par divertissement pour ne pas affronter sa condition → paradoxe : on cherche le bonheur dans un futur qui ne sera jamais là.</div>
+            <div class="arg-item"><strong>Contre la vision linéaire (Heidegger) :</strong> on ne peut pas réduire le temps à une ligne passé→présent→futur car nous sommes toujours <em>constitués</em> de notre passé et <em>orientés</em> vers notre futur.</div>
+            <div class="arg-item"><strong>Temps comme création (Bergson) :</strong> contre l'idée que le temps n'est que perte et fuite — chaque instant peut produce quelque chose d'inédit.</div>
+            <div class="arg-item"><strong>Sur le présent (Augustin) :</strong> le présent pur est insaisissable — dès qu'on le nomme, il est déjà passé. Le présent est moins un point qu'un passage entre mémoire et projet.</div>
+          </div>
+        </div>
+        <div class="card col-12" style="background: var(--soft-green);">
+          <div class="card-title"><span class="dot" style="background: var(--accent2);"></span>Bonus vidéo — à intégrer</div>
+          <div class="arg-list">
+            <div class="arg-item"><strong>Héraclite :</strong> « On ne se baigne jamais deux fois dans le même fleuve » — excellente accroche : le temps fait que tout change constamment, l'eau du fleuve n'est jamais la même.</div>
+            <div class="arg-item"><strong>Les Mayas et le temps cyclique :</strong> civilisation disparue il y a plus de 4600 ans ayant élaboré des calendriers extrêmement précis grâce à l'observation des astres — preuve que la gestion du temps est une préoccupation humaine depuis l'Antiquité, et illustre un rapport cyclique (et non linéaire) au temps.</div>
+            <div class="arg-item"><strong>Marc Aurèle :</strong> il faut vivre l'instant présent sans se laisser déborder par le passé (regrets, nostalgie) ni par le futur (angoisse). Le présent est la seule chose que nous possédons vraiment — mais nuance : n'est-ce pas renoncer à ce qui fait notre humanité, à savoir notre capacité à nous projeter (Sartre) ?</div>
+            <div class="arg-item"><strong>Sénèque, <em>De la brièveté de la vie</em> :</strong> on ne donne jamais d'argent pour rien, mais on laisse perdre son temps dans des bêtises ou dans la « manie du travail », oubliant de faire ce qui compte vraiment — référence à recycler aussi pour le bonheur et le travail.</div>
+            <div class="arg-item"><strong>Exemple actuel — l'accélération sociale du temps :</strong> fast-food, speed dating, formats courts sur internet… nous vivons sous la pression de faire « le plus de choses possible, le plus vite possible ». Ce phénomène, lié aux innovations techniques, peut nourrir une troisième partie sur notre rapport contemporain au temps.</div>
+          </div>
+        </div>
+      </div>
+      <div class="citation-block">
+        Le passé n'est pas mort, il n'est même pas encore passé.
+        <span class="cit-author">— William Faulkner</span>
+      </div>
+    </div>
+
+    <div id="notion-4" class="notion-panel">
+      <div class="header-block">
+        <div class="header-title"><h2>Le Langage</h2></div>
+        <div class="header-meta">Fiche 04 / 17</div>
+      </div>
+      <div class="grid-container">
+        <div class="card col-4" style="background: var(--soft-red);">
+          <div class="card-title"><span class="dot" style="background: var(--accent);"></span>Définitions clés</div>
+          <div class="definition-item"><strong>Langage :</strong> faculté universelle d'exprimer sa pensée par des signes.</div>
+          <div class="definition-item"><strong>Langue :</strong> système de signes conventionnels propre à une communauté (français, anglais).</div>
+          <div class="definition-item"><strong>Parole :</strong> utilisation individuelle de la langue par un sujet.</div>
+        </div>
+        <div class="card col-8">
+          <div class="card-title"><span class="dot" style="background: var(--accent);"></span>Problématique générale</div>
+          <div class="problematique-text">Le langage sert-il uniquement à traduire fidèlement une pensée préexistante, ou est-ce le langage lui-même qui donne forme, structure et possibilité à la pensée ?</div>
+        </div>
+        <div class="card col-8">
+          <div class="card-title"><span class="dot" style="background: var(--accent2);"></span>Repères philosophiques (Auteurs)</div>
+          <div class="author-block">
+            <div class="author-name">Saussure</div>
+            <div class="author-concept">L'arbitraire du signe</div>
+            <div class="author-detail">Le lien entre le signifiant (le mot "table") et le signifié (le concept de table) est arbitraire et conventionnel. Le langage découpe la réalité de façon spécifique selon chaque culture.</div>
+          </div>
+          <div class="author-block">
+            <div class="author-name">Bergson</div>
+            <div class="author-concept">Les mots comme étiquettes</div>
+            <div class="author-detail">Les mots sont généraux et utilitaires. Ils écrasent la singularité et la finesse de nos sentiments intimes. Le langage échoue à exprimer l'individualité pure.</div>
+          </div>
+          <div class="author-block">
+            <div class="author-name">Austin</div>
+            <div class="author-concept">Quand dire, c'est faire</div>
+            <div class="author-detail">Certains énoncés ne font pas que décrire le monde, ils accomplissent des actes de langage (ex: "Je le jure"). La parole a une puissance performative directe sur le réel.</div>
+          </div>
+        </div>
+        <div class="card col-4" style="background: var(--soft-blue);">
+          <div class="card-title"><span class="dot" style="background: var(--accent2);"></span>Exemples pour disserter</div>
+          <div class="ex-item"><strong>La "Novlangue" d'Orwell (1984) :</strong> en supprimant le mot "liberté" du dictionnaire, le régime totalitaire rend la notion de liberté littéralement impensable.</div>
+          <div class="ex-item"><strong>Hegel à son étudiant :</strong> « Au moment où j'ai écrit ça, il n'y avait que Dieu et moi qui comprenions, et maintenant il n'y a plus que lui. »</div>
+        </div>
+        <div class="card col-12">
+          <div class="card-title"><span class="dot" style="background: #555;"></span>Arguments pour la copie</div>
+          <div class="arg-list">
+            <div class="arg-item"><strong>Pour l'indissociabilité pensée/langage :</strong> Orwell et Klemperer démontrent chacun à leur façon qu'appauvrir le vocabulaire, c'est appauvrir la pensée.</div>
+            <div class="arg-item"><strong>Pour la dangerosité du langage-pouvoir :</strong> les deux grands régimes totalitaires du 20e siècle ont tous deux produit une analyse de leur propre manipulation du langage → preuve que c'est leur premier outil de domination.</div>
+            <div class="arg-item"><strong>Pour la dimension relationnelle :</strong> on ne devient pleinement humain qu'en entrant dans un langage — Hélène Keller et l'enfant de l'Aveyron le montrent concrètement.</div>
+          </div>
+        </div>
+        <div class="card col-12" style="background: var(--soft-green);">
+          <div class="card-title"><span class="dot" style="background: var(--accent2);"></span>Bonus vidéo — à intégrer</div>
+          <div class="arg-list">
+            <div class="arg-item"><strong>Rousseau :</strong> « La parole étant la première institution sociale ne doit sa forme qu'à des causes naturelles. » — c'est par le langage que les hommes ont pu se réunir et former une société.</div>
+            <div class="arg-item"><strong>Langage animal vs humain (Descartes, Lestel) :</strong> les abeilles communiquent par danse, le singe vervet pousse un cri d'alerte spécifique — mais ce ne sont que des signaux liés aux besoins corporels, qui déclenchent une action sans créer de dialogue. Comme le dit Dominique Lestel : « Les animaux peuvent parler mais ils n'ont rien à dire. » Le langage humain exprime l'esprit, le langage animal exprime le corps.</div>
+            <div class="arg-item"><strong>Exemple du singe Kanzi (bonobo) :</strong> entraîné au langage par symboles (Yerkish), il a appris plus de 1000 signes, peut exprimer des besoins complexes, faire des blagues, voire mentir — un cas limite intéressant pour discuter la frontière entre communication animale et langage.</div>
+            <div class="arg-item"><strong>Freud — le langage comme thérapie :</strong> sur le divan, la parole permet d'exprimer sans censure les désirs et traumatismes refoulés. Parler de ses angoisses à un ami les rend déjà « plus légères à porter » — le langage a une fonction presque magique d'extériorisation de l'inconscient.</div>
+            <div class="arg-item"><strong>Bergson sur l'ineffable :</strong> le langage ramène tout à des généralités (« mélancolie », « amour »), alors qu'aucun sentiment vécu n'est identique à un autre — l'art, au contraire, permet d'exprimer cette infinité de nuances que le langage ordinaire ne peut saisir.</div>
+          </div>
+        </div>
+      </div>
+      <div class="citation-block">
+        Vouloir penser sans les mots, c'est une tentative insensée.
+        <span class="cit-author">— Hegel, Encyclopédie des sciences philosophiques</span>
+      </div>
+    </div>
+
+    <div id="notion-5" class="notion-panel">
+      <div class="header-block">
+        <div class="header-title"><h2>L'Art</h2></div>
+        <div class="header-meta">Fiche 05 / 17</div>
+      </div>
+      <div class="grid-container">
+        <div class="card col-4" style="background: var(--soft-red);">
+          <div class="card-title"><span class="dot" style="background: var(--accent);"></span>Définitions clés</div>
+          <div class="definition-item"><strong>Technique (sens ancien) :</strong> ensemble de règles pour produire un objet.</div>
+          <div class="definition-item"><strong>Esthétique (sens moderne) :</strong> création d'œuvres singulières destinées à susciter une émotion esthétique, détachée de l'utilité pratique.</div>
+        </div>
+        <div class="card col-8">
+          <div class="card-title"><span class="dot" style="background: var(--accent);"></span>Problématique générale</div>
+          <div class="problematique-text">L'art est-il un simple luxe divertissant qui nous détourne du réel, ou est-il au contraire le dévoilement le plus profond de la vérité des choses ?</div>
+        </div>
+        <div class="card col-8">
+          <div class="card-title"><span class="dot" style="background: var(--accent2);"></span>Repères philosophiques (Auteurs)</div>
+          <div class="author-block">
+            <div class="author-name">Platon</div>
+            <div class="author-concept">La condamnation des simulacres</div>
+            <div class="author-detail">L'artiste imite les objets sensibles, qui ne sont eux-mêmes que des copies des Idées intelligibles. L'art est donc une illusion au troisième degré, un mensonge dangereux pour la cité.</div>
+          </div>
+          <div class="author-block">
+            <div class="author-name">Kant</div>
+            <div class="author-concept">Le génie et le désintéressement</div>
+            <div class="author-detail">Le beau plaît « sans concept » et de manière désintéressée (on n'a pas besoin de posséder ou consommer l'œuvre). L'artiste de génie donne ses propres règles à l'art.</div>
+          </div>
+          <div class="author-block">
+            <div class="author-name">Bergson</div>
+            <div class="author-concept">L'art comme vision directe</div>
+            <div class="author-detail">Notre vision ordinaire du réel est filtrée par le langage et l'utilité. L'artiste nous libère de ces filtres pratiques pour nous faire voir la réalité en soi, nue et vibrante.</div>
+          </div>
+        </div>
+        <div class="card col-4" style="background: var(--soft-blue);">
+          <div class="card-title"><span class="dot" style="background: var(--accent2);"></span>Exemples pour disserter</div>
+          <div class="ex-item"><strong>Les Souliers de Van Gogh :</strong> peindre de vieux souliers usés n'est pas une simple imitation technique. Le tableau révèle toute la fatigue et la vérité de la vie rude du travailleur de la terre (analyse de Heidegger).</div>
+          <div class="ex-item"><strong>Le refus de répétition chez Picasso :</strong> dès que son style devenait populaire, il en changeait → l'artiste ne peut pas se répéter sans perdre son originalité.</div>
+        </div>
+        <div class="card col-12">
+          <div class="card-title"><span class="dot" style="background: #555;"></span>Arguments pour la copie</div>
+          <div class="arg-list">
+            <div class="arg-item"><strong>Contre Platon :</strong> même quand l'artiste imite, il ne copie jamais servilement — Michel-Ange n'imite pas des corps, il révèle la douleur. L'imitation artistique fait toujours apparaître quelque chose d'invisible.</div>
+            <div class="arg-item"><strong>Pour la liberté de l'art :</strong> le beau échappe aux règles et aux concepts — c'est une expérience libre, ni scientifique ni démontrable. C'est précisément ce qui le rend précieux et menaçant pour le pouvoir.</div>
+            <div class="arg-item"><strong>Pour la rupture moderne :</strong> la photographie a rendu l'imitation inutile → les peintres ont été « libérés » de ce devoir et ont pu produire de l'inédit (cubisme, art abstrait).</div>
+          </div>
+        </div>
+        <div class="card col-12" style="background: var(--soft-green);">
+          <div class="card-title"><span class="dot" style="background: var(--accent2);"></span>Bonus vidéo — à intégrer</div>
+          <div class="arg-list">
+            <div class="arg-item"><strong>Accroche — l'histoire de Beeple :</strong> ce créateur de sites web américain démissionne pour vivre de son art, dessine chaque jour pendant 5000 jours, puis vend la compilation de ses œuvres sous forme de NFT pour plus de 69 millions d'euros (2021). Très utile pour aborder l'évolution de l'art (art numérique), le travail (l'entraînement quotidien) et la motivation à créer.</div>
+            <div class="arg-item"><strong>Nietzsche et Schopenhauer :</strong> « L'art, et rien que l'art : c'est lui qui nous permet de vivre » (Nietzsche) vs « L'art est un refuge face à la vie » (Schopenhauer) — deux citations courtes et puissantes pour les sujets « Peut-on vivre sans art ? » ou « Peut-on être heureux sans l'art ? ».</div>
+            <div class="arg-item"><strong>Le canapé de Dalí vs le canapé IKEA :</strong> le canapé de Dalí en forme de bouche n'est pas fait pour s'asseoir, il est fait pour être contemplé — distinction entre le beau (contemplation, sans fonction) et l'agréable (objet technique fonctionnel).</div>
+            <div class="arg-item"><strong>Heidegger et Van Gogh — « Le champ de blé aux corbeaux » :</strong> l'artiste ne voit pas dans ce paysage un simple stock de ressources alimentaires (vision technoscientifique), mais une poésie qu'il dévoile. La vérité de l'art (en grec <em>alètheia</em>, le dévoilement) est différente de la vérité des technosciences.</div>
+            <div class="arg-item"><strong>Pour une troisième partie originale :</strong> l'art comme savoir-faire (pas seulement les beaux-arts, mais aussi l'artisanat, les arts martiaux, la cuisine) et l'art contemporain, où des œuvres « ni belles ni difficiles à faire » (ex. <em>Plays</em> de Cy Twombly, sculpture de 3 m en métal rappelant de la pâte à modeler) interrogent justement la définition même de l'art. À comparer avec un tableau classique comme <em>Les Bergers d'Arcadie</em> de Poussin, exemple d'harmonie et de savoir-faire technique.</div>
+            <div class="arg-item"><strong>Aristote, <em>La Poétique</em> :</strong> l'art imite la nature, mais imiter n'est pas copier — l'œuvre d'art fait apparaître quelque chose de nouveau, produit un « effet de révélation » qui procure du plaisir.</div>
+          </div>
+        </div>
+      </div>
+      <div class="citation-block">
+        Le beau est ce qui plaît universellement et sans concept.
+        <span class="cit-author">— Emmanuel Kant, Critique de la faculté de juger</span>
+      </div>
+    </div>
+
+    <div id="notion-6" class="notion-panel">
+      <div class="header-block">
+        <div class="header-title"><h2>Le Travail</h2></div>
+        <div class="header-meta">Fiche 06 / 17</div>
+      </div>
+      <div class="grid-container">
+        <div class="card col-4" style="background: var(--soft-red);">
+          <div class="card-title"><span class="dot" style="background: var(--accent);"></span>Définitions clés</div>
+          <div class="definition-item"><strong>Étymologie :</strong> <em>Tripalium</em> (instrument de torture).</div>
+          <div class="definition-item"><strong>Philosophique :</strong> activité consciente et transformatrice par laquelle l'homme façonne la nature pour satisfaire ses besoins et, ce faisant, se développe lui-même.</div>
+        </div>
+        <div class="card col-8">
+          <div class="card-title"><span class="dot" style="background: var(--accent);"></span>Problématique générale</div>
+          <div class="problematique-text">Le travail est-il par nature une fatalité douloureuse et aliénante pour l'homme, ou constitue-t-il le moyen privilégié de son humanisation, de sa liberté et de son émancipation ?</div>
+        </div>
+        <div class="card col-8">
+          <div class="card-title"><span class="dot" style="background: var(--accent2);"></span>Repères philosophiques (Auteurs)</div>
+          <div class="author-block">
+            <div class="author-name">Hegel</div>
+            <div class="author-concept">La dialectique du maître et de l'esclave</div>
+            <div class="author-detail">Le maître ne travaille pas et dépend de l'esclave. L'esclave, en travaillant la matière, transforme le monde réel, prend conscience de ses capacités techniques et finit par s'émanciper.</div>
+          </div>
+          <div class="author-block">
+            <div class="author-name">Marx</div>
+            <div class="author-concept">Le travail aliéné</div>
+            <div class="author-detail">Dans le système capitaliste et la division industrielle du travail, l'ouvrier est dépossédé de son outil et de son œuvre. Son travail devient une marchandise épuisante et vide de sens.</div>
+          </div>
+          <div class="author-block">
+            <div class="author-name">Nietzsche</div>
+            <div class="author-concept">La police du travail</div>
+            <div class="author-detail">Le travail acharné moderne consomme une quantité prodigieuse de force nerveuse et empêche l'homme de réfléchir, de méditer et de poursuivre des buts élevés et individuels.</div>
+          </div>
+        </div>
+        <div class="card col-4" style="background: var(--soft-blue);">
+          <div class="card-title"><span class="dot" style="background: var(--accent2);"></span>Exemples pour disserter</div>
+          <div class="ex-item"><strong>Le travail à la chaîne (Temps Modernes de Chaplin) :</strong> Charlot répète indéfiniment le même geste sur des boulons. Il n'est plus un sujet pensant qui crée, mais un simple rouage mécanique de la machine.</div>
+          <div class="ex-item"><strong>Le menuisier compagnon :</strong> contrairement à l'ouvrier à la chaîne, il conçoit son meuble du début à la fin et se laissait surprendre par sa propre création.</div>
+        </div>
+        <div class="card col-12">
+          <div class="card-title"><span class="dot" style="background: #555;"></span>Arguments pour la copie</div>
+          <div class="arg-list">
+            <div class="arg-item"><strong>Contre l'idée que l'art n'est pas du « vrai » travail :</strong> Simenon perd du poids en écrivant, Verdier s'engage 10 ans — la passion donne un sens à la souffrance, elle ne la supprime pas.</div>
+            <div class="arg-item"><strong>Pour le critère de Bergson :</strong> un travail aliénant est un travail où on ne se reconnaît plus. C'est ce que Marx décrit avec la chaîne de montage — le travailleur n'a plus de rapport à l'œuvre finie.</div>
+            <div class="arg-item"><strong>Contre la mécanisation aveugle (Marx + Arendt) :</strong> supprimer le travail humain, c'est supprimer non seulement la souffrance mais aussi l'accomplissement — on prive les hommes de ce qui les constitue.</div>
+          </div>
+        </div>
+        <div class="card col-12" style="background: var(--soft-green);">
+          <div class="card-title"><span class="dot" style="background: var(--accent2);"></span>Bonus vidéo — à intégrer</div>
+          <div class="arg-list">
+            <div class="arg-item"><strong>Hegel :</strong> « C'est par la médiation du travail que la conscience vient à soi-même. » Le travail permet de construire, d'inventer, de se réaliser soi-même — quand il est mené dans de bonnes conditions, respectant la dignité humaine.</div>
+            <div class="arg-item"><strong>Descartes — technique et travail :</strong> grâce à la technique, les hommes deviennent « comme maîtres et possesseurs de la nature » ; la machine permet même de travailler à notre place, ce qui rend l'homme plus productif mais aussi plus dépendant de la machine (aliénation).</div>
+            <div class="arg-item"><strong>Exemple de la femme au foyer (Hegel) :</strong> elle travaille tout autant qu'un salarié — elle transforme des matériaux bruts en plats, et transforme aussi des enfants « à l'état brut » en les éduquant. Le travail n'est donc pas réductible à une activité salariée.</div>
+            <div class="arg-item"><strong>Le plaisir de l'objectivation (Hegel) :</strong> faire un gâteau ou une maquette procure une satisfaction particulière — on reconnaît dans l'objet créé le projet qu'on avait en tête. L'esprit s'« extériorise » dans la matière (objectivation de l'esprit).</div>
+            <div class="arg-item"><strong>Troisième partie originale — le travail émotionnel :</strong> au-delà du travail physique et intellectuel, certains métiers (hôtesse de l'air, métiers du soin) demandent un effort émotionnel constant (sourire, rassurer, encourager) — une dimension du travail souvent oubliée.</div>
+            <div class="arg-item"><strong>Exemple biblique — Adam et Ève (Genèse) :</strong> dans le jardin d'Éden, travailler était un plaisir ; après la faute, le travail devient une souffrance et une punition. Le récit illustre la double nature du travail : source d'épanouissement et de réalisation de soi, mais aussi contrainte pénible pour subvenir à ses besoins.</div>
+          </div>
+        </div>
+      </div>
+      <div class="citation-block">
+        La différence entre l'abeille la plus habile et l'architecte le plus maladroit, c'est que l'architecte porte d'abord la maison dans sa tête.
+        <span class="cit-author">— Karl Marx, Le Capital</span>
+      </div>
+    </div>
+
+    <div id="notion-7" class="notion-panel">
+      <div class="header-block">
+        <div class="header-title"><h2>La Technique</h2></div>
+        <div class="header-meta">Fiche 07 / 17</div>
+      </div>
+      <div class="grid-container">
+        <div class="card col-4" style="background: var(--soft-red);">
+          <div class="card-title"><span class="dot" style="background: var(--accent);"></span>Définitions clés</div>
+          <div class="definition-item"><strong>Générale :</strong> ensemble de procédés, d'outils et de règles fondés sur le savoir, permettant d'obtenir un résultat jugé utile.</div>
+          <div class="definition-item"><strong>Moderne :</strong> application systématique de la science qui tend à l'exploitation rationalisée et totale de la nature.</div>
+        </div>
+        <div class="card col-8">
+          <div class="card-title"><span class="dot" style="background: var(--accent);"></span>Problématique générale</div>
+          <div class="problematique-text">La puissance technique de l'homme moderne témoigne-t-elle de sa souveraineté absolue, ou s'est-elle transformée en un système autonome et aveugle menaçant sa propre survie ?</div>
+        </div>
+        <div class="card col-8">
+          <div class="card-title"><span class="dot" style="background: var(--accent2);"></span>Repères philosophiques (Auteurs)</div>
+          <div class="author-block">
+            <div class="author-name">Descartes</div>
+            <div class="author-concept">Maîtres et possesseurs de la nature</div>
+            <div class="author-detail">En développant une philosophie pratique fondée sur la physique, l'homme peut utiliser la technique pour s'exempter de corvées et préserver sa santé, se rendant comme maître et possesseur du monde.</div>
+          </div>
+          <div class="author-block">
+            <div class="author-name">Heidegger</div>
+            <div class="author-concept">L'Arraisonnement (Gestell)</div>
+            <div class="author-detail">La technique moderne n'est pas un simple outil neutre. C'est un mode de dévoilement du monde qui somme la nature de livrer son énergie. Tout devient un fond de ressources disponibles, y compris l'homme.</div>
+          </div>
+          <div class="author-block">
+            <div class="author-name">Hans Jonas</div>
+            <div class="author-concept">Le principe responsabilité</div>
+            <div class="author-detail">Face aux risques de destruction globale engendrés par la technique (nucléaire, écocide), l'homme doit adopter une "heuristique de la peur" et s'imposer un devoir moral absolu de préserver l'avenir.</div>
+          </div>
+        </div>
+        <div class="card col-4" style="background: var(--soft-blue);">
+          <div class="card-title"><span class="dot" style="background: var(--accent2);"></span>Exemples pour disserter</div>
+          <div class="ex-item"><strong>Le barrage hydroélectrique sur le Rhin :</strong> contrairement au vieux moulin à eau qui s'intégrait au fleuve, le barrage arraisonne le fleuve pour le forcer à produire des mégawatts en continu (exemple de Heidegger).</div>
+          <div class="ex-item"><strong>Les déchets nucléaires :</strong> la création d'éléments toxiques pour des millénaires montre que les effets de nos dispositifs modernes sont irréversibles.</div>
+        </div>
+        <div class="card col-12">
+          <div class="card-title"><span class="dot" style="background: #555;"></span>Arguments pour la copie</div>
+          <div class="arg-list">
+            <div class="arg-item"><strong>Sur l'origine de la technique :</strong> Prométhée montre qu'elle naît pour <em>compenser la vulnérabilité humaine</em>, pas pour dominer. C'est la modernité qui l'a transformée en outil de toute-puissance.</div>
+            <div class="arg-item"><strong>Sur la dérive (Heidegger) :</strong> le problème n'est pas la machine en elle-même mais la <em>vision du monde</em> qu'elle présuppose — où tout, y compris l'homme, devient stock à disposition.</div>
+            <div class="arg-item"><strong>Sur la responsabilité inédite (Jonas) :</strong> nos ancêtres n'avaient pas à se demander si leurs actions mettaient en danger l'humanité entière. Nous, si → la technique crée une responsabilité sans précédent.</div>
+          </div>
+        </div>
+        <div class="card col-12" style="background: var(--soft-green);">
+          <div class="card-title"><span class="dot" style="background: var(--accent2);"></span>Bonus vidéo — à intégrer</div>
+          <div class="arg-list">
+            <div class="arg-item"><strong>Platon, le mythe de Prométhée (<em>Protagoras</em>) :</strong> lorsque Zeus charge Prométhée et son frère Épiméthée de distribuer des qualités aux animaux, il ne reste plus rien pour l'homme, né nu et sans défense. Prométhée vole alors aux dieux le feu et le savoir-faire technique. Idée clé : notre puissance technique est une <em>réaction à notre impuissance naturelle</em> — c'est parce que nous étions les plus fragiles que nous sommes devenus, grâce à la technique, l'espèce dominante.</div>
+            <div class="arg-item"><strong>Aristote — la main et l'intelligence :</strong> la main humaine, peu puissante en elle-même, est polyvalente comme notre intelligence ; elle est « cet outil qui permet de fabriquer de nouveaux outils ». À l'inverse, l'animal naît avec toutes ses techniques déjà programmées (comme une console avec les jeux intégrés) mais ne peut en inventer de nouvelles.</div>
+            <div class="arg-item"><strong>Exemple d'actualité — les OGM et CRISPR :</strong> la technique CRISPR (« ciseaux génétiques ») permet de modifier facilement les gènes (poissons plus gros, moustiques résistants au paludisme, protection humaine contre le VIH). Cela pose la question : est-ce encore « naturel » ? Est-ce dangereux ? Excellent exemple pour la technique <em>et</em> pour la nature.</div>
+          </div>
+        </div>
+      </div>
+      <div class="citation-block">
+        La technique moderne est une provocation par laquelle la nature est mise en demeure de libérer une énergie qui peut être extraite.
+        <span class="cit-author">— Martin Heidegger, La Question de la technique</span>
+      </div>
+    </div>
+
+    <div id="notion-8" class="notion-panel">
+      <div class="header-block">
+        <div class="header-title"><h2>La Religion</h2></div>
+        <div class="header-meta">Fiche 08 / 17</div>
+      </div>
+      <div class="grid-container">
+        <div class="card col-4" style="background: var(--soft-red);">
+          <div class="card-title"><span class="dot" style="background: var(--accent);"></span>Définitions clés</div>
+          <div class="definition-item"><strong>Étymologie :</strong> <em>Religare</em> (lier les hommes entre eux et au sacré).</div>
+          <div class="definition-item"><strong>Philosophique :</strong> système de croyances, de dogmes et de rites unissant une communauté dans la reconnaissance d'un principe supérieur ou divin transcendant.</div>
+        </div>
+        <div class="card col-8">
+          <div class="card-title"><span class="dot" style="background: var(--accent);"></span>Problématique générale</div>
+          <div class="problematique-text">La religion est-elle une illusion consolatrice infantilisante dont l'homme doit se libérer par la raison, ou constitue-t-elle une dimension fondamentale de sens et de lien social ?</div>
+        </div>
+        <div class="card col-8">
+          <div class="card-title"><span class="dot" style="background: var(--accent2);"></span>Repères philosophiques (Auteurs)</div>
+          <div class="author-block">
+            <div class="author-name">Marx</div>
+            <div class="author-concept">L'opium du peuple</div>
+            <div class="author-detail">La religion est une production imaginaire de l'homme souffrant. En promettant une compensation de bonheur dans l'au-delà, elle endort la révolte ouvrière contre l'injustice sociale présente.</div>
+          </div>
+          <div class="author-block">
+            <div class="author-name">Durkheim</div>
+            <div class="author-concept">Le ciment social</div>
+            <div class="author-detail">La religion est l'adoration que la société se voue à elle-même. Les rites et la distinction entre le sacré et le profane servent avant tout à fabriquer de la cohésion et de la conscience collective.</div>
+          </div>
+          <div class="author-block">
+            <div class="author-name">Freud</div>
+            <div class="author-concept">Une névrose obsessionnelle collective</div>
+            <div class="author-detail">Dieu est une projection rassurante de la figure du père protecteur de l'enfance. La religion est une illusion née du refus d'affronter l'angoisse de la mort et l'hostilité de la nature.</div>
+          </div>
+        </div>
+        <div class="card col-4" style="background: var(--soft-blue);">
+          <div class="card-title"><span class="dot" style="background: var(--accent2);"></span>Exemples pour disserter</div>
+          <div class="ex-item"><strong>La procession religieuse :</strong> lors d'une fête sainte, des milliers de personnes marchent au même pas. Ce rite montre la force du lien social horizontal créé par le sacré (illustration durkheimienne).</div>
+          <div class="ex-item"><strong>La ferveur face au vide scientifique :</strong> l'angoisse existentielle dans les salons funéraires montre que l'explication purement biologique de la mort est insatisfaisante pour l'esprit humain.</div>
+        </div>
+        <div class="card col-12">
+          <div class="card-title"><span class="dot" style="background: #555;"></span>Arguments pour la copie</div>
+          <div class="arg-list">
+            <div class="arg-item"><strong>Incompatibilité technique/religion (Heidegger) :</strong> l'homme-sujet qui « somme la nature de livrer son énergie » est structurellement opposé à l'homme-enfant de Dieu dont le trait distinctif est l'humilité.</div>
+            <div class="arg-item"><strong>Contre le scientisme :</strong> la science ne répond pas aux questions de sens — pourquoi vivre, pourquoi souffrir, pourquoi mourir. Nietzsche : la mort de Dieu laisse un vide que la science ne comble pas.</div>
+            <div class="arg-item"><strong>Pour la foi contre la preuve (Kant + Kierkegaard) :</strong> Kant réfute toutes les preuves rationnelles de l'existence de Dieu. Kierkegaard en tire la conclusion : si la foi pouvait être prouvée, elle ne serait plus de la foi.</div>
+          </div>
+        </div>
+        <div class="card col-12" style="background: var(--soft-green);">
+          <div class="card-title"><span class="dot" style="background: var(--accent2);"></span>Bonus vidéo — à intégrer</div>
+          <div class="arg-list">
+            <div class="arg-item"><strong>Lamartine :</strong> « Dieu n'est qu'un mot rêvé pour expliquer le monde. » La religion naîtrait d'un manque de sens : faute de tout comprendre, l'homme se réfugie dans la croyance en une transcendance créatrice ou protectrice — bonne citation pour une troisième partie nuancée.</div>
+            <div class="arg-item"><strong>Max Weber — le désenchantement du monde :</strong> au début du 20ᵉ siècle, Weber décrit le recul de la religion dans les sociétés contemporaines, dû notamment au triomphe de la science et de la rationalité sur les croyances — utile pour discuter l'actualité du sujet.</div>
+            <div class="arg-item"><strong>Double dimension du lien religieux :</strong> la transcendance (lien vertical avec Dieu) et l'immanence (lien horizontal entre les hommes, via des rites communs comme Noël). La religion répond donc à la fois à un besoin existentiel individuel et à un besoin social.</div>
+            <div class="arg-item"><strong>Freud — religion et Surmoi :</strong> la religion a contribué à intérioriser la loi (« le policier à l'intérieur de notre esprit ») là où il n'y avait ni État ni tribunal. Mais en renforçant excessivement la culpabilité (notamment sexuelle), elle peut favoriser des névroses obsessionnelles (TOCs).</div>
+            <div class="arg-item"><strong>Exemple — le film <em>Tu ne tueras point</em> (Hacksaw Ridge) :</strong> un soldat chrétien refuse de tuer mais part quand même au front sans arme, sauve de nombreuses vies et reçoit une médaille — illustre un conflit entre devoir religieux et devoir civique, et la possibilité de concilier les deux.</div>
+            <div class="arg-item"><strong>Chiffre à retenir :</strong> environ 85 % des humains déclarent appartenir à une religion — un fait à mobiliser pour discuter la nécessité (ou non) de la religion dans la société contemporaine.</div>
+          </div>
+        </div>
+      </div>
+      <div class="citation-block">
+        Dieu est mort et c'est nous qui l'avons tué. Comment nous consolerons-nous, nous les meurtriers des meurtriers ?
+        <span class="cit-author">— Nietzsche, Le Gai Savoir</span>
+      </div>
+    </div>
+
+    <div id="notion-9" class="notion-panel">
+      <div class="header-block">
+        <div class="header-title"><h2>La Raison</h2></div>
+        <div class="header-meta">Fiche 09 / 17</div>
+      </div>
+      <div class="grid-container">
+        <div class="card col-4" style="background: var(--soft-red);">
+          <div class="card-title"><span class="dot" style="background: var(--accent);"></span>Définitions clés</div>
+          <div class="definition-item"><strong>Théorique :</strong> faculté de l'esprit humain de lier des concepts, de discerner le vrai du faux, d'ordonner le réel selon des principes logiques.</div>
+          <div class="definition-item"><strong>Pratique :</strong> capacité de définir des règles morales d'action (le bien et le mal).</div>
+        </div>
+        <div class="card col-8">
+          <div class="card-title"><span class="dot" style="background: var(--accent);"></span>Problématique générale</div>
+          <div class="problematique-text">La raison est-elle un outil absolu capable de tout connaître et d'épuiser le réel par elle-même, ou doit-elle humblement reconnaître ses propres limites internes ?</div>
+        </div>
+        <div class="card col-8">
+          <div class="card-title"><span class="dot" style="background: var(--accent2);"></span>Repères philosophiques (Auteurs)</div>
+          <div class="author-block">
+            <div class="author-name">Descartes</div>
+            <div class="author-concept">Le bon sens universel</div>
+            <div class="author-detail">La raison ("le bon sens") est la chose la mieux partagée du monde. Il suffit d'appliquer une méthode rigoureuse (les 4 règles de la méthode) pour éviter l'erreur et atteindre des vérités évidentes.</div>
+          </div>
+          <div class="author-block">
+            <div class="author-name">Kant</div>
+            <div class="author-concept">La critique des limites</div>
+            <div class="author-detail">La raison pure commet des erreurs inévitables (les antinomies) lorsqu'elle tente de penser des objets sans l'appui de l'expérience sensible (comme Dieu, l'âme ou l'infini).</div>
+          </div>
+          <div class="author-block">
+            <div class="author-name">Pascal</div>
+            <div class="author-concept">L'impuissance de la raison pure</div>
+            <div class="author-detail">La raison est incapable de prouver les principes fondamentaux (l'espace, le temps). Elle doit céder le pas au cœur et au sentiment : « Le cœur a ses raisons que la raison ne connaît point. »</div>
+          </div>
+        </div>
+        <div class="card col-4" style="background: var(--soft-blue);">
+          <div class="card-title"><span class="dot" style="background: var(--accent2);"></span>Exemples pour disserter</div>
+          <div class="ex-item"><strong>La démonstration mathématique :</strong> le théorème de Pythagore ne dépend d'aucune observation empirique incertaine ; il se déduit par la seule logique interne de la raison pure.</div>
+          <div class="ex-item"><strong>L'aveu de Kant face à Hume :</strong> Kant déclare que la lecture du sceptique David Hume « l'a réveillé de son sommeil dogmatique » → même les plus grands rationalistes ont dû reconnaître les limites de la raison pure.</div>
+        </div>
+        <div class="card col-12">
+          <div class="card-title"><span class="dot" style="background: #555;"></span>Arguments pour la copie</div>
+          <div class="arg-list">
+            <div class="arg-item"><strong>Contre le rationalisme pur :</strong> Kant montre que même la science la plus rigoureuse a besoin de l'expérience pour valider ses théories — la raison seule « délire ».</div>
+            <div class="arg-item"><strong>Pour la réhabilitation de l'imagination :</strong> sans imagination, pas d'hypothèses scientifiques. C'est elle qui permet de visualiser ce qu'on n'a pas encore observé.</div>
+            <div class="arg-item"><strong>Sur la cohérence logique :</strong> un raisonnement peut être parfaitement cohérent et totalement faux — la cohérence logique est une condition nécessaire mais non suffisante de la vérité.</div>
+          </div>
+        </div>
+        <div class="card col-12" style="background: var(--soft-green);">
+          <div class="card-title"><span class="dot" style="background: var(--accent2);"></span>Bonus vidéo — à intégrer</div>
+          <div class="arg-list">
+            <div class="arg-item"><strong>Kant et les Lumières :</strong> l'homme des Lumières est celui qui sort de l'enfance et ose penser par lui-même (« <em>Sapere aude</em> », « Aie le courage de penser »). Beaucoup préfèrent se soumettre à des autorités intellectuelles, morales ou religieuses qui pensent à leur place — pour Kant, c'est en suivant sa raison qu'on devient véritablement libre.</div>
+            <div class="arg-item"><strong>La dignité humaine (Kant) :</strong> tous les hommes sont dotés de raison, ce qui fonde leur dignité — les humains ne doivent jamais être traités comme de simples moyens, mais toujours comme des fins en soi. Référence transversale, utile pour le devoir et la justice.</div>
+            <div class="arg-item"><strong>Pascal — « deux excès » :</strong> « Exclure la raison, n'admettre que la raison » sont deux excès symétriques. Pour Pascal, la raison est utile mais a besoin de connaissances immédiates venues du cœur (ex. : on sait qu'on ne dort pas sans pouvoir le démontrer rationnellement).</div>
+            <div class="arg-item"><strong>Exemple actuel — les biais cognitifs :</strong> le « biais d'optimisme » (90 % des conducteurs s'estiment meilleurs que la moyenne, ce qui est statistiquement impossible) montre que notre raison est traversée de raccourcis dont nous n'avons pas conscience — nous sommes moins raisonnables que nous le croyons, même en réfléchissant.</div>
+          </div>
+        </div>
+      </div>
+      <div class="citation-block">
+        La raison ne voit que ce qu'elle produit elle-même ; elle doit prendre les devants et obliger la nature à répondre à ses questions.
+        <span class="cit-author">— Emmanuel Kant, Critique de la raison pure</span>
+      </div>
+    </div>
+
+    <div id="notion-10" class="notion-panel">
+      <div class="header-block">
+        <div class="header-title"><h2>La Science</h2></div>
+        <div class="header-meta">Fiche 10 / 17</div>
+      </div>
+      <div class="grid-container">
+        <div class="card col-4" style="background: var(--soft-red);">
+          <div class="card-title"><span class="dot" style="background: var(--accent);"></span>Définitions clés</div>
+          <div class="definition-item"><strong>Générale :</strong> mode de connaissance rationnel, universel, vérifiable et méthodique, visant à découvrir les lois rigoureuses qui régissent les phénomènes.</div>
+          <div class="definition-item"><strong>Scientisme :</strong> croyance aveugle dans le fait que la science peut résoudre tous les problèmes humains et répondre à toutes les questions morales.</div>
+        </div>
+        <div class="card col-8">
+          <div class="card-title"><span class="dot" style="background: var(--accent);"></span>Problématique générale</div>
+          <div class="problematique-text">La science progresse-t-elle par accumulation tranquille de vérités absolues et définitives, ou par une suite de ruptures, de rectifications d'erreurs et de modèles provisoires ?</div>
+        </div>
+        <div class="card col-8">
+          <div class="card-title"><span class="dot" style="background: var(--accent2);"></span>Repères philosophiques (Auteurs)</div>
+          <div class="author-block">
+            <div class="author-name">Karl Popper</div>
+            <div class="author-concept">Le critère de falsificabilité</div>
+            <div class="author-detail">Une théorie n'est scientifique que si elle est réfutable, c'est-à-dire si l'on peut imaginer une expérience concrète capable de démontrer sa fausseté. Les théories irréfutables (comme l'astrologie) relèvent de la pseudo-science.</div>
+          </div>
+          <div class="author-block">
+            <div class="author-name">Gaston Bachelard</div>
+            <div class="author-concept">L'obstacle épistémologique</div>
+            <div class="author-detail">La science progresse contre l'opinion et les évidences immédiates de nos sens. Elle avance par rectifications d'erreurs historiques et ruptures de cadres de pensée : « La science est une longue erreur rectifiée ».</div>
+          </div>
+          <div class="author-block">
+            <div class="author-name">Thomas Kuhn</div>
+            <div class="author-concept">Les paradigmes scientifiques</div>
+            <div class="author-detail">La science fonctionne au sein d'un paradigme (modèle dominant accepté par la communauté). Quand les anomalies s'accumulent, une révolution scientifique éclate et change radicalement de paradigme.</div>
+          </div>
+        </div>
+        <div class="card col-4" style="background: var(--soft-blue);">
+          <div class="card-title"><span class="dot" style="background: var(--accent2);"></span>Exemples pour disserter</div>
+          <div class="ex-item"><strong>L'astrologie vs l'astronomie :</strong> l'astrologie trouve toujours une explication vague pour justifier un horoscope raté (irréfutable). L'astronomie fait des prédictions mathématiques précises que l'observation peut invalider (falsifiable au sens de Popper).</div>
+          <div class="ex-item"><strong>Le passage du géocentrisme à l'héliocentrisme :</strong> Galilée rompt avec le dogme sensible de la Terre fixe. C'est une authentique révolution de paradigme au sens de Kuhn.</div>
+        </div>
+        <div class="card col-12">
+          <div class="card-title"><span class="dot" style="background: #555;"></span>Arguments pour la copie</div>
+          <div class="arg-list">
+            <div class="arg-item"><strong>Contre le scientisme (Popper) :</strong> les théories scientifiques sont comme un filet de pêche — elles laissent échapper l'essentiel du réel. La science ne dit pas que le monde est simple juste parce qu'elle l'exprime ainsi.</div>
+            <div class="arg-item"><strong>Sur la provisoirité :</strong> Newton « vrai » pendant deux siècles, puis relativisé par Einstein. La science est un <em>processus</em>, pas un ensemble de vérités acquises.</div>
+            <div class="arg-item"><strong>Sur les limites éthiques :</strong> la constitution d'un objet scientifique pose des questions morales — le vivant a longtemps été étudié sur des organismes morts. La science ne peut pas s'affranchir de l'éthique.</div>
+          </div>
+        </div>
+        <div class="card col-12" style="background: var(--soft-green);">
+          <div class="card-title"><span class="dot" style="background: var(--accent2);"></span>Bonus vidéo — à intégrer</div>
+          <div class="arg-list">
+            <div class="arg-item"><strong>Albert Camus — accroche très actuelle :</strong> « La civilisation mécanique vient de parvenir à son dernier degré de sauvagerie. Il va falloir choisir, dans un avenir plus ou moins proche, entre le suicide collectif et l'utilisation intelligente des conquêtes scientifiques. » Idéale pour montrer que le progrès scientifique crée une responsabilité et un danger nouveaux.</div>
+            <div class="arg-item"><strong>Exemple actuel — le transhumanisme :</strong> les projets comme Neuralink (puces cérébrales) interrogent les limites entre science qui aide l'homme et science qui le transforme radicalement — à relier aussi à la nature et à la liberté.</div>
+            <div class="arg-item"><strong>Les trois formes de vérité scientifique :</strong> la vérité <em>cohérence</em> (un discours qui ne se contredit pas, ex. les maths), la vérité <em>adéquation</em> (un énoncé correspond à la réalité, ex. « il y a une caméra devant moi ») et la vérité <em>évidence</em> (des axiomes indémontrables mais évidents, comme chez Euclide). La science combine ces trois formes — sans expérience, on ne ferait que des mathématiques, sans pouvoir découvrir la physique ou la biologie.</div>
+            <div class="arg-item"><strong>Exemple — la phrénologie :</strong> discipline à la mode au 19ᵉ siècle, prétendant expliquer le caractère des gens à partir de la forme de leur crâne. Considérée scientifique à l'époque, elle a fini par être abandonnée — bon exemple pour montrer que les sciences sont faillibles, évoluent et que leurs résultats sont toujours provisoires.</div>
+            <div class="arg-item"><strong>Trois facteurs de l'essor scientifique moderne (depuis Galilée) :</strong> l'expérimentation systématique, le couplage science-technique (les « technosciences »), et la mathématisation du réel (ce qui compte n'est pas la gravitation elle-même, mais l'équation qui la décrit).</div>
+          </div>
+        </div>
+      </div>
+      <div class="citation-block">
+        Les théories scientifiques sont des filets rationnels créés par nous, et elles ne doivent pas être confondues avec une représentation complète de tous les aspects du monde réel.
+        <span class="cit-author">— Karl Popper, La Logique de la découverte scientifique</span>
+      </div>
+    </div>
+
+    <div id="notion-11" class="notion-panel">
+      <div class="header-block">
+        <div class="header-title"><h2>La Vérité</h2></div>
+        <div class="header-meta">Fiche 11 / 17</div>
+      </div>
+      <div class="grid-container">
+        <div class="card col-4" style="background: var(--soft-red);">
+          <div class="card-title"><span class="dot" style="background: var(--accent);"></span>Définitions clés</div>
+          <div class="definition-item"><strong>Correspondance (Adéquation) :</strong> conformité entre ce que l'esprit affirme et la réalité extérieure observable (dire qu'il pleut quand il pleut effectivement).</div>
+          <div class="definition-item"><strong>Cohérence :</strong> absence de contradiction logique interne au sein d'un raisonnement abstrait.</div>
+        </div>
+        <div class="card col-8">
+          <div class="card-title"><span class="dot" style="background: var(--accent);"></span>Problématique générale</div>
+          <div class="problematique-text">La recherche de la vérité doit-elle être guidée exclusivement par des critères formels d'exactitude scientifique, ou exige-t-elle d'autres formes d'engagement et de dévoilement existentiel ?</div>
+        </div>
+        <div class="card col-8">
+          <div class="card-title"><span class="dot" style="background: var(--accent2);"></span>Repères philosophiques (Auteurs)</div>
+          <div class="author-block">
+            <div class="author-name">Descartes</div>
+            <div class="author-concept">L'évidence rationnelle</div>
+            <div class="author-detail">La vérité se reconnaît à la clarté et à la distinction de l'idée qui s'impose à l'esprit, sans doute possible, à l'image du Cogito.</div>
+          </div>
+          <div class="author-block">
+            <div class="author-name">Kierkegaard</div>
+            <div class="author-concept">La subjectivité comme vérité</div>
+            <div class="author-detail">Pour les questions existentielles profondes (la foi, l'angoisse), la vérité n'est pas un savoir objectif froid, mais une appropriation passionnée et intime du sujet.</div>
+          </div>
+          <div class="author-block">
+            <div class="author-name">Nietzsche</div>
+            <div class="author-concept">Les illusions utiles</div>
+            <div class="author-detail">Nos "vérités" ne sont que des métaphores usées et oubliées comme telles. Ce sont des erreurs biologiquement utiles indispensables à la survie de l'espèce humaine.</div>
+          </div>
+        </div>
+        <div class="card col-4" style="background: var(--soft-blue);">
+          <div class="card-title"><span class="dot" style="background: var(--accent2);"></span>Exemples pour disserter</div>
+          <div class="ex-item"><strong>Le procès judiciaire :</strong> l'exigence absolue de preuves matérielles et de témoignages croisés est l'unique rempart contre l'arbitraire d'un verdict partial ou idéologique.</div>
+          <div class="ex-item"><strong>L'expérience tragique de Kierkegaard :</strong> face aux choix décisifs de sa vie, la statistique ou la science ne lui dictent rien ; seule l'affirmation de sa propre subjectivité fait vérité pour lui.</div>
+        </div>
+        <div class="card col-12">
+          <div class="card-title"><span class="dot" style="background: #555;"></span>Arguments pour la copie</div>
+          <div class="arg-list">
+            <div class="arg-item"><strong>Contre le monopole scientifique :</strong> dans l'art, la religion et la morale, la vérité n'est pas une conformité à une réalité extérieure mais un <em>dévoilement</em>. Réduire la vérité à l'exactitude, c'est appauvrir le réel.</div>
+            <div class="arg-item"><strong>Pour la nécessité des preuves :</strong> dans les domaines où les conséquences sont graves (justice, médecine), l'exigence de preuves est une garantie contre l'arbitraire.</div>
+            <div class="arg-item"><strong>Argument de Kant :</strong> même sans preuve absolue, on peut tenir quelque chose pour vrai — l'opinion éclairée et la foi sont des façons légitimes d'habiter la vérité, à condition de ne pas les confondre avec le savoir.</div>
+          </div>
+        </div>
+        <div class="card col-12" style="background: var(--soft-green);">
+          <div class="card-title"><span class="dot" style="background: var(--accent2);"></span>Bonus vidéo — à intégrer</div>
+          <div class="arg-list">
+            <div class="arg-item"><strong>Platon, l'allégorie de la caverne :</strong> des prisonniers enchaînés ne voient que des ombres qu'ils prennent pour la réalité. La quête de la vérité, même pour un prisonnier libéré, est pénible et semée d'obstacles, mais possible — pour Platon, il existe bien une vérité objective qu'on peut atteindre, au prix d'une véritable « pédagogie philosophique ».</div>
+            <div class="arg-item"><strong>Le scepticisme (Pyrrhon) et Socrate :</strong> à l'inverse de Platon, les sceptiques affirment qu'on ne peut jamais accéder à la vérité et préfèrent « suspendre leur jugement ». Socrate tranche avec une formule célèbre : « Je ne sais qu'une chose, c'est que je ne sais rien » — il faut prendre conscience de la difficulté de la quête avant de pouvoir s'en approcher. La vérité n'est pas innée, elle est acquise progressivement.</div>
+            <div class="arg-item"><strong>Kant, <em>Critique de la raison pratique</em> :</strong> la vérité serait la valeur la plus importante au monde, plus que le bonheur ou la justice — il faudrait toujours dire la vérité, même si c'est dur, car sans vérité la vie collective devient impossible.</div>
+            <div class="arg-item"><strong>Exemple — l'affaire Jean-Claude Roman :</strong> cet homme a fait croire pendant des années à sa famille et à son entourage qu'il était médecin, accumulant les mensonges jusqu'au drame final (il finit par tuer ses proches pour que le mensonge ne soit jamais découvert). Cas extrême illustrant les conséquences dramatiques du mensonge généralisé et l'importance vitale de la vérité dans les relations humaines.</div>
+          </div>
+        </div>
+      </div>
+      <div class="citation-block">
+        Le beau est ce qui, sans concept, est reconnu comme objet d'une satisfaction nécessaire. <span style="font-weight:normal; font-style:normal;">— Kant — et sur la vérité :</span> « C'est le cœur qui sent Dieu, non la raison. »
+        <span class="cit-author">— Pascal</span>
+      </div>
+    </div>
+
+    <div id="notion-12" class="notion-panel">
+      <div class="header-block">
+        <div class="header-title"><h2>La Nature</h2></div>
+        <div class="header-meta">Fiche 12 / 17</div>
+      </div>
+      <div class="grid-container">
+        <div class="card col-4" style="background: var(--soft-red);">
+          <div class="card-title"><span class="dot" style="background: var(--accent);"></span>Définitions clés</div>
+          <div class="definition-item"><strong>Cosmique :</strong> ordre du monde physique indépendant de l'action humaine (la biosphère, les astres).</div>
+          <div class="definition-item"><strong>Essentielle :</strong> ensemble des propriétés définissant l'identité stable d'un être (la nature humaine, la nature de l'eau).</div>
+        </div>
+        <div class="card col-8">
+          <div class="card-title"><span class="dot" style="background: var(--accent);"></span>Problématique générale</div>
+          <div class="problematique-text">La nature est-elle un ensemble de ressources neutres à dominer et exploiter sans limites, ou impose-t-elle à l'homme un élargissement inédit de ses devoirs moraux ?</div>
+        </div>
+        <div class="card col-8">
+          <div class="card-title"><span class="dot" style="background: var(--accent2);"></span>Repères philosophiques (Auteurs)</div>
+          <div class="author-block">
+            <div class="author-name">Descartes</div>
+            <div class="author-concept">La nature mécaniste</div>
+            <div class="author-detail">La nature est réduite à l'étendue et au mouvement mécanique. Démythifiée, elle devient une pure matière géométrique disponible pour la domination technique de l'homme.</div>
+          </div>
+          <div class="author-block">
+            <div class="author-name">Hans Jonas</div>
+            <div class="author-concept">La vulnérabilité de la nature</div>
+            <div class="author-detail">La puissance d'impact destructeur de la technique moderne rend la nature vulnérable. Nous avons le devoir moral impératif de préserver l'avenir de l'humanité sur Terre.</div>
+          </div>
+          <div class="author-block">
+            <div class="author-name">Spinoza</div>
+            <div class="author-concept">Deus sive Natura</div>
+            <div class="author-detail">Dieu et la Nature sont une seule et unique substance infinie. L'homme n'est pas « un empire dans un empire » ; il est pleinement soumis aux lois immuables du Tout naturel.</div>
+          </div>
+        </div>
+        <div class="card col-4" style="background: var(--soft-blue);">
+          <div class="card-title"><span class="dot" style="background: var(--accent2);"></span>Exemples pour disserter</div>
+          <div class="ex-item"><strong>Le Discours du Chef Seattle (1854) :</strong> il rappelle au président américain que la Terre n'est pas une marchandise mais une toile sacrée dont l'homme n'est qu'un simple fil.</div>
+          <div class="ex-item"><strong>L'extinction contemporaine des espèces :</strong> la disparition massive d'insectes montre concrètement comment la destruction technologique de la biodiversité fragilise directement la vie humaine elle-même.</div>
+        </div>
+        <div class="card col-12">
+          <div class="card-title"><span class="dot" style="background: #555;"></span>Arguments pour la copie</div>
+          <div class="arg-list">
+            <div class="arg-item"><strong>Pour l'élargissement du devoir :</strong> si le devoir naît du respect envers ce qui est vulnérable et sur quoi on a du pouvoir, alors la nature menacée entre pleinement dans le champ du devoir.</div>
+            <div class="arg-item"><strong>Jonas contre l'indifférence :</strong> aucune génération avant nous n'avait le pouvoir de menacer la vie sur Terre entière. Cette puissance inédite crée une responsabilité inédite — l'éthique traditionnelle ne suffit plus.</div>
+            <div class="arg-item"><strong>Argument amérindien contre l'anthropocentrisme :</strong> « L'homme n'est qu'un fil du tissu » → réconcilie devoir envers l'homme et devoir envers la nature, puisque les deux sont indissociables.</div>
+          </div>
+        </div>
+        <div class="card col-12" style="background: var(--soft-green);">
+          <div class="card-title"><span class="dot" style="background: var(--accent2);"></span>Bonus vidéo — à intégrer</div>
+          <div class="arg-list">
+            <div class="arg-item"><strong>Aristote, <em>La Physique</em> :</strong> idée originale à exploiter — la nature « désire » : la graine désire devenir un arbre, le feu désire monter vers le ciel. Pour Aristote, la nature n'est pas un objet passif mais une puissance orientée vers un but (finalité naturelle).</div>
+            <div class="arg-item"><strong>Pascal — la culture comme « seconde nature » :</strong> pour ne pas opposer trop radicalement nature et culture, on peut montrer qu'elles se complètent — la culture prolonge la nature plutôt que de s'y substituer entièrement ; l'homme sans culture n'existe pas vraiment.</div>
+            <div class="arg-item"><strong>Freud, <em>Malaise dans la culture</em> :</strong> à force de censurer et réprimer excessivement nos désirs naturels (la sexualité notamment), une société accumule de la violence qui peut « exploser » (Freud y voit une cause de la Première Guerre mondiale). Il faut donc trouver un équilibre entre nature et culture : ni domination écologique excessive, ni répression excessive des pulsions.</div>
+            <div class="arg-item"><strong>Exemple — les macaques de l'île de Koshima :</strong> ces singes ont transmis sur plusieurs générations la technique du lavage des patates douces dans l'eau salée — preuve d'une transmission de savoir chez l'animal. Mais selon Michael Tomasello, ce savoir n'est jamais <em>cumulatif</em> contrairement au savoir humain : aucun individu ne pourrait réinventer seul un smartphone, résultat de millions d'inventions accumulées sur des générations.</div>
+            <div class="arg-item"><strong>Crispr / OGM :</strong> voir aussi la fiche Technique — la modification génétique (poissons, moustiques, humains résistants à des maladies) repose la question de la frontière entre nature et artifice.</div>
+          </div>
+        </div>
+      </div>
+      <div class="citation-block">
+        L'homme n'a pas tissé la toile de la vie, il n'en est qu'un fil. Tout ce qu'il fait à la toile, il le fait à lui-même.
+        <span class="cit-author">— Chef Seattle, discours de 1854</span>
+      </div>
+    </div>
+
+    <div id="notion-13" class="notion-panel">
+      <div class="header-block">
+        <div class="header-title"><h2>Le Devoir</h2></div>
+        <div class="header-meta">Fiche 13 / 17</div>
+      </div>
+      <div class="grid-container">
+        <div class="card col-4" style="background: var(--soft-red);">
+          <div class="card-title"><span class="dot" style="background: var(--accent);"></span>Définitions clés</div>
+          <div class="definition-item"><strong>Obligation morale :</strong> commandement rationnel et intérieur dicté par la conscience (agir par pur respect de la loi morale).</div>
+          <div class="definition-item"><strong>Contrainte :</strong> force physique ou juridique extérieure qui s'impose à nous et prive l'individu de son choix (obéir sous la menace).</div>
+        </div>
+        <div class="card col-8">
+          <div class="card-title"><span class="dot" style="background: var(--accent);"></span>Problématique générale</div>
+          <div class="problematique-text">Le devoir se réduit-il à une soumission ou une obéissance aveugle aux règles sociales, ou exige-t-il au contraire l'exercice le plus haut de l'autonomie rationnelle de la conscience ?</div>
+        </div>
+        <div class="card col-8">
+          <div class="card-title"><span class="dot" style="background: var(--accent2);"></span>Repères philosophiques (Auteurs)</div>
+          <div class="author-block">
+            <div class="author-name">Kant</div>
+            <div class="author-concept">L'Impératif catégorique</div>
+            <div class="author-detail">Le devoir doit être accompli de façon inconditionnelle, sans aucun calcul d'intérêt personnel. Le critère est l'universalisabilité de la maxime de l'action.</div>
+          </div>
+          <div class="author-block">
+            <div class="author-name">Hannah Arendt</div>
+            <div class="author-concept">La banalité du mal</div>
+            <div class="author-detail">À travers le procès d'Adolf Eichmann, elle montre que l'obéissance passive et bureaucratique aux ordres de l'État, coupée de toute pensée critique personnelle, mène aux crimes les plus monstrueux.</div>
+          </div>
+          <div class="author-block">
+            <div class="author-name">Platon</div>
+            <div class="author-concept">L'anneau de Gygès</div>
+            <div class="author-detail">Le mythe du berger Gygès devenu invisible montre que la plupart des hommes n'agissent de manière juste que par peur du regard des autres et du châtiment social, non par pur devoir moral.</div>
+          </div>
+        </div>
+        <div class="card col-4" style="background: var(--soft-blue);">
+          <div class="card-title"><span class="dot" style="background: var(--accent2);"></span>Exemples pour disserter</div>
+          <div class="ex-item"><strong>La défense d'Eichmann à Jérusalem :</strong> il affirme s'être contenté de "faire son devoir" de fonctionnaire en appliquant les lois du Troisième Reich. Arendt dénonce cette monstrueuse absence de pensée.</div>
+          <div class="ex-item"><strong>L'impossibilité d'universaliser le vol :</strong> si tout le monde s'autorisait à voler, le concept même de propriété s'effondrerait immédiatement, rendant le vol impossible (exemple formel de Kant).</div>
+        </div>
+        <div class="card col-12">
+          <div class="card-title"><span class="dot" style="background: #555;"></span>Arguments pour la copie</div>
+          <div class="arg-list">
+            <div class="arg-item"><strong>Contre la confusion devoir/obéissance (Eichmann) :</strong> l'obéissance aveugle n'est pas le devoir — c'est son exact opposé. Le devoir exige qu'on s'interroge soi-même sur la finalité de ses actes.</div>
+            <div class="arg-item"><strong>Pour l'universalisabilité comme critère :</strong> si tout le monde mentait, la confiance disparaîtrait et la communication deviendrait impossible → le mensonge ne peut pas être universalisé → il est moralement interdit.</div>
+            <div class="arg-item"><strong>Sur la fragilité morale (Gygès) :</strong> si la conscience suffit, pourquoi les lois ? Parce que Platon a raison — nous ne sommes souvent justes que faute d'opportunité. Les institutions sont le garde-fou de notre faiblesse.</div>
+          </div>
+        </div>
+        <div class="card col-12" style="background: var(--soft-green);">
+          <div class="card-title"><span class="dot" style="background: var(--accent2);"></span>Bonus vidéo — à intégrer</div>
+          <div class="arg-list">
+            <div class="arg-item"><strong>Désobéissance civile — Thoreau et La Boétie :</strong> « Il est de mon devoir, en tout état de cause, de m'assurer que je ne contribue pas au mal que je condamne » (Thoreau) ; « Les tyrans ne sont grands que parce que nous sommes à genoux » (La Boétie). Deux citations courtes et fortes pour les sujets « A-t-on le devoir d'obéir / de désobéir ? ».</div>
+            <div class="arg-item"><strong>Rousseau, <em>Émile</em> :</strong> la voix du devoir moral, ou de la conscience, est décrite comme un « arbitre infaillible du bien et du mal » présent en chacun de nous — référence à recycler depuis la fiche conscience.</div>
+            <div class="arg-item"><strong>Trois sens du devoir :</strong> devoirs légaux (la loi), devoirs sociaux (les règles de politesse/convenance), devoirs moraux (faire le bien, ne pas être cruel) — un plan en trois parties tout fait.</div>
+            <div class="arg-item"><strong>Exemple — le film <em>Tu ne tueras point</em> :</strong> un soldat chrétien doit à la fois se battre pour son pays (devoir civique) et ne pas tuer (devoir religieux). Il part au front sans arme, sauve de nombreux soldats et reçoit une médaille — bon exemple de conflit entre devoirs contradictoires et de leur dépassement possible.</div>
+            <div class="arg-item"><strong>Sartre vs Kant vs Freud sur la morale :</strong> pour Sartre, aucune morale ne s'impose de l'extérieur — même soumis à Dieu, on choisit librement de s'y soumettre (la morale est assumer sa liberté). Pour Kant, le devoir moral est rationnel et universel, indépendant de nos sentiments (« inclinations »). Freud objecte qu'une morale totalement rationnelle, qui mettrait nos sentiments de côté, serait une « morale inhumaine » — on privilégie naturellement nos proches, ce qui n'a rien d'universel.</div>
+          </div>
+        </div>
+      </div>
+      <div class="citation-block">
+        Agis de telle sorte que tu traites l'humanité, aussi bien dans ta personne que dans la personne de tout autre, toujours comme une fin, et jamais simplement comme un moyen.
+        <span class="cit-author">— Emmanuel Kant, Fondements de la métaphysique des mœurs</span>
+      </div>
+    </div>
+
+    <div id="notion-14" class="notion-panel">
+      <div class="header-block">
+        <div class="header-title"><h2>La Justice</h2></div>
+        <div class="header-meta">Fiche 14 / 17</div>
+      </div>
+      <div class="grid-container">
+        <div class="card col-4" style="background: var(--soft-red);">
+          <div class="card-title"><span class="dot" style="background: var(--accent);"></span>Définitions clés</div>
+          <div class="definition-item"><strong>Légalité (Droit positif) :</strong> ce qui est strictement conforme aux lois écrites en vigueur dans un État donné à une époque précise.</div>
+          <div class="definition-item"><strong>Légitimité (Droit naturel) :</strong> ce qui est conforme à une exigence morale supérieure et idéale de justice (l'égalité, l'équité).</div>
+        </div>
+        <div class="card col-8">
+          <div class="card-title"><span class="dot" style="background: var(--accent);"></span>Problématique générale</div>
+          <div class="problematique-text">La justice se réduit-elle au strict respect des lois positives de la cité, ou impose-t-elle parfois un droit légitime de résistance morale ou de désobéissance civile ?</div>
+        </div>
+        <div class="card col-8">
+          <div class="card-title"><span class="dot" style="background: var(--accent2);"></span>Repères philosophiques (Auteurs)</div>
+          <div class="author-block">
+            <div class="author-name">Aristote</div>
+            <div class="author-concept">La justice comme équité</div>
+            <div class="author-detail">La loi générale écrite est parfois trop rigide pour s'adapter parfaitement à la complexité infinie des cas particuliers réels. L'équité est le correctif indispensable de la loi.</div>
+          </div>
+          <div class="author-block">
+            <div class="author-name">Sophocle</div>
+            <div class="author-concept">Le conflit Antigone / Créon</div>
+            <div class="author-detail">Antigone défend les "lois non écrites et immuables" divines en enterrant son frère, défiant ainsi ouvertement le décret légal et politique du roi Créon.</div>
+          </div>
+          <div class="author-block">
+            <div class="author-name">Pascal</div>
+            <div class="author-concept">La force et la justice</div>
+            <div class="author-detail">La justice sans la force physique est impuissante ; la force sans la justice est tyrannique. Ne pouvant faire que ce qui est juste soit fort, les hommes ont fait que ce qui est fort soit juste.</div>
+          </div>
+        </div>
+        <div class="card col-4" style="background: var(--soft-blue);">
+          <div class="card-title"><span class="dot" style="background: var(--accent2);"></span>Exemples pour disserter</div>
+          <div class="ex-item"><strong>Le combat de Martin Luther King :</strong> il organise des actions collectives de désobéissance civile contre les lois ségrégatistes américaines au nom d'une exigence supérieure de dignité humaine.</div>
+          <div class="ex-item"><strong>Socrate refusant de fuir :</strong> condamné injustement à mort par les citoyens d'Athènes, il refuse de s'évader pour ne pas détruire l'autorité des lois de la cité : « Mieux vaut subir l'injustice que la commettre. »</div>
+        </div>
+        <div class="card col-12">
+          <div class="card-title"><span class="dot" style="background: #555;"></span>Arguments pour la copie</div>
+          <div class="arg-list">
+            <div class="arg-item"><strong>Pour la nécessité de la loi :</strong> sans loi générale, tout est livré à l'arbitraire du juge. Mais sans juge, la loi est appliquée mécaniquement. Les deux sont nécessaires.</div>
+            <div class="arg-item"><strong>Pour l'équité contre le légalisme :</strong> appliquer la loi à la lettre peut produire des injustices. L'équité permet d'être juste là où la loi est aveugle.</div>
+            <div class="arg-item"><strong>Sur la désobéissance civile :</strong> si la loi peut être injuste, la conscience morale peut imposer d'y désobéir — non par intérêt personnel, mais au nom du juste.</div>
+          </div>
+        </div>
+        <div class="card col-12" style="background: var(--soft-green);">
+          <div class="card-title"><span class="dot" style="background: var(--accent2);"></span>Bonus vidéo — à intégrer</div>
+          <div class="arg-list">
+            <div class="arg-item"><strong>Trois formes de justice (plan tout fait) :</strong> la justice <em>distributive</em> (répartir équitablement, « à chacun sa part »), la justice <em>pénale</em> (punir une faute) et — pour une troisième partie originale — la justice <em>restaurative</em>, qui fait se rencontrer victime et auteur d'un délit pour qu'ils se comprennent ; cette pratique, qui existe en France et ailleurs, ferait baisser la récidive et améliorer le ressenti des victimes.</div>
+            <div class="arg-item"><strong>Exemple — le film <em>12 hommes en colère</em> (Sidney Lumet) :</strong> 12 jurés tirés au sort doivent juger un jeune accusé du meurtre de son père. Onze sont d'emblée convaincus de sa culpabilité, mais un seul juré force le débat à examiner les doutes, jusqu'à l'acquittement final. Excellent exemple sur le danger d'une justice trop rapide et l'importance du doute raisonnable.</div>
+            <div class="arg-item"><strong>Critères de la justice — Marx vs Nozick :</strong> pour Marx, le vrai critère de justice est l'<em>égalité</em> entre les hommes — la propriété privée des moyens de production crée des rapports de domination (bourgeoisie/prolétariat) qu'il faut abolir par la révolution. Pour le libertarien Robert Nozick, c'est la <em>liberté individuelle</em> qui prime : tant qu'un contrat est signé librement, redistribuer les richesses (même celles d'un sportif très riche) revient à porter atteinte à la liberté de chacun — une forme de « travail forcé ».</div>
+            <div class="arg-item"><strong>Sur le droit positif et le droit naturel (Pascal) :</strong> « Plaisante justice qu'une rivière borne ! Vérité en deçà des Pyrénées, erreur au-delà. » Pascal souligne que le droit positif change selon les frontières et les époques (ex. : le cannabis interdit en France, autorisé en Espagne), ce qui montre qu'il ne peut pas, à lui seul, définir la véritable justice — un droit naturel supérieur (ne pas tuer, ne pas voler) doit le compléter.</div>
+          </div>
+        </div>
+      </div>
+      <div class="citation-block">
+        Selon que vous serez puissant ou misérable, les jugements de cour vous rendront blanc ou noir.
+        <span class="cit-author">— La Fontaine, Les Animaux malades de la peste</span>
+      </div>
+    </div>
+
+    <div id="notion-15" class="notion-panel">
+      <div class="header-block">
+        <div class="header-title"><h2>La Liberté</h2></div>
+        <div class="header-meta">Fiche 15 / 17</div>
+      </div>
+      <div class="grid-container">
+        <div class="card col-4" style="background: var(--soft-red);">
+          <div class="card-title"><span class="dot" style="background: var(--accent);"></span>Définitions clés</div>
+          <div class="definition-item"><strong>Libre arbitre :</strong> capacité de la volonté de choisir de manière absolue entre deux options contraires sans y être déterminé.</div>
+          <div class="definition-item"><strong>Déterminisme :</strong> doctrine selon laquelle tous les événements, y compris les choix humains, sont insérés dans une chaîne continue de causes et d'effets.</div>
+        </div>
+        <div class="card col-8">
+          <div class="card-title"><span class="dot" style="background: var(--accent);"></span>Problématique générale</div>
+          <div class="problematique-text">La liberté humaine réside-t-elle dans l'affirmation orgueilleuse d'un libre arbitre absolu, ou s'acquiert-elle péniblement par la prise de conscience lucide de ce qui nous détermine ?</div>
+        </div>
+        <div class="card col-8">
+          <div class="card-title"><span class="dot" style="background: var(--accent2);"></span>Repères philosophiques (Auteurs)</div>
+          <div class="author-block">
+            <div class="author-name">Spinoza</div>
+            <div class="author-concept">L'illusion du libre arbitre</div>
+            <div class="author-detail">L'homme se croit libre parce qu'il est conscient de ses actions mais ignorant des causes biologiques et sociales qui le poussent à agir. L'illusion du libre arbitre est celle d'une pierre qui roule et croirait vouloir son mouvement.</div>
+          </div>
+          <div class="author-block">
+            <div class="author-name">Sartre</div>
+            <div class="author-concept">La condamnation à la liberté</div>
+            <div class="author-detail">L'existence précède l'essence. L'homme n'est défini par aucun déterminisme stable. Il crée sa propre identité à chaque seconde par ses choix réels et porte l'entière responsabilité de son existence.</div>
+          </div>
+          <div class="author-block">
+            <div class="author-name">Alain Ehrenberg</div>
+            <div class="author-concept">Le fardeau de la liberté moderne</div>
+            <div class="author-detail">Dans <em>La Fatigue d'être soi</em>, la liberté totale contemporaine et l'injonction permanente à la performance individuelle créent un sentiment d'angoisse et de dépression face au vide des repères.</div>
+          </div>
+        </div>
+        <div class="card col-4" style="background: var(--soft-blue);">
+          <div class="card-title"><span class="dot" style="background: var(--accent2);"></span>Exemples pour disserter</div>
+          <div class="ex-item"><strong>La résistance sous l'Occupation allemande :</strong> l'affirmation paradoxale de Jean-Paul Sartre selon laquelle c'est au moment de l'oppression totale que le choix de résister ou de collaborer engage pleinement la liberté absolue du sujet.</div>
+          <div class="ex-item"><strong>L'explosion de l'anxiété moderne :</strong> lorsque les cadres traditionnels s'effondrent et que la liberté devient totale, la dépression explose → trop de liberté sans cadre devient un fardeau.</div>
+        </div>
+        <div class="card col-12">
+          <div class="card-title"><span class="dot" style="background: #555;"></span>Arguments pour la copie</div>
+          <div class="arg-list">
+            <div class="arg-item"><strong>Contre le libre arbitre (Spinoza + Freud) :</strong> si on observait toutes les causes qui nous font agir (éducation, désirs inconscients, pression sociale), on verrait que nos « choix libres » sont largement déterminés.</div>
+            <div class="arg-item"><strong>Pour la liberté comme prise de conscience :</strong> la vraie liberté n'est pas d'ignorer ce qui nous détermine mais de le comprendre. Connaître ses chaînes, c'est déjà commencer à s'en libérer.</div>
+            <div class="arg-item"><strong>Argument de Sartre contre le fatalisme :</strong> même en prison, même sous oppression, on choisit — ne pas choisir est encore un choix. La liberté est inaliénable, c'est ce qui la rend à la fois glorieuse et terrifiante.</div>
+          </div>
+        </div>
+        <div class="card col-12" style="background: var(--soft-green);">
+          <div class="card-title"><span class="dot" style="background: var(--accent2);"></span>Bonus vidéo — à intégrer</div>
+          <div class="arg-list">
+            <div class="arg-item"><strong>Rousseau :</strong> « La liberté consiste moins à faire sa volonté qu'à ne pas être soumis à celle d'autrui. » Définition de base très citable pour amorcer un développement.</div>
+            <div class="arg-item"><strong>La fable du Loup et du Chien (La Fontaine) :</strong> le loup, jaloux du chien bien nourri et au poil soyeux, découvre la trace d'un collier sur son cou — symbole de la servitude. Il préfère finalement repartir, libre mais affamé : « Cela dit, maître Loup s'enfuit, et court encore. » Excellent exemple pour le dilemme entre liberté (avec ses inconvénients) et confort (qui implique une forme de soumission) — fonctionne pour « La liberté, est-ce faire ce que je veux ? ».</div>
+            <div class="arg-item"><strong>Trois sens de la liberté (plan en 3 parties) :</strong> la liberté naturelle (faire ce qu'on veut, seul), la liberté politique (faire ce qu'on veut en respectant des règles communes), et la liberté intérieure — obéir à sa volonté profonde plutôt qu'à ses désirs immédiats. Exemple : un toxicomane qui parvient à arrêter la drogue est, en un sens, plus libre que s'il céde à son envie immédiate.</div>
+            <div class="arg-item"><strong>Spinoza, lettre à Schuller :</strong> nos choix nous semblent libres simplement parce que nous ignorons les causes (neurones, éducation, pressions sociales) qui les déterminent — « être libre », c'est juste ne pas savoir pourquoi on agit ainsi. La seule chose possible est de comprendre un peu mieux pourquoi on choisit ce qu'on choisit.</div>
+            <div class="arg-item"><strong>Exemple — le transhumanisme :</strong> vouloir se libérer de nos limites naturelles (mémoire augmentée, immortalité) pose la question : peut-on, et doit-on, s'émanciper de notre nature pour être plus libre ? À recycler avec les fiches nature et technique.</div>
+          </div>
+        </div>
+      </div>
+      <div class="citation-block">
+        Nous n'avons jamais été aussi libres que sous l'Occupation allemande.
+        <span class="cit-author">— Jean-Paul Sartre, La République du silence</span>
+      </div>
+    </div>
+
+    <div id="notion-16" class="notion-panel">
+      <div class="header-block">
+        <div class="header-title"><h2>Le Bonheur</h2></div>
+        <div class="header-meta">Fiche 16 / 17</div>
+      </div>
+      <div class="grid-container">
+        <div class="card col-4" style="background: var(--soft-red);">
+          <div class="card-title"><span class="dot" style="background: var(--accent);"></span>Définitions clés</div>
+          <div class="definition-item"><strong>Bonheur :</strong> état global, stable et durable de satisfaction, de plénitude et de paix intérieure.</div>
+          <div class="definition-item"><strong>Plaisir :</strong> sensation agréable, intense, éphémère et localisée, liée à la satisfaction d'un besoin biologique précis.</div>
+        </div>
+        <div class="card col-8">
+          <div class="card-title"><span class="dot" style="background: var(--accent);"></span>Problématique générale</div>
+          <div class="problematique-text">Le bonheur réside-t-il dans la quête insatiable et frénétique de tous nos plaisirs, ou exige-t-il la modération rationnelle de nos désirs et l'acceptation de la réalité ?</div>
+        </div>
+        <div class="card col-8">
+          <div class="card-title"><span class="dot" style="background: var(--accent2);"></span>Repères philosophiques (Auteurs)</div>
+          <div class="author-block">
+            <div class="author-name">Épicure</div>
+            <div class="author-concept">Le calcul des désirs</div>
+            <div class="author-detail">Le bonheur s'obtient par l'ataraxie (absence de troubles de l'âme). Il faut rejeter les désirs vains et illimités pour se concentrer exclusivement sur les désirs naturels et nécessaires.</div>
+          </div>
+          <div class="author-block">
+            <div class="author-name">Les Stoïciens (Épictète)</div>
+            <div class="author-concept">La citadelle intérieure</div>
+            <div class="author-detail">Le bonheur dépend exclusivement de ce qui dépend de nous (nos jugements, nos pensées) et exige le détachement absolu envers ce qui ne dépend pas de nous (la mort, la maladie, la fortune).</div>
+          </div>
+          <div class="author-block">
+            <div class="author-name">Kant</div>
+            <div class="author-concept">Un idéal de l'imagination</div>
+            <div class="author-detail">Le bonheur est un concept trop indéterminé pour constituer un guide d'action précis. L'homme ne doit pas chercher directement le bonheur, mais se rendre digne du bonheur par l'accomplissement du devoir.</div>
+          </div>
+        </div>
+        <div class="card col-4" style="background: var(--soft-blue);">
+          <div class="card-title"><span class="dot" style="background: var(--accent2);"></span>Exemples pour disserter</div>
+          <div class="ex-item"><strong>La table de banquet d'Épicure :</strong> un simple morceau de pain, un verre d'eau et la présence de quelques amis fidèles suffisent à procurer le souverain bien, loin des excès anxiogènes des cours royales.</div>
+          <div class="ex-item"><strong>Le divertissement pascalien :</strong> les hommes jouent aux cartes non parce que ça les rend heureux, mais pour ne pas penser à leur condition.</div>
+        </div>
+        <div class="card col-12">
+          <div class="card-title"><span class="dot" style="background: #555;"></span>Arguments pour la copie</div>
+          <div class="arg-list">
+            <div class="arg-item"><strong>Épicure contre la course aux plaisirs :</strong> distinguer désirs naturels/nécessaires des désirs vains — satisfaire les premiers suffit. Le reste est source d'agitation, pas de bonheur.</div>
+            <div class="arg-item"><strong>Stoïciens contre le fatalisme :</strong> ce qu'on ne peut pas contrôler ne devrait pas déterminer notre bonheur. Ce qui dépend de moi — mon jugement, mes valeurs — est inaliénable.</div>
+            <div class="arg-item"><strong>Aristote contre le bonheur immédiat :</strong> un plaisir intense n'est pas le bonheur. Le bonheur se juge sur une vie entière — ce qui implique une cohérence et une direction dans l'existence.</div>
+          </div>
+        </div>
+        <div class="card col-12" style="background: var(--soft-green);">
+          <div class="card-title"><span class="dot" style="background: var(--accent2);"></span>Bonus vidéo — à intégrer</div>
+          <div class="arg-list">
+            <div class="arg-item"><strong>Saint-Augustin :</strong> « Le bonheur, c'est de continuer à désirer ce que l'on possède déjà. » Plutôt que de voir le désir comme source de tristesse, il invite à réinventer notre rapport au désir — ni le satisfaire sans limite, ni l'éteindre, mais apprendre à désirer ce qu'on a déjà.</div>
+            <div class="arg-item"><strong>Épictète vs Calliclès :</strong> « Il n'y a qu'une route vers le bonheur : c'est de renoncer aux choses qui ne dépendent pas de nous » (Épictète, stoïcisme) — à l'opposé, l'hédonisme de Calliclès (dans les <em>Dialogues</em> de Platon) affirme que pour bien vivre il faut laisser libre cours à ses passions, aussi grandes soient-elles, sans les réprimer. Deux thèses opposées idéales pour structurer une dissertation.</div>
+            <div class="arg-item"><strong>Rousseau contre Épicure (<em>La Nouvelle Héloïse</em>) :</strong> « Malheur à qui n'a plus rien à désirer ! Il perd pour ainsi dire tout ce qu'il possède. » Contrairement à Épicure, Rousseau soutient que le désir, même s'il fait souffrir par le manque, est ce qui nous donne envie de vivre — sans manque, nous serions « morts ».</div>
+            <div class="arg-item"><strong>Exemple littéraire — Rousseau, <em>Les Confessions</em> :</strong> Rousseau raconte avoir été le plus heureux de sa vie à 16 ans, aux Charmettes, entouré de musique, de nature et d'affection — un exemple simple mais apprécié des correcteurs pour illustrer qu'on peut effectivement être heureux, et que le bonheur n'a pas besoin d'être extraordinaire.</div>
+            <div class="arg-item"><strong>Plan en deux parties :</strong> mon bonheur personnel d'un côté, le bonheur des autres de l'autre — utile pour élargir un sujet centré sur l'individu.</div>
+          </div>
+        </div>
+      </div>
+      <div class="citation-block">
+        La mort n'est rien pour nous : quand nous existons, la mort n'est pas là ; quand la mort est là, nous n'existons plus.
+        <span class="cit-author">— Épicure, Lettre à Ménécée</span>
+      </div>
+    </div>
+
+    <div id="notion-17" class="notion-panel">
+      <div class="header-block">
+        <div class="header-title"><h2>L'État</h2></div>
+        <div class="header-meta">Fiche 17 / 17</div>
+      </div>
+      <div class="grid-container">
+        <div class="card col-4" style="background: var(--soft-red);">
+          <div class="card-title"><span class="dot" style="background: var(--accent);"></span>Définitions clés</div>
+          <div class="definition-item"><strong>Politique :</strong> institution juridique et souveraine qui exerce une autorité suprême et unifiée sur la population d'un territoire délimité.</div>
+          <div class="definition-item"><strong>Monopole de la violence (Weber) :</strong> seule l'institution d'État possède le droit légitime d'employer la force physique pour faire respecter l'ordre public.</div>
+        </div>
+        <div class="card col-8">
+          <div class="card-title"><span class="dot" style="background: var(--accent);"></span>Problématique générale</div>
+          <div class="problematique-text">L'État est-il une machine oppressive extérieure liberticide dont l'homme doit se méfier, ou constitue-t-il la condition même de l'avènement des libertés réelles et civiles des citoyens ?</div>
+        </div>
+        <div class="card col-8">
+          <div class="card-title"><span class="dot" style="background: var(--accent2);"></span>Repères philosophiques (Auteurs)</div>
+          <div class="author-block">
+            <div class="author-name">Thomas Hobbes</div>
+            <div class="author-concept">Le Léviathan protecteur</div>
+            <div class="author-detail">À l'état de nature, l'homme est un loup pour l'homme, vivant dans la guerre perpétuelle de tous contre tous. Pour garantir leur sécurité physique, les individus scellent un pacte social et abandonnent leur souveraineté au Léviathan d'État.</div>
+          </div>
+          <div class="author-block">
+            <div class="author-name">Rousseau</div>
+            <div class="author-concept">La Volonté générale</div>
+            <div class="author-detail">Le contrat social permet d'unir les forces sans perdre sa liberté. En obéissant à la loi issue de la volonté générale que le citoyen a lui-même votée, l'homme n'obéit qu'à lui-même et accède à la véritable liberté civile.</div>
+          </div>
+          <div class="author-block">
+            <div class="author-name">Nietzsche</div>
+            <div class="author-concept">Le plus froid des monstres froids</div>
+            <div class="author-detail">L'État est une puissance mensongère destructrice qui prétend parler au nom du peuple pour mieux uniformiser, broyer les individualités créatrices originales et dompter les esprits libres.</div>
+          </div>
+        </div>
+        <div class="card col-4" style="background: var(--soft-blue);">
+          <div class="card-title"><span class="dot" style="background: var(--accent2);"></span>Exemples pour disserter</div>
+          <div class="ex-item"><strong>La fable du loup et du chien (La Fontaine) :</strong> le chien est bien nourri et protégé par son maître (l'État) mais a le cou pelé par le collier. Le loup préfère sa faim et sa liberté sauvage.</div>
+          <div class="ex-item"><strong>Le vote des lois :</strong> obéir au code de la route que la communauté a démocratiquement décidé protège le citoyen contre son esclavage aux désirs immédiats.</div>
+        </div>
+        <div class="card col-12">
+          <div class="card-title"><span class="dot" style="background: #555;"></span>Arguments pour la copie</div>
+          <div class="arg-list">
+            <div class="arg-item"><strong>Pour la nécessité de l'État :</strong> sans tiers médiateur, les relations entre individus sont livrées au rapport de force — La Fontaine l'illustre. L'État est la condition de l'égalité réelle.</div>
+            <div class="arg-item"><strong>Contre l'État trop fort :</strong> Locke et Arendt montrent que l'État qui dépasse sa fonction de protection devient lui-même source d'arbitraire — la limite du pouvoir étatique est aussi nécessaire que le pouvoir lui-même.</div>
+            <div class="arg-item"><strong>Argument de Rousseau :</strong> obéir à une loi qu'on a faite soi-même (par le vote, le contrat social) n'est pas une soumission — c'est la forme la plus haute de liberté.</div>
+          </div>
+        </div>
+        <div class="card col-12" style="background: var(--soft-green);">
+          <div class="card-title"><span class="dot" style="background: var(--accent2);"></span>Bonus vidéo — à intégrer</div>
+          <div class="arg-list">
+            <div class="arg-item"><strong>Machiavel, <em>Le Prince</em> :</strong> le dirigeant ne doit pas s'embarrasser de la morale pour gouverner ; le but est d'être « aimé et craint » du peuple — et s'il faut choisir, la crainte est plus sûre et plus efficace que l'amour.</div>
+            <div class="arg-item"><strong>Paul Valéry :</strong> « Si l'État est fort, il nous écrase ; s'il est faible, nous périssons. » Citation idéale pour une troisième partie nuancée : tout État a besoin d'une force suffisante pour garantir l'ordre, mais un État trop puissant menace les libertés individuelles.</div>
+            <div class="arg-item"><strong>Pierre Clastres — les sociétés sans État :</strong> l'ethnologue a vécu avec les Indiens Guayaki et Guarani, dont le chef n'a aucun pouvoir réel (il doit même être généreux avec ce qu'il possède) et où il n'y a pas d'inégalité sociale. Mais Clastres n'idéalise pas : la loi y est inscrite dans le corps par des rites initiatiques très violents — un contre-exemple intéressant pour interroger la nécessité de l'État.</div>
+            <div class="arg-item"><strong>Exemple actuel — l'État minimal (Javier Milei) :</strong> le président argentin, libertarien, prône la réduction de l'État au minimum (suppression de ministères, libéralisation du port d'armes…). Permet de discuter concrètement la théorie de l'« État minimal » et ses conséquences possibles.</div>
+            <div class="arg-item"><strong>Distinction utile :</strong> opposer l'État répressif (police, prison, interdictions) et l'État providence (écoles, hôpitaux, services publics, aides sociales) pour construire un plan en deux temps.</div>
+          </div>
+        </div>
+      </div>
+      <div class="citation-block">
+        Un peuple libre obéit, mais il ne sert pas ; il obéit aux lois, mais il n'obéit qu'aux lois, et c'est par la force des lois qu'il n'obéit pas aux hommes.
+        <span class="cit-author">— Jean-Jacques Rousseau, Du Contrat social</span>
+      </div>
+    </div>
+
+    <div id="notion-18" class="notion-panel">
+      <div class="header-block">
+        <div class="header-title"><h2>Une journée pas comme les autres</h2></div>
+        <div class="header-meta">Récit fil-rouge · 17 notions</div>
+      </div>
+      <p class="story-intro">Pour retenir les 17 notions sans les réciter comme une liste de courses, voici une petite histoire. Un lycéen banal vit une journée banale — sauf que chaque moment de sa journée cache une notion de philo. Cliquez sur les étiquettes pour retourner directement à la fiche correspondante.</p>
+
+      <div class="story-chapter">
+        <div class="story-chapter-head">
+          <span class="story-chapter-num">01</span>
+          <span class="story-chapter-title">Le réveil qui sonne deux fois</span>
+          <span class="story-notion-tag" onclick="showNotion('notion-1')">La Conscience</span>
+        </div>
+        <p>7h02. Le réveil sonne. Léo l'éteint, se retourne, et se rendort sans même s'en rendre compte — son corps a agi seul, comme un appareil photo qui prend une photo sans que personne ne réfléchisse à appuyer sur le bouton. C'est la <strong>conscience spontanée</strong> : il est « en éveil » sans être vraiment réveillé.</p>
+        <p>7h09, deuxième sonnerie. Cette fois Léo ouvre les yeux et pense : « Encore moi, encore ce lit, encore ce plafond fissuré. » Il se voit lui-même en train de se réveiller, comme dans un miroir. C'est la <strong>conscience réflexive</strong> — il a une expérience, mais il sait aussi qu'il l'a.</p>
+        <p>Puis il regarde l'heure : 7h11. Il avait promis à sa mère de se lever à 7h. Une petite voix intérieure murmure : « Tu lui as promis. » Cette voix qui juge ce qu'il devrait faire, c'est la <strong>conscience morale</strong> — celle dont parlait déjà Rousseau, cette « voix infaillible » qui sait distinguer le bien du mal, même à 7h11 du matin un lundi.</p>
+      </div>
+
+      <div class="story-chapter">
+        <div class="story-chapter-head">
+          <span class="story-chapter-num">02</span>
+          <span class="story-chapter-title">Le rêve qu'il ne comprend pas</span>
+          <span class="story-notion-tag" onclick="showNotion('notion-2')">L'Inconscient</span>
+        </div>
+        <p>En se brossant les dents, Léo se souvient d'un bout de rêve étrange : il était en retard à un examen, mais l'examen se passait dans le magasin de vêtements où sa grand-mère l'emmenait quand il avait six ans. Bizarre. Sans lien apparent. Sauf que justement, rien n'arrive « sans lien » dans l'inconscient.</p>
+        <p>Il repense alors à sa cousine Emma, qui depuis toujours refuse catégoriquement d'entrer dans les centres commerciaux — elle prétexte que « ça l'angoisse », sans savoir pourquoi. Personne dans la famille n'a jamais creusé. Léo se dit que c'est exactement le genre de truc dont parlait Freud : un souvenir refoulé, enfermé par le Surmoi pour « protéger », et qui ressort déguisé — en phobie, ou en rêve absurde un lundi matin.</p>
+        <p>Il referme le tube de dentifrice. Il ne « décide » pas de penser à Emma à ce moment précis — ça lui vient tout seul. Comme une perception qu'on aurait sans en avoir conscience, un peu comme ces personnes aveugles qui devinent où se trouve une lumière sans la « voir ». L'inconscient, conclut-il, c'est tout ce qui agit en nous sans frapper à la porte avant.</p>
+      </div>
+
+      <div class="story-chapter">
+        <div class="story-chapter-head">
+          <span class="story-chapter-num">03</span>
+          <span class="story-chapter-title">Trois minutes qui durent une heure</span>
+          <span class="story-notion-tag" onclick="showNotion('notion-3')">Le Temps</span>
+        </div>
+        <p>Au petit-déjeuner, Léo attend que son toast sorte du grille-pain. Trois minutes. Mais ces trois minutes lui semblent interminables — il scrolle son téléphone, regarde l'horloge, recommence. À l'inverse, hier soir, il a passé deux heures à coder sur l'appli de la fédération de tennis de table sans voir le temps passer. Même durée objective (deux heures = deux heures), mais un ressenti totalement différent.</p>
+        <p>Comme le disait Héraclite, on ne se baigne jamais deux fois dans le même fleuve : ces trois minutes d'attente du matin et ces deux heures de code du soir n'ont strictement rien de commun, même si l'horloge mesure la même « quantité » de temps. Le temps physique (celui de l'horloge) et le temps vécu (celui de la conscience, dirait Saint-Augustin) sont deux choses différentes.</p>
+        <p>Pendant qu'il mange, Léo reçoit une notification : un ami vient de poster une story qui disparaîtra dans 24h. Tout, aujourd'hui, semble vouloir aller plus vite — les formats courts, le fast-food, le « speed dating ». Cette accélération permanente, c'est un phénomène bien réel de nos sociétés modernes, et ça interroge : sommes-nous plus heureux en allant plus vite ?</p>
+      </div>
+
+      <div class="story-chapter">
+        <div class="story-chapter-head">
+          <span class="story-chapter-num">04</span>
+          <span class="story-chapter-title">« Tu vois ce que je veux dire ? »</span>
+          <span class="story-notion-tag" onclick="showNotion('notion-4')">Le Langage</span>
+        </div>
+        <p>Dans le bus, sa copine Inès lui raconte une dispute avec sa sœur. Elle cherche ses mots, recommence trois fois sa phrase, et finit par dire : « En fait... tu vois ce que je veux dire ? » Léo hoche la tête, mais il sent bien qu'aucun mot ne correspond exactement à ce qu'elle ressent. Bergson aurait dit que le langage écrase les nuances : « énervée », « triste », « déçue » sont des mots génériques, alors que ce qu'elle vit est unique, à elle, intransmissible tel quel.</p>
+        <p>Et pourtant — en en parlant, Inès se sent déjà mieux. Comme sur le divan d'un psychanalyste, le simple fait de mettre des mots sur les choses (même imparfaits) les rend plus légères à porter. Le langage est limité, mais il est aussi thérapeutique.</p>
+        <p>Léo pense alors au bonobo Kanzi, qui a appris plus de 1000 symboles et peut exprimer ses envies, voire faire des blagues. Mais comme le dit le philosophe Dominique Lestel : « Les animaux peuvent parler mais ils n'ont rien à dire. » Kanzi communique des besoins ; Inès, elle, essaie de dire quelque chose d'elle-même. C'est peut-être ça, la vraie différence entre signal et langage.</p>
+      </div>
+
+      <div class="story-chapter">
+        <div class="story-chapter-head">
+          <span class="story-chapter-num">05</span>
+          <span class="story-chapter-title">Une photo qui vaut 69 millions</span>
+          <span class="story-notion-tag" onclick="showNotion('notion-5')">L'Art</span>
+        </div>
+        <p>En cours d'arts plastiques, le prof montre une image : la compilation d'œuvres numériques de l'artiste Beeple, vendue en NFT pour plus de 69 millions d'euros. Un élève au fond râle : « N'importe qui pourrait faire ça sur Photoshop. » Le prof sourit et répond que Beeple a dessiné une image par jour pendant plus de 5000 jours — soit presque 14 ans de pratique quotidienne avant cette vente.</p>
+        <p>Puis il montre deux images côte à côte : un canapé classique d'un magasin de meubles, et le célèbre canapé en forme de bouche du peintre Salvador Dalí. Le premier sert à s'asseoir — c'est de l'agréable, du fonctionnel. Le second ne sert à rien, sinon à être regardé, à provoquer une réaction. C'est le beau au sens de Kant : ce qui plaît sans avoir d'utilité.</p>
+        <p>Léo repense à sa propre appli de tennis de table — ce n'est pas de l'art, c'est de la technique, ça « sert » à quelque chose. Mais quand il a passé du temps à choisir les couleurs et l'interface juste pour que ce soit « beau à utiliser », n'a-t-il pas, lui aussi, fait un (tout petit) geste artistique ?</p>
+      </div>
+
+      <div class="story-chapter">
+        <div class="story-chapter-head">
+          <span class="story-chapter-num">06</span>
+          <span class="story-chapter-title">La maquette dans la tête</span>
+          <span class="story-notion-tag" onclick="showNotion('notion-6')">Le Travail</span>
+        </div>
+        <p>À la pause, Léo retrouve enfin du réseau et ouvre GitHub : un message d'un utilisateur le remercie pour la fonction qu'il a ajoutée à l'appli d'arbitrage de tennis de table — la détection automatique des nouvelles versions du règlement. Ça lui prend deux secondes à lire, mais ça lui procure une vraie fierté. Pourquoi ? Parce qu'il reconnaît, dans cet outil terminé, le projet qu'il avait en tête avant de l'écrire. Hegel appelait ça l'objectivation : l'esprit se retrouve lui-même dans la matière qu'il a transformée.</p>
+        <p>Au self, sa mère l'appelle pour lui rappeler qu'elle a préparé le repas du soir avant de partir travailler. Hegel aurait dit qu'elle aussi « travaille » — elle transforme des ingrédients bruts en plat, comme elle transforme ses enfants « à l'état brut » en les éduquant. Le travail n'est pas réservé aux métiers salariés.</p>
+        <p>Mais tout travail n'est pas que joie : Léo pense à la caissière du self, qui doit sourire à chaque élève toute la journée, même fatiguée. Ce travail émotionnel — sourire, rassurer, encaisser les sautes d'humeur des autres — est un travail à part entière, souvent invisible. Comme dans la Genèse, où le travail est à la fois la source de la création (Adam jardinier) et une punition (après la faute) — le travail a toujours ce double visage.</p>
+      </div>
+
+      <div class="story-chapter">
+        <div class="story-chapter-head">
+          <span class="story-chapter-num">07</span>
+          <span class="story-chapter-title">La main qui invente</span>
+          <span class="story-notion-tag" onclick="showNotion('notion-7')">La Technique</span>
+        </div>
+        <p>En SVT, le prof distribue un article sur CRISPR, cette technique qui permet de « modifier » des gènes — moustiques rendus résistants au paludisme, poissons plus gros, et bientôt peut-être des humains protégés de certaines maladies. Une élève demande : « Mais est-ce que c'est encore naturel, ça ? »</p>
+        <p>Le prof répond par le mythe de Prométhée : à l'origine, les dieux ont donné à chaque animal une qualité pour survivre — griffes, fourrure, vitesse — mais il ne restait plus rien pour l'homme, né nu et fragile. Prométhée lui vole alors le feu et le savoir-faire technique. Autrement dit : la technique n'est pas un luxe, c'est la condition même de la survie de l'espèce humaine, la plus faible de toutes à l'état naturel.</p>
+        <p>Léo regarde sa main en prenant des notes. Aristote disait que la main humaine, contrairement à la patte griffue du tigre (programmée pour une seule chose), peut tout faire : écrire, fabriquer un marteau, et avec ce marteau fabriquer un autre outil. La main est « l'outil qui fabrique des outils » — exactement comme son cerveau, qui n'a aucune compétence innée mais peut toutes les apprendre.</p>
+      </div>
+
+      <div class="story-chapter">
+        <div class="story-chapter-head">
+          <span class="story-chapter-num">08</span>
+          <span class="story-chapter-title">Le sapin en juin</span>
+          <span class="story-notion-tag" onclick="showNotion('notion-8')">La Religion</span>
+        </div>
+        <p>En rentrant du self, Léo croise une discussion entre deux camarades : l'un est croyant, l'autre non, et ils débattent sans s'énerver — chacun écoute l'autre. Léo se souvient d'une statistique entendue récemment : environ 85% des humains sur Terre se déclarent rattachés à une religion. Un chiffre énorme, qui rend la question impossible à ignorer.</p>
+        <p>Marx disait que la religion est « l'opium du peuple » — une façon de supporter les souffrances terrestres en se projetant vers un au-delà meilleur. Mais Lamartine voyait plutôt la religion comme une réponse à l'angoisse de ne pas tout comprendre : « Dieu n'est qu'un mot rêvé pour expliquer le monde. » Les deux ne sont pas forcément contradictoires.</p>
+        <p>Léo pense aussi à Noël : même des familles non croyantes décorent un sapin et se réunissent. La religion n'a donc pas qu'une dimension verticale (le lien avec Dieu) — elle a aussi une dimension horizontale, sociale, qui rassemble les gens autour de rituels communs, croyants ou pas.</p>
+      </div>
+
+      <div class="story-chapter">
+        <div class="story-chapter-head">
+          <span class="story-chapter-num">09</span>
+          <span class="story-chapter-title">Le test que tout le monde rate</span>
+          <span class="story-notion-tag" onclick="showNotion('notion-9')">La Raison</span>
+        </div>
+        <p>En cours de philo justement, la prof fait un sondage : « Qui pense conduire mieux que la moyenne des gens de son âge ? » Presque toute la classe lève la main. Statistiquement, c'est impossible — tout le monde ne peut pas être au-dessus de la moyenne. C'est le « biais d'optimisme » : même en réfléchissant, notre raison reste traversée de raccourcis dont on n'a pas conscience.</p>
+        <p>La prof enchaîne avec Kant : être un être de raison, c'est « sortir de l'enfance », oser penser par soi-même plutôt que de laisser d'autres (parents, influenceurs, algorithmes) penser à notre place. Mais elle ajoute aussitôt Pascal : « Exclure la raison, n'admettre que la raison » sont deux excès symétriques. La raison seule ne suffit pas — il y a des choses qu'on « sait » sans pouvoir les démontrer, comme le fait qu'on n'est pas en train de rêver.</p>
+        <p>Léo se dit que toute la journée, depuis ce matin, il a utilisé sa raison sans même y penser — pour comprendre un texte, calculer le temps qu'il lui restait, juger une situation. Mais cette même raison, biaisée par mille petites habitudes, l'a aussi trompé plusieurs fois (genre, croire qu'il avait le temps de finir son toast).</p>
+      </div>
+
+      <div class="story-chapter">
+        <div class="story-chapter-head">
+          <span class="story-chapter-num">10</span>
+          <span class="story-chapter-title">La théorie qu'on peut casser</span>
+          <span class="story-notion-tag" onclick="showNotion('notion-10')">La Science</span>
+        </div>
+        <p>Toujours en philo, un élève demande : « Mais alors, comment on sait qu'une théorie scientifique est vraie ? » La prof répond par Popper : on ne le sait jamais vraiment — on peut juste dire qu'une théorie n'a pas encore été contredite par l'expérience. Une bonne théorie scientifique, c'est une théorie qu'on pourrait, en théorie, démentir.</p>
+        <p>Elle donne l'exemple de la phrénologie : au 19ᵉ siècle, des scientifiques très sérieux pensaient pouvoir lire le caractère des gens dans la forme de leur crâne. À l'époque, c'était considéré comme une science. Aujourd'hui, c'est abandonné. La science avance non pas en empilant des vérités définitives, mais en éliminant des erreurs.</p>
+        <p>Léo repense alors à Camus, cité dans une autre fiche : la civilisation mécanique nous met face à un choix — utiliser intelligemment nos découvertes, ou foncer droit dans le mur. Entre CRISPR ce matin et les puces cérébrales dont tout le monde parle, Léo se dit que sa génération n'aura pas le choix d'éviter la question.</p>
+      </div>
+
+      <div class="story-chapter">
+        <div class="story-chapter-head">
+          <span class="story-chapter-num">11</span>
+          <span class="story-chapter-title">Le mensonge de trop</span>
+          <span class="story-notion-tag" onclick="showNotion('notion-11')">La Vérité</span>
+        </div>
+        <p>À midi, Léo regarde une vidéo sur l'affaire Jean-Claude Roman, cet homme qui a fait croire pendant des années à toute sa famille qu'il était médecin — un mensonge tellement énorme qu'il a fini par tuer ses proches pour qu'il ne soit jamais découvert. Une histoire glaçante, mais qui illustre quelque chose de très simple : la vie en commun est impossible sans un minimum de vérité partagée.</p>
+        <p>Léo pense à Socrate : « Je ne sais qu'une chose, c'est que je ne sais rien. » Avant de chercher la vérité, il faut d'abord admettre qu'on ne la possède pas — comme les prisonniers de la caverne de Platon, qui prennent des ombres pour la réalité et qui doivent faire un effort pénible pour s'en libérer.</p>
+        <p>Plus modestement : ce matin, Léo a dit à sa mère « Oui, oui, je me lève » alors qu'il s'est rendormi. Un petit mensonge, sans conséquence. Mais Kant aurait dit que même un petit mensonge abîme un peu la confiance — et que la vérité est une valeur si importante qu'on devrait toujours la dire, même quand c'est inconfortable.</p>
+      </div>
+
+      <div class="story-chapter">
+        <div class="story-chapter-head">
+          <span class="story-chapter-num">12</span>
+          <span class="story-chapter-title">La graine qui « veut » devenir arbre</span>
+          <span class="story-notion-tag" onclick="showNotion('notion-12')">La Nature</span>
+        </div>
+        <p>En sortant du lycée, Léo passe devant un petit jardin partagé où des élèves ont planté des tomates en avril. Aristote disait que la nature « désire » : la graine désire devenir une plante, le feu désire monter vers le ciel. Une idée étrange au premier abord, mais qui montre que pour les Anciens, la nature n'était pas un simple tas de matière inerte — elle avait une direction, un but.</p>
+        <p>Léo repense aux macaques de l'île de Koshima, qui ont appris à laver leurs patates douces dans l'eau de mer et transmettent cette technique depuis des générations. Un savoir transmis, comme une culture animale. Mais contrairement à l'humain, ce savoir ne s'accumule jamais : aucun macaque n'inventera jamais un smartphone, alors qu'aucun humain seul n'aurait pu l'inventer non plus — c'est le fruit de millions d'inventions empilées sur des générations.</p>
+        <p>Et la culture, justement, n'efface pas la nature : elle la prolonge. Le jardin partagé, avec ses rangs bien ordonnés et ses étiquettes, c'est de la nature (les tomates poussent toutes seules) ET de la culture (l'organisation, le choix des graines). Pascal aurait dit que la culture est une « seconde nature » — pas son contraire.</p>
+      </div>
+
+      <div class="story-chapter">
+        <div class="story-chapter-head">
+          <span class="story-chapter-num">13</span>
+          <span class="story-chapter-title">Le portefeuille trouvé sur le trottoir</span>
+          <span class="story-notion-tag" onclick="showNotion('notion-13')">Le Devoir</span>
+        </div>
+        <p>Sur le chemin du retour, Léo trouve un portefeuille tombé par terre. Personne autour. Il pourrait le garder — personne ne le saurait jamais. Et pourtant, sans même hésiter, il ramasse le portefeuille et cherche un moyen de le rendre. Pourquoi ? Aucune loi ne l'oblige formellement à cet instant précis, aucun policier ne le regarde.</p>
+        <p>Kant aurait dit que Léo agit ici par devoir moral pur : il traite l'inconnu propriétaire du portefeuille comme une fin, et non comme un moyen de se faire un peu d'argent facile. Mais Freud aurait nuancé : une morale purement rationnelle et universelle, qui ignorerait totalement nos sentiments, serait « inhumaine ». Et c'est peut-être vrai — Léo n'a pas calculé un impératif catégorique, il a juste pensé : « Et si c'était le portefeuille de ma grand-mère ? »</p>
+        <p>Cette petite voix intérieure, encore elle, celle du premier chapitre — la conscience morale, ou ce que Rousseau appelait « l'arbitre infaillible du bien et du mal ». Trois sens du devoir se mélangent ici sans même que Léo y pense : ce n'est pas légal (aucune loi ne l'y oblige), ni vraiment social (personne ne le voit), mais c'est moral.</p>
+      </div>
+
+      <div class="story-chapter">
+        <div class="story-chapter-head">
+          <span class="story-chapter-num">14</span>
+          <span class="story-chapter-title">Douze avis pour un seul verdict</span>
+          <span class="story-notion-tag" onclick="showNotion('notion-14')">La Justice</span>
+        </div>
+        <p>Léo trouve un commissariat sur le chemin pour déposer le portefeuille. En attendant son tour, il regarde une affiche qui parle du film 12 hommes en colère : douze jurés doivent juger un jeune accusé de meurtre. Onze sont convaincus dès le début qu'il est coupable. Un seul doute, et force les autres à réexaminer chaque preuve — jusqu'à un acquittement final.</p>
+        <p>Léo se dit que ce policier, là, devant lui, applique une justice distributive minuscule : il prend le portefeuille, vérifiera l'identité, rendra l'objet à son propriétaire — « à chacun ce qui lui appartient ». Mais à côté, dans une autre salle, une justice pénale est peut-être en train de juger quelqu'un — « à chacun ce qu'il mérite ».</p>
+        <p>Et Léo repense à Pascal : « Vérité en deçà des Pyrénées, erreur au-delà. » Le droit change selon les pays et les époques (ce qui est interdit ici est permis ailleurs) — mais certaines règles de base (ne pas tuer, ne pas voler) semblent universelles. Le droit positif (les lois écrites) a besoin d'un droit naturel pour ne pas devenir n'importe quoi.</p>
+      </div>
+
+      <div class="story-chapter">
+        <div class="story-chapter-head">
+          <span class="story-chapter-num">15</span>
+          <span class="story-chapter-title">Le chien bien nourri et le loup affamé</span>
+          <span class="story-notion-tag" onclick="showNotion('notion-15')">La Liberté</span>
+        </div>
+        <p>De retour chez lui, Léo doit choisir : finir ses devoirs de maths maintenant (pénible mais nécessaire), ou continuer à coder sur son appli (ce qu'il a vraiment envie de faire). Il pense à la fable de La Fontaine : le loup, jaloux du chien bien nourri et au poil soyeux, découvre une trace de collier sur son cou — la marque de la servitude. Le loup repart, libre mais affamé.</p>
+        <p>Faire ses devoirs, c'est un peu porter le collier : une contrainte, mais qui apporte la sécurité (de bonnes notes, moins de stress). Coder, c'est la liberté du loup : personne ne l'y oblige, mais ça ne « rapporte » rien d'immédiat pour le bac.</p>
+        <p>Spinoza aurait dit que dans les deux cas, Léo n'est pas vraiment « libre » au sens où il l'imagine — son choix est déterminé par sa fatigue, son envie de progresser sur son projet, la pression de ses parents... « être libre », ce n'est peut-être que ne pas connaître les causes de ce qu'on choisit. Mais Sartre objecterait : même fatigué, même sous pression, c'est encore Léo qui choisit — et ne pas choisir serait déjà un choix. Il ouvre finalement son cahier de maths. Dix minutes. Puis il rouvrira son code. Un compromis — sa propre version de la liberté intérieure : ne pas céder uniquement à l'envie immédiate.</p>
+      </div>
+
+      <div class="story-chapter">
+        <div class="story-chapter-head">
+          <span class="story-chapter-num">16</span>
+          <span class="story-chapter-title">Le repas du soir, sans rien de spécial</span>
+          <span class="story-notion-tag" onclick="showNotion('notion-16')">Le Bonheur</span>
+        </div>
+        <p>Le soir, repas en famille. Rien d'extraordinaire — des pâtes, une conversation banale, le bruit de la télé en fond. Et pourtant, à un moment, Léo se sent bien. Pas euphorique, juste... apaisé. Saint-Augustin aurait dit que le bonheur, ce n'est pas d'avoir toujours plus, mais de continuer à désirer ce qu'on a déjà — être content de cette soirée ordinaire plutôt que de la trouver fade en comparaison d'autre chose.</p>
+        <p>Rousseau, dans Les Confessions, racontait avoir été le plus heureux de sa vie à 16 ans, dans une simple maison de campagne, entouré de musique et d'affection — rien d'extraordinaire non plus. Le bonheur n'a pas besoin d'être spectaculaire.</p>
+        <p>Mais Épictète aurait peut-être ajouté un bémol : ce bonheur dépend en partie de choses que Léo ne contrôle pas (sa famille est là, en bonne santé, ce soir). Et Kant rappellerait que ce bonheur reste un sentiment flou, impossible à programmer — on ne peut pas viser le bonheur directement, seulement essayer de mériter d'être heureux, par exemple en ayant rendu ce portefeuille trouvé un peu plus tôt.</p>
+      </div>
+
+      <div class="story-chapter">
+        <div class="story-chapter-head">
+          <span class="story-chapter-num">17</span>
+          <span class="story-chapter-title">Le règlement qu'on n'a pas écrit soi-même</span>
+          <span class="story-notion-tag" onclick="showNotion('notion-17')">L'État</span>
+        </div>
+        <p>Avant de dormir, Léo reçoit une notification GitHub : quelqu'un signale un bug dans la partie de son appli qui affiche le règlement officiel de la fédération de tennis de table. Ce règlement, personne dans son lycée ne l'a écrit — il vient d'une fédération, une sorte de mini-État du tennis de table, avec ses propres règles, ses arbitres (sa police), ses sanctions.</p>
+        <p>Léo se dit que sans ce règlement commun, chaque arbitre pourrait décider ses propres règles à chaque match — ce serait le chaos, la « guerre de tous contre tous » que décrivait Hobbes à l'état de nature. Le règlement protège tout le monde, même s'il limite un peu la liberté de chacun (on ne peut pas inventer ses propres règles en plein match).</p>
+        <p>Et comme le disait Rousseau à propos des lois votées démocratiquement : ce règlement n'est pas totalement extérieur aux joueurs — il a été pensé, débattu, voté par des représentants de clubs, eux-mêmes membres de la fédération. En s'y soumettant, chaque joueur obéit en fait... à une règle dont sa propre communauté a participé à l'écriture. « Si l'État est fort, il nous écrase ; s'il est faible, nous périssons », disait Paul Valéry — un règlement trop strict tuerait le jeu, mais sans règlement du tout, plus de jeu possible non plus.</p>
+        <p style="margin-top:14px; font-style:italic; color:#777;">Léo ferme son ordinateur, éteint la lumière. Une journée banale, terminée — sauf qu'elle vient de traverser, sans bruit, les 17 grandes questions de la philosophie. Demain, il en vivra 17 autres.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    function showNotion(notionId) {
+      // Masquer tous les panneaux de notion
+      const panels = document.querySelectorAll('.notion-panel');
+      panels.forEach(panel => panel.classList.remove('active'));
+
+      // Désactiver tous les éléments de navigation de la sidebar
+      const navItems = document.querySelectorAll('.nav-item');
+      navItems.forEach(item => item.classList.remove('active'));
+
+      // Activer le panneau demandé
+      document.getElementById(notionId).classList.add('active');
+
+      // Ajouter la classe active sur l'élément cliqué
+      const event = window.event;
+      if(event && event.currentTarget) {
+        event.currentTarget.classList.add('active');
+      } else {
+        // Fallback si l'événement n'est pas capturé directement
+        const items = document.querySelectorAll('.nav-item');
+        const index = parseInt(notionId.split('-')[1]) - 1;
+        if(items[index]) items[index].classList.add('active');
+      }
+      
+      // Remonter automatiquement en haut de la page lors du changement de fiche
+      document.querySelector('.main-content').scrollTop = 0;
+    }
+  </script>
+
+</body>
+</html>
